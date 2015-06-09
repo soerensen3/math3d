@@ -7,7 +7,7 @@ type
     { TItemList }
 
     TListEnumerator = class;
-    TItemList = class
+    TItemList = class ( TPersistent )
       private
         FItems: pItemArray;
         FCount: Integer;

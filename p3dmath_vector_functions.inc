@@ -57,14 +57,12 @@ end;
 //N should be normalized in order to achieve the desired result.
 function reflect( i, n: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
-var
-  d: Float;
 begin
   Result:= I - 2.0 * dot(N, I) * N;
 end;
 {$ENDIF}
 
-
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 {$IF NUMFIELD = 4}
 // This will unproject a vector using world, view and projection matrix. It will return the unprojected vector and the direction it is pointing to.
 function unproject( x: TVector; matWorld, matView, matProj: TMatrix; Width, Height: Integer; out vDirection: TVector ): TVector;
@@ -95,6 +93,7 @@ end;
 
 
 // This will return the bigger components of two vectors. It works component-wise.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function max( x: TVector; y: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -112,6 +111,7 @@ end;
 {$ENDIF}
 
 // This will return the smaller components of two vectors. It works component-wise.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function min( x: TVector; y: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -129,6 +129,7 @@ end;
 {$ENDIF}
 
 // This will return the bigger components of one vector and a scalar. It works component-wise.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function max( x: TVector; s: Single ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -147,6 +148,7 @@ end;
 
 
 // This will return the smaller components of one vector and a scalar. It works component-wise.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function min( x: TVector; s: Single ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -162,7 +164,7 @@ begin
   {$ENDIF}
 end;
 {$ENDIF}
-
+{$WARNINGS ON}
 //clamp returns the value of x constrained to the range minVal to maxVal. The returned value is computed as min(max(x, minVal), maxVal).
 function clamp( x, minVal, maxVal: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
@@ -172,6 +174,7 @@ end;
 {$ENDIF}
 
 //Returns x if x >= 0; otherwise, it returns -x.
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function abs( x: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -189,6 +192,7 @@ end;
 {$ENDIF}
 
 //clamp returns the value of x constrained to the range minVal to maxVal. The returned value is computed as min(max(x, minVal), maxVal).
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function clamp( x: TVector; minVal, maxVal: Float ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -206,6 +210,7 @@ end;
 {$ENDIF}
 
 //floor returns a value equal to the nearest integer that is less than or equal to x.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function floor( x: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -223,6 +228,7 @@ end;
 {$ENDIF}
 
 //ceil returns a value equal to the nearest integer that is greater than or equal to x.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function ceil( x: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -240,6 +246,7 @@ end;
 {$ENDIF}
 
 //round returns a value equal to the nearest integer to x.
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function round( x: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -255,6 +262,7 @@ begin
   {$ENDIF}
 end;
 {$ENDIF}
+{$WARNINGS ON}
 
 //distance returns the distance between the two points p0 and p1.
 function distance( p0, p1: TVector ): Float; overload;
@@ -274,6 +282,7 @@ end;
 {$ENDIF}
 
 //fract returns the fractional part of x.
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function fract( x: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
@@ -289,6 +298,7 @@ begin
   {$ENDIF}
 end;
 {$ENDIF}
+{$WARNINGS ON}
 
 function smoothstep( edge0, edge1, x: TVector ): TVector; overload;
 {$IFDEF IMPLEMENTATION}

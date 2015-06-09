@@ -1,7 +1,22 @@
+{ <description>
+
+  Copyright (C) <2015> <Johannes Rosleff Sörensen> <contact>
+
+  This source is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+  This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+  A copy of the GNU General Public License is available on the World Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also
+  obtain it by writing to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+}
+
 {$IFDEF INTERFACE}
-{@abstract( @classname is a basic vector object wich can be modified with operators and functions
+
+{@abstract' @classname is a basic vector object wich can be modified with operators and functions
 and which provides some methods itself.
-There are provided different ways to access the fields of the vector.)
+There are provided different ways to access the fields of the vector.'
 @orderedList(
 @item Using Coord
 @item Using @bold( x,y,z,w r,g,b,a s,t,p,q ) properties
@@ -49,7 +64,6 @@ There is no solution for that for now i fear.
 @br@br
 For more information on swizzling see this
 doc: https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Swizzling
-
 }
 TVector = packed object
   private
@@ -82,8 +96,8 @@ TVector = packed object
     @returns The result of the function}
     function DotProduct( v: TVector ): Float;
     {Determines the biggest component (X, Y, Z, W).
-    @returns( The the index of the biggest component which can be used with @bold( Coord )
-    @longCode( s:= v.Coord[ v.GetBiggestComp ]; ))}
+    @returns` The the index of the biggest component which can be used with @bold`Coord`
+    @code` s:= v.Coord[ v.GetBiggestComp ]; ``}
     function GetBiggestComp: Integer;
 
 //    function RotateRad( Axis: TVec3; Angle: Float ): TVector;
@@ -91,13 +105,13 @@ TVector = packed object
 //      function Transform( Matrix: TMatrix ): TVector;
 
     {Negates the current vector without altering it.
-    @returns( The result is only returned without altering the original vector.
-    This is exivalent to @longCode( v2:= -v;))}
+    @returns`The result is only returned without altering the original vector.
+    This is exivalent to @code`v2:= -v;``}
     function Invert: TVector;
-    {Function to get access to the first element (@bold(X)) of the vector.
-    @returns( The result is a pointer to the data of a vector. It can be used when passing to
+    {Function to get access to the first element (@bold`X`) of the vector.
+    @returns`The result is a pointer to the data of a vector. It can be used when passing to
     opengl for example. This is equivalent to
-    @longCode( ptr:= @v.Coord[ 0 ]; ))}
+    @code`ptr:= @v.Coord[ 0 ];``}
     function Ptr: PFloat;
 //      function Mirror( Plane: pPlane ): TVector;
 
@@ -107,10 +121,11 @@ TVector = packed object
 
 
     property Coord[ Index: Integer ]: Float read GetCoord write SetCoord; default;
-    {This will generate a string with the vector's values enclosed in <>. It can
+    {This will generate a string with the vector's separated with comma (and a space). It can
     be used for debugging or printing the values of a vector on screen.
-    @returns( The string is return in the function's result )}
-    function ToString: String;
+    @returns'The string is return in the function's result'}
+    function ToString( const Digits: Integer = 8 ): String;
+    procedure FromString( S: String );
 
   published
     property X: Float index 0 read FCoord[ 0 ] write SetCoord;
@@ -148,6 +163,7 @@ end;
 {$ENDIF}
 
 {$IFDEF CONSTRUCTOR}
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function Vector(
   {$IF NUMFIELD = 1}
   x: TYPEX;
@@ -316,11 +332,12 @@ function Vector(
   {$UNDEF TYPEY}
   {$UNDEF TYPEZ}
   {$UNDEF TYPEW}
+  {$WARNINGS ON}
 {$ENDIF}
 
 {$IFDEF HELPERFUNCT}
 
-{$INCLUDE math3d_vector_functions.inc}
+{$INCLUDE p3dmath_vector_functions.inc}
 //Operator for adding two vectors. Only same vector types can be added so far.
 operator + ( a, b: TVector ) c: TVector; inline;
 //Operator for adding one vector and a float. Only same vector types can be added so far.
@@ -330,6 +347,8 @@ operator - ( a, b: TVector ) c: TVector; inline;
 //Operator for subtracting one vector and a float. Only same vector types can be added so far.
 operator - ( a: TVector; b: Float ) c: TVector; inline;
 //Operator for multiplying two vectors component-wise. Only same vector types can be multiplied so far.
+operator * ( a, b: TVector ) c: TVector; inline;
+//Operator for calculating a dot product of two vectors.
 operator * ( a, b: TVector ) c: Float; inline;
 //Operator for scaling a vector using a scalar (float).
 operator * ( a: TVector; s: Float ) c: TVector; inline;
@@ -341,6 +360,7 @@ operator / ( a, b: TVector ) c: TVector; inline;
 operator / ( a: TVector; s: Float ) c: TVector; inline;
 //Operator for negating a vector.
 operator - ( a: TVector ) c: TVector; inline;
+operator = ( a, b: TVector ) c: Boolean; inline;
 
 {$UNDEF HELPERFUNCT}
 {$ENDIF}
@@ -387,14 +407,18 @@ begin
 end;
 
 {$IF NUMFIELD>2}
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function TVector.CrossProduct(v: TVector): TVector;
 begin
   Result.x:= y * v.z - z * v.y;
   Result.y:= z * v.x - x * v.z;
   Result.z:= x * v.y - y * v.x;
+  {$IF NUMFIELD=4}
+  Result.w:= 1;
+  {$ENDIF}
 end;
 {$ENDIF}
-
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function TVector.DotProduct(v: TVector): Float;
 begin
   Result:= x * v.x
@@ -406,6 +430,7 @@ begin
           {$ENDIF}
           ;
 end;
+{$WARNINGS ON}
 
 function TVector.GetBiggestComp: Integer;
 var
@@ -450,20 +475,81 @@ begin
   Result:= @FCoord[ 0 ];
 end;
 
-{$INCLUDE math3d_vector_swizzle.inc}
+{$INCLUDE p3dmath_vector_swizzle.inc}
 
 
-function TVector.ToString: String;
+function TVector.ToString( const Digits: Integer = 8 ): String;
+var
+  str: String;
 begin
   {$IF NUMFIELD = 2}
-  Result:= Format( '<%.4f,%.4f>', [ X, Y ]);
+  str:= StringReplace( '%.#f,%.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ X, Y ]);
   {$ENDIF}
   {$IF NUMFIELD = 3}
-  Result:= Format( '<%.4f, %.4f, %.4f>', [ X, Y, Z ]);
+  str:= StringReplace( '%.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ X, Y, Z ]);
   {$ENDIF}
   {$IF NUMFIELD = 4}
-  Result:= Format( '<%.4f, %.4f, %.4f, %.4f>', [ X, Y, Z, W ]);
+  str:= StringReplace( '%.#f, %.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ X, Y, Z, W ]);
   {$ENDIF}
+end;
+
+procedure TVector.FromString( S: String );
+  function GetWordCount: Integer;
+  var
+    c: Char;
+  begin
+    if ( S = '' ) then
+      Result:= 0
+    else
+      begin
+        Result:= 1;
+        for c in S do
+          if ( c = ',' ) then
+            Inc( Result );
+      end;
+  end;
+
+  function GetWord( n: Integer ): String;
+  var
+    i: Integer;
+    c: Char;
+  begin
+    i:= 1;
+    Result:= '';
+    for c in S do
+      if ( c = ',' ) then
+        begin
+          Inc( i );
+          if ( i > n ) then
+            break;
+        end
+      else if ( i = n ) then
+        Result:= Result + c;
+  end;
+
+const
+  exp_wc =
+    {$IF NUMFIELD = 2}
+       2
+    {$ELSEIF NUMFIELD = 3}
+       3
+    {$ELSEIF NUMFIELD = 4}
+       4
+    {$ENDIF}
+    ;
+var
+  i: Integer;
+  n: Integer;
+begin
+  n:= GetWordCount();
+
+  if ( n <> exp_wc ) then
+    raise Exception.Create( Format( 'Error while converting string ''%s'' to TVec%d. Wrong number of values given: %d.', [ S, exp_wc, n ]));
+  for i:= 1 to n do
+    Coord[ i - 1 ]:= StrToFloat( GetWord( i ));
 end;
 
 function TVector.Compare(v: TVector): Boolean;
@@ -475,10 +561,13 @@ begin
        {$IF NUMFIELD > 2}
        and ( v.z = z )
        {$ENDIF}
+       {$IF NUMFIELD > 3}
+       and ( v.w = w )
+       {$ENDIF}
        ;
 end;
 
-
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator+(a, b: TVector)c: TVector;
 begin
   c.x:= a.x + b.x;
@@ -493,6 +582,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator+(a: TVector; b: Float)c: TVector;
 begin
   c.x:= a.x + b;
@@ -507,6 +597,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator-(a, b: TVector)c: TVector;
 begin
   c.x:= a.x - b.x;
@@ -521,6 +612,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator-(a: TVector; b: Float)c: TVector;
 begin
   c.x:= a.x - b;
@@ -534,12 +626,29 @@ begin
   c.w:= a.w - b;
   {$ENDIF}
 end;
+{$WARNINGS ON}
 
-operator*(a, b: TVector)c: Float;
+operator*( a, b: TVector )c: Single;
 begin
   Result:= a.DotProduct( b );
 end;
 
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
+operator*(a, b: TVector )c: TVector;
+begin
+  c.x:= a.x * b.x;
+  {$IF NUMFIELD > 1}
+  c.y:= a.y * b.y;
+  {$ENDIF}
+  {$IF NUMFIELD > 2}
+  c.z:= a.z * b.z;
+  {$ENDIF}
+  {$IF NUMFIELD > 3}
+  c.w:= a.w * b.w;
+  {$ENDIF}
+end;
+
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator*(a: TVector; s: Float)c: TVector;
 begin
   c.x:= a.x * s;
@@ -554,6 +663,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator*(s: Float; b: TVector)c: TVector;
 begin
   c.x:= b.x * s;
@@ -568,6 +678,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator/(a, b: TVector)c: TVector;
 begin
   c.x:= a.x / b.x;
@@ -582,6 +693,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator/(a: TVector; s: Float)c: TVector;
 begin
   c.x:= a.x / s;
@@ -595,13 +707,19 @@ begin
   c.w:= a.w / s;
   {$ENDIF}
 end;
+{$WARNINGS ON}
 
 operator-(a: TVector)c: TVector;
 begin
   c:= a * -1;
 end;
 
-{$INCLUDE math3d_vector_functions.inc}
+operator=(a, b: TVector)c: Boolean;
+begin
+  c:= a.Compare( b );
+end;
+
+{$INCLUDE p3dmath_vector_functions.inc}
 
 {$UNDEF IMPLEMENTATION}
-{$ENDIF}
+{$ENDIF}

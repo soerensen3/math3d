@@ -12,9 +12,6 @@ uses
 
 type
   {$MACRO ON}
-  Float = Single;
-
-  {.$DEFINE COLUMN_MAJOR_ORDER}
 
   { TVec2 }
   {$DEFINE INTERFACE}
@@ -150,4 +147,4 @@ implementation
 {$INCLUDE p3dmath_arrays_decl.inc}
 
 end.
-
+

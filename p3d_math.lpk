@@ -2,17 +2,12 @@
 <CONFIG>
   <Package Version="4">
     <Name Value="p3d_math"/>
+    <Type Value="RunAndDesignTime"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
-      <Other>
-        <CompilerMessages>
-          <MsgFileName Value=""/>
-        </CompilerMessages>
-        <CompilerPath Value="$(CompPath)"/>
-      </Other>
     </CompilerOptions>
     <Files Count="12">
       <Item1>
@@ -64,7 +59,7 @@
         <UnitName Value="p3dMath"/>
       </Item12>
     </Files>
-    <Type Value="RunAndDesignTime"/>
+    <LazDoc Paths="doc/test"/>
     <RequiredPkgs Count="1">
       <Item1>
         <PackageName Value="FCL"/>

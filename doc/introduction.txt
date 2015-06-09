@@ -2,17 +2,17 @@
 
 @section( 1 whatismath3d What is math3d )
 
-Math3D is a 3D mathematics library for pascal.
+Math3D is a 3D math library for pascal.
 It supports vector types, matrices and quaternions so far.
-Like GLM (C++ only), the syntax tries to be as close to @bold( glsl ) as possible.
+Like GLM (C++ only), the syntax is supposed to be as close to @bold( glsl ) as possible.
 
-Additionally there is support for quaternions.
+Additionally to @bold( glsl ) there is support for quaternions.
 
 In Math3D, for convenience, vectors and matrices are defined as objects (not classes) so they
-can be used like normal variables so you don't have to take care of creating or freeing them.
+can be used like for example float variables and you don't have to take care of creating or freeing them.
 
-@bold(Note:) This library is quite new so it will probably undergo some major changes in the
-future. In this early stage it is probably not suitable for a productive use. However I would be
+@bold(Note:) This library is just published so it might undergo some major changes in the
+future. In this early stage it is probably not suitable for a productive use yet. However I would be
 happy to receive some feedback!
 
 @section( 1 typesdefined Types defined in math3d )
@@ -37,9 +37,7 @@ happy to receive some feedback!
 )
 
 @section( 1 differences Differences to glsl )
-As already said math3d tries to be as close with the syntax to glsl as possible.
-However in some places, due to language restrictions or other reasons, it just can't
-be done.
+While Math3d aims to be as close to glsl as possible with it's syntax in some cases this is just not possible because pascal language is just different from glsl.
 
 @section( 2 diff_matrix_order Matrix Order )
 There are two different orders when using matrices, one is colum-major and one is row-major.
@@ -47,8 +45,9 @@ The order only defines how matrices are stored in memory.
 See this if you want to know more: http://fgiesen.wordpress.com/2012/02/12/row-major-vs-column-major-row-vectors-vs-column-vectors/
 When I started making my first library years ago I was using Direct3D while now
 I use OpenGL, but I was used to row-major-order so I left it at that.
-However the order in glsl is column-major. So in the future I will probably make
-a switch for changing the order if needed.
+However the order in glsl is column-major. So there is a switch to change the order from row-major to colum-major order.
+If you open the options of the package file, in the section Other you can click on define where you can check or uncheck the option.
+Please note that it only has an influence on the additional constructors for creating the view matrices. For the math it doesn't really matter which order you are using. If you however pass your matrices to @bold( OpenGL ) you need to transpose the matrices for @bold( column-major ) order.
 
 @section( 2 diff_typenames Type names )
 In Pascal it is common to use a T as prefix for types. What is mat4 in glsl becomes

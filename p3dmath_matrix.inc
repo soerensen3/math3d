@@ -9,19 +9,19 @@
 {$ENDIF}
 
 {$IFDEF INTERFACE}
-{ TMatrix }
 type
-  //A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
-  //transformations.
-  //@br@br
-  //The array @bold(m) is for directly accessing the fields of the matrix.
-  //You can also use the properties for accessing columns and rows which consist
-  //of an "_" and one number for the row and another for the column. So if you
-  //want to let's say access row 0 and column 3 you use _03.
-  //The array is stored in row-major order but it only matters if you pass it
-  //to another library like OpenGL or Direct 3D or when you use the helper
-  //functions for generating a matrix.
+  {tst}
   TMatrix = packed object
+    //A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
+    //transformations.
+    //@br@br
+    //The array @link'm' is for directly accessing the fields of the matrix.
+    //You can also use the properties for accessing columns and rows which consist
+    //of an "_" and one number for the column and another for the row. So if you
+    //want to let's say access column 0 and row 3 you use _03.
+    //The array is stored in column-major order but it only matters if you pass it
+    //to another API than OpenGL, like Direct 3D. You might need to transpose the matrix then.
+
     private
       function GetIndex( index: Integer ): Float; inline;
       function GetMField( AIndex: Integer ): Float; inline;
@@ -32,8 +32,8 @@ type
       //Use this one dimensional array for directly accessing the fields in the matrix.
       m: array [0..NUMFIELD*NUMFIELD-1] of Float;
 
-      //Use these properties to access the fields of matrix using row and column.
-      //The first value indicates the row, the second value indicates the column.
+      //Use these properties to access the fields of matrix using column and row.
+      //The first value indicates the columnt, the second value indicates the row.
       property _00: Float index                0  read GetMField write SetMField;
       {$IF NUMFIELD > 1 }
       property _01: Float index                1  read GetMField write SetMField;
@@ -60,7 +60,7 @@ type
       //This property is only provided for the use with OnChange events if needed in the future.
       property _m[ index: Integer ]: Float read GetIndex write SetIndex; default;
   end;
-//Will generate a translation matrix of the size depending on the fields of @bold(Vec).
+//Will generate a translation matrix of the size depending on the fields of @bold`Vec`.
 //If the vector has 3 fields the corresponding matrix will be 3 by 3.
 function
 {$IF NUMFIELD = 2}
@@ -71,7 +71,7 @@ function
   mat4translate
 {$ENDIF}
   ( Vec: TVector ): TMatrix; overload;
-//Will generate a scale matrix of the size depending on the fields of @bold(Vec).
+//Will generate a scale matrix of the size depending on the fields of @bold`Vec`.
 //If the vector has 3 fields the corresponding matrix will be 3 by 3.
 function
 {$IF NUMFIELD = 2}
@@ -93,25 +93,13 @@ function mat4rotate( Axis: TVec3; Angle: Float ): TMatrix; overload;
 
 //Will return the determinant of a 4 by 4 matrix.
 function mat4determinant( Mat: TMatrix ): Float;
-//Will calculate the the inverse of a 4 by 4 matrix and store the result in @bold(MatInv).
+//Will calculate the the inverse of a 4 by 4 matrix and store the result in @bold`MatInv`.
 //If the inverse could be calculated the function will return True.
 function mat4inverse( Mat: TMatrix; out MatInv: TMatrix ): Boolean;
 //Will return the the transpose of a 4 by 4 matrix which means it will swap
 //colums and rows.
 function mat4transpose( Matrix: TMatrix ): TMatrix;
-//Returns a left handed perspective 4 by 4 projection matrix.
-function mat4perspectiveFOVLH( FOV, Aspect, Near, Far: Float ): TMatrix;
-//Returns a right handed perspective 4 by 4 projection matrix.
-function mat4perspectiveFOVRH( FOV, Aspect, Near, Far: Float ): TMatrix;
-//Returns a left handed orthogonal 4 by 4 projection matrix.
-//function mat4orthoLH( w, h, Near, Far: Float ): TMatrix;
-//Returns a right handed orthogonal 4 by 4 projection matrix.
-//function mat4orthoRH( w, h, Near, Far: Float ): TMatrix;
-function mat4orthoRH( left, right, top, bottom: Float ): TMatrix;
-//Returns a left handed 4 by 4 lookat matrix which can be used for cameras.
-function mat4lookatLH( EyePt, LookAt, UpDir: TVec3 ): TMatrix;
-//Returns a right handed 4 by 4 lookat matrix which can be used for cameras.
-function mat4lookatRH( EyePt, LookAt, UpDir: TVec3 ): TMatrix;
+
 {function MatrixMirror( Plane: TPlane ): TMatrix;}
 {function MatrixCubeMap( Face: Cardinal ): TMatrix;}
 
@@ -175,7 +163,7 @@ procedure TMatrix.SetMField(AIndex: Integer; AValue: Float);
 begin
   m[ AIndex ]:= AValue;
 end;
-
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator * ( a: TMatrix; b: TMatrix ) c: TMatrix; inline;
 begin
   c._00:= a._00 * b._00
@@ -263,6 +251,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator*( a: TVector; b: TMatrix ) c: TVector;
 begin
   Result.x:= ( a.x * b._00 )
@@ -307,6 +296,7 @@ begin
   {$ENDIF}
 end;
 
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator*( a: TMatrix; b: TVector )c: TVector;
 begin
   Result.x:= ( a._00 * b.x )
@@ -350,6 +340,7 @@ begin
            + ( a._33 * b.w );
   {$ENDIF}
 end;
+{$WARNINGS ON}
 
 operator=(a: TMatrix; b: TMatrix)c: Boolean;
 begin
@@ -367,18 +358,34 @@ function
   ( Vec: TVector ): TMatrix;
 begin
   Result:= MatIdentity;
-  {$IF NUMFIELD = 2}
-    Result._10:= Vec.x;
-    Result._11:= Vec.y;
-  {$ELSEIF NUMFIELD = 3}
-    Result._20:= Vec.x;
-    Result._21:= Vec.y;
-    Result._22:= Vec.z;
-  {$ELSEIF NUMFIELD = 4}
-    Result._30:= Vec.x;
-    Result._31:= Vec.y;
-    Result._32:= Vec.z;
-    Result._33:= Vec.w;
+  {$IFDEF COLUMN_MAJOR_ORDER}
+    {$IF NUMFIELD = 2}
+  Result._00:= Vec.x;
+  Result._11:= Vec.y;
+    {$ELSEIF NUMFIELD = 3}
+  Result._02:= Vec.x;
+  Result._12:= Vec.y;
+  Result._22:= Vec.z;
+    {$ELSEIF NUMFIELD = 4}
+  Result._03:= Vec.x;
+  Result._13:= Vec.y;
+  Result._23:= Vec.z;
+  Result._33:= Vec.w;
+    {$ENDIF}
+  {$ELSE}
+    {$IF NUMFIELD = 2}
+  Result._10:= Vec.x;
+  Result._11:= Vec.y;
+    {$ELSEIF NUMFIELD = 3}
+  Result._20:= Vec.x;
+  Result._21:= Vec.y;
+  Result._22:= Vec.z;
+    {$ELSEIF NUMFIELD = 4}
+  Result._30:= Vec.x;
+  Result._31:= Vec.y;
+  Result._32:= Vec.z;
+  Result._33:= Vec.w;
+    {$ENDIF}
   {$ENDIF}
 end;
 
@@ -408,6 +415,7 @@ begin
   {$ENDIF}
 end;
 
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 {$IF NUMFIELD = 3}
 function mat3rotate(Axis: TVec3; Angle: Float): TMat3;
 var
@@ -417,6 +425,19 @@ begin
    one_minus_cosine:=1 - cosine;
    Axis.Normalize;
 
+   {$IFDEF COLUMN_MAJOR_ORDER}
+   Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
+   Result._10:= (one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
+   Result._20:= (one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
+
+   Result._01:= (one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
+   Result._11:= (one_minus_cosine * Sqr(Axis.y)) + Cosine;
+   Result._21:= (one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+
+   Result._02:= (one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
+   Result._12:= (one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
+   Result._22:= (one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   {$ELSE}
    Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
    Result._01:= (one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
    Result._02:= (one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
@@ -428,15 +449,12 @@ begin
    Result._20:= (one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
    Result._21:= (one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
    Result._22:= (one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   {$ENDIF}
 end;
 {$ENDIF}
 {$IF NUMFIELD = 4}
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function mat4rotate(Axis: TVec3; Angle: Float ): TMatrix;
-const
-  x = 0;
-  y = 1;
-  z = 2;
-  w = 3;
 var
    cosine, sine, one_minus_cosine : Extended;
 begin
@@ -444,6 +462,27 @@ begin
    one_minus_cosine:=1 - cosine;
    Axis.Normalize;
 
+   {$IFDEF COLUMN_MAJOR_ORDER}
+   Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
+   Result._10:= (one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
+   Result._20:= (one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
+   Result._30:= 0;
+
+   Result._01:= (one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
+   Result._11:= (one_minus_cosine * Sqr(Axis.y)) + Cosine;
+   Result._21:= (one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+   Result._31:= 0;
+
+   Result._02:= (one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
+   Result._12:= (one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
+   Result._22:= (one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   Result._32:= 0;
+
+   Result._03:= 0;
+   Result._13:= 0;
+   Result._23:= 0;
+   Result._33:= 1;
+   {$ELSE}
    Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
    Result._01:= (one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
    Result._02:= (one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
@@ -463,7 +502,9 @@ begin
    Result._31:= 0;
    Result._32:= 0;
    Result._33:= 1;
+   {$ENDIF}
 end;
+{$WARNINGS ON}
 
 function MatrixDet( const a1, a2, a3, b1, b2, b3, c1, c2, c3: Float ): Float;
 begin
@@ -527,6 +568,7 @@ begin
     end;
 end;
 
+{$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 function mat4transpose(Matrix: TMatrix): TMatrix;
 begin
   Result._00:= Matrix._00;
@@ -549,96 +591,12 @@ begin
   Result._23:= Matrix._32;
   Result._33:= Matrix._33;
 end;
-
-function mat4perspectiveFOVLH( FOV, Aspect, Near, Far: Float ): TMatrix;
-var
-  w, h: Float;
-begin
-  h:= Cot( FOV / 2 );
-  w:= h / Aspect;
-  Result._00:= w; Result._01:= 0; Result._02:= 0;                          Result._03:= 0;
-  Result._10:= 0; Result._11:= h; Result._12:= 0;                          Result._13:= 0;
-//  Result._20:= 0; Result._21:= 0; Result._22:= Far/( Far - Near );         Result._23:= 1;
-  Result._20:= 0; Result._21:= 0; Result._22:= ( Far + Near )/( Near - Far ); Result._23:= -1;
-//  Result._30:= 0; Result._31:= 0; Result._32:= -Near * Far/( Far - Near ); Result._33:= 0;
-  Result._30:= 0; Result._31:= 0; Result._32:= (2 * Far * Near )/( Near - Far ); Result._33:= 0;
-end;
-
-function mat4perspectiveFOVRH( FOV, Aspect, Near, Far: Float ): TMatrix;
-var
-  w, h: Float;
-begin
-  h:= Cot( FOV / 2 );
-  w:= h / Aspect;
-  Result._00:= w; Result._01:= 0; Result._02:= 0;                          Result._03:= 0;
-  Result._10:= 0; Result._11:= h; Result._12:= 0;                          Result._13:= 0;
-  Result._20:= 0; Result._21:= 0; Result._22:= Far/( Near - Far );         Result._23:= -1;
-  Result._30:= 0; Result._31:= 0; Result._32:= Near * Far/( Near - Far );  Result._33:= 0;
-end;
-{
-function mat4orthoLH( w, h, Near, Far: Float ): TMatrix;
-begin
-  Result._00:= 2/w; Result._01:= 0;   Result._02:= 0;                   Result._03:= 0;
-  Result._10:= 0;   Result._11:= -2/h; Result._12:= 0;                   Result._13:= 0;
-  Result._20:= 0;   Result._21:= 0;   Result._22:= 1/( Far - Near );    Result._23:= 0;
-  Result._30:= 0;   Result._31:= 0;   Result._32:= Near/( Near - Far ); Result._33:= 1;
-end;
-
-function mat4orthoRH( w, h, Near, Far: Float ): TMatrix;
-begin
-  Result._00:= 2/w; Result._01:= 0;   Result._02:= 0;                   Result._03:= -1;
-  Result._10:= 0;   Result._11:= -2/h; Result._12:= 0;                   Result._13:= 0;
-  Result._20:= 0;   Result._21:= 0;   Result._22:= 1/( Near - Far );    Result._23:= 0;
-  Result._30:= 0;   Result._31:= 1;   Result._32:= Near/( Near - Far ); Result._33:= 1;
-end;
-}
-function mat4orthoRH( left, right, top, bottom: Float ): TMatrix;
-begin
-  Result._00:= 2/( right - left ); Result._01:= 0;   Result._02:= 0;     Result._03:= 0;
-  Result._10:= 0;   Result._11:= 2/( top - bottom ); Result._12:= 0;    Result._13:= 0;
-  Result._20:= 0;   Result._21:= 0;   Result._22:= -1;                    Result._23:= 0;
-  Result._30:= - (right + left) / (right - left);   Result._31:= - (top + bottom) / (top - bottom);   Result._32:= 0; Result._33:= 1;
-end;
+{$WARNINGS ON}
 
 
-function mat4lookatLH( EyePt, LookAt, UpDir: TVec3 ): TMatrix;
-var
-  xa, ya, za: TVec3;
-begin
-  za:= Normalize ( LookAt - EyePt );
-  xa:= Normalize( cross( UpDir, za ));
-  ya:= cross( za, xa );
-
-  Result._00:= xa.x; Result._01:= ya.x; Result._02:= za.x; Result._03:= 0;
-  Result._10:= xa.y; Result._11:= ya.y; Result._12:= za.y; Result._13:= 0;
-  Result._20:= xa.z; Result._21:= ya.z; Result._22:= za.z; Result._23:= 0;
-
-  Result._30:= -Dot( xa, EyePt );
-  Result._31:= -Dot( ya, EyePt );
-  Result._32:= -Dot( za, EyePt );
-  Result._33:= 1;
-end;
-
-function mat4lookatRH( EyePt, LookAt, UpDir: TVec3 ): TMatrix;
-var
-  xa, ya, za: TVec3;
-begin
-  za:= Normalize( EyePt - LookAt );
-  xa:= Normalize( cross( UpDir, za ));
-  ya:= cross( za, xa );
-
-  Result._00:= xa.x; Result._01:= ya.x; Result._02:= za.x; Result._03:= 0;
-  Result._10:= xa.y; Result._11:= ya.y; Result._12:= za.y; Result._13:= 0;
-  Result._20:= xa.z; Result._21:= ya.z; Result._22:= za.z; Result._23:= 0;
-
-  Result._30:= -Dot( xa, EyePt );
-  Result._31:= -Dot( ya, EyePt );
-  Result._32:= -Dot( za, EyePt );
-  Result._33:= 1;
-end;
 
 {$ENDIF}
 
 {$UNDEF IMPLEMENTATION}
 {$ENDIF}
-
+
