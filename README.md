@@ -1,12 +1,10 @@
-P3DMath
-
+# P3DMath #
 P3DMath is an open source 3D math library for pascal. It is part part of the 3D engine pascal3d (p3d) which is
 currently in development but not yet published. It is planned to be open source as well.
 For more information refer to the docs.
+## P3DMath License ##
 
-P3DMath License
-
-The MIT License (MIT)
+### The MIT License (MIT) ###
 
 Copyright (c) [2015] [Johannes Rosleff Soerensen]
 
