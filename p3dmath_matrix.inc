@@ -1,3 +1,27 @@
+{
+The MIT License (MIT)
+
+Copyright (c) [2015] [Johannes Rosleff Soerensen]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+}
+
 //math3d_matrix.inc
 
 {$IF NUMFIELD = 2}
@@ -12,10 +36,10 @@
 type
   {tst}
   TMatrix = packed object
-    //A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
-    //transformations.
+    //@abbr`A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
+    //transformations`.
     //@br@br
-    //The array @link'm' is for directly accessing the fields of the matrix.
+    //The array @link`m` is for directly accessing the fields of the matrix.
     //You can also use the properties for accessing columns and rows which consist
     //of an "_" and one number for the column and another for the row. So if you
     //want to let's say access column 0 and row 3 you use _03.
@@ -29,11 +53,11 @@ type
       procedure SetMField( AIndex: Integer; AValue: Float );
 
     public
-      //Use this one dimensional array for directly accessing the fields in the matrix.
+      //@abbr`Use this one dimensional array for directly accessing the fields in the matrix`.
       m: array [0..NUMFIELD*NUMFIELD-1] of Float;
 
-      //Use these properties to access the fields of matrix using column and row.
-      //The first value indicates the columnt, the second value indicates the row.
+      //@abbr`Use these properties to access the fields of matrix using column and row.
+      //The first value indicates the column, the second value indicates the row.
       property _00: Float index                0  read GetMField write SetMField;
       {$IF NUMFIELD > 1 }
       property _01: Float index                1  read GetMField write SetMField;
@@ -58,9 +82,11 @@ type
       {$ENDIF}
 
       //This property is only provided for the use with OnChange events if needed in the future.
-      property _m[ index: Integer ]: Float read GetIndex write SetIndex; default;
+
+
+      property _m[ index: Integer ]: Float read GetIndex write SetIndex; default; //@exclude
   end;
-//Will generate a translation matrix of the size depending on the fields of @bold`Vec`.
+//@abbr`Will generate a translation matrix` of the size depending on the fields of @bold`Vec`.
 //If the vector has 3 fields the corresponding matrix will be 3 by 3.
 function
 {$IF NUMFIELD = 2}
@@ -71,7 +97,7 @@ function
   mat4translate
 {$ENDIF}
   ( Vec: TVector ): TMatrix; overload;
-//Will generate a scale matrix of the size depending on the fields of @bold`Vec`.
+//@abbr`Will generate a scale matrix` of the size depending on the fields of @bold`Vec`.
 //If the vector has 3 fields the corresponding matrix will be 3 by 3.
 function
 {$IF NUMFIELD = 2}
@@ -84,19 +110,19 @@ function
   ( Vec: TVector ): TMatrix; overload;
 
 {$IF NUMFIELD = 3}
-//Will generate a 3 by 3 rotation matrix using an axis and an angle.
+//@abbr`Will generate a 3 by 3 rotation matrix using an axis and an angle`.
 function mat3rotate( Axis: TVec3; Angle: Float ): TMatrix; overload;
 {$ENDIF}
 {$IF NUMFIELD = 4}
-//Will generate a 4 by 4 rotation matrix using an axis and an angle.
+//@abbr`Will generate a 4 by 4 rotation matrix using an axis and an angle`.
 function mat4rotate( Axis: TVec3; Angle: Float ): TMatrix; overload;
 
-//Will return the determinant of a 4 by 4 matrix.
+//@abbr`Will return the determinant of a 4 by 4 matrix`.
 function mat4determinant( Mat: TMatrix ): Float;
-//Will calculate the the inverse of a 4 by 4 matrix and store the result in @bold`MatInv`.
+//@abbr`Will calculate the the inverse of a 4 by 4 matrix` and store the result in @bold`MatInv`.
 //If the inverse could be calculated the function will return True.
 function mat4inverse( Mat: TMatrix; out MatInv: TMatrix ): Boolean;
-//Will return the the transpose of a 4 by 4 matrix which means it will swap
+//@abbr`Will return the the transpose of a 4 by 4 matrix` which means it will swap
 //colums and rows.
 function mat4transpose( Matrix: TMatrix ): TMatrix;
 
@@ -105,14 +131,15 @@ function mat4transpose( Matrix: TMatrix ): TMatrix;
 
 {$ENDIF}
 
-//Operator for multiplying a matrix with a float. All values are affected.
+//@abbr`Operator for multiplying a matrix with a float`. All values are affected.
 operator * ( a: TMatrix; b: Float ) c: TMatrix; inline;
-//Operator for multiplying two matrices. If you multiply two transformations, the left value is the transformation applied first.
+//@abbr`Operator for multiplying two matrices`. If you multiply two transformations, the left value is the transformation applied first.
 operator * ( a: TMatrix; b: TMatrix ) c: TMatrix; inline; // left first - right last
-//Operator for transforming a vec using a matrix. The operation is Pre-Multiply in this order.
+//@abbr`Operator for transforming a vec using a matrix`. The operation is Pre-Multiply in this order.
 operator * ( a: TVector; b: TMatrix ) c: TVector; inline; // PRE-Multiply
-//Operator for transforming a vec using a matrix. The operation is Post-Multiply in this order.
+//@abbr`Operator for transforming a vec using a matrix`. The operation is Post-Multiply in this order.
 operator * ( a: TMatrix; b: TVector ) c: TVector; inline; // POST-Multiply
+//@abbr`Operator for comparing two matrices`.
 operator = ( a: TMatrix; b: TMatrix ) c: Boolean; inline;
 
 {$UNDEF INTERFACE}

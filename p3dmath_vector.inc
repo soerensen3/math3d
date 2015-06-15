@@ -1,15 +1,25 @@
-{ <description>
+{
+The MIT License (MIT)
 
-  Copyright (C) <2015> <Johannes Rosleff Sörensen> <contact>
+Copyright (c) [2015] [Johannes Rosleff Soerensen]
 
-  This source is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-  This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-  A copy of the GNU General Public License is available on the World Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also
-  obtain it by writing to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 }
 
 {$IFDEF INTERFACE}
@@ -75,55 +85,50 @@ TVector = packed object
     FCoord: array[ 0..NUMFIELD-1 ] of Float;
 
   public
-    {Calculate the length of the current vector.
-    @returns The result of the function.}
+    {@abbr`Calculate the length of the current vector`.}
     function GetDist: Float;
-    {Normalizes the current vector.
-    @returns The result of the function will be returned additionally.
+    {@abbr`Normalizes the current vector`.
+    The vector will be returned in the function's result additionally.
     @br@br
     For returning a normalized vector without
-    changing the current one use Vecnormalize}
+    changing the current one use the @link`p3dMath.normalize` function}
     function Normalize: TVector;
 
     {$IF NUMFIELD>2}
-    {Calculate the cross product of the current vector and v, wheras the current
-    vector is the first and v is the second.
-    @returns The result of the function.}
+    {@abbr`Calculate the cross product of the current vector and v`.}
     function CrossProduct( v: TVector ): TVector;
     {$ENDIF}
-    {Calculate the dot product of the current vector and v, wheras the current
-    vector is the first and v is the second.
-    @returns The result of the function}
+    {@abbr`Calculate the dot product of the current vector and v`.}
     function DotProduct( v: TVector ): Float;
-    {Determines the biggest component (X, Y, Z, W).
-    @returns` The the index of the biggest component which can be used with @bold`Coord`
-    @code` s:= v.Coord[ v.GetBiggestComp ]; ``}
+    {@abbr`Determines the biggest component (X, Y, Z, W)`.
+    The result is the index of the biggest component which can be used with @bold`Coord`@br
+    @code` s:= v.Coord[ v.GetBiggestComp ]; `}
     function GetBiggestComp: Integer;
 
 //    function RotateRad( Axis: TVec3; Angle: Float ): TVector;
 //    function RotateDeg( Axis: TVec3; Angle: Float ): TVector;
 //      function Transform( Matrix: TMatrix ): TVector;
 
-    {Negates the current vector without altering it.
-    @returns`The result is only returned without altering the original vector.
+    {@abbr`Negates the current vector without altering it`.
+    The result is only returned without altering the original vector.
     This is exivalent to @code`v2:= -v;``}
     function Invert: TVector;
-    {Function to get access to the first element (@bold`X`) of the vector.
-    @returns`The result is a pointer to the data of a vector. It can be used when passing to
+    {@abbr`Function to get access to the first element (@bold`X`) of the vector`.
+    The result is a pointer to the data of a vector. It can be used when passing to
     opengl for example. This is equivalent to
-    @code`ptr:= @v.Coord[ 0 ];``}
+    @code`ptr:= @@v.Coord[ 0 ];`}
     function Ptr: PFloat;
 //      function Mirror( Plane: pPlane ): TVector;
 
-    {Compares two vectors and returns if there field values are equal.
-    @returns The result is a boolean and is True if the vectors are equal.}
+    {@abbr`Compares two vectors and returns if their field values are equal`.
+    The result is a boolean and is True if the vectors are equal.}
     function Compare( v: TVector ): Boolean;
 
 
     property Coord[ Index: Integer ]: Float read GetCoord write SetCoord; default;
-    {This will generate a string with the vector's separated with comma (and a space). It can
+    {@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can
     be used for debugging or printing the values of a vector on screen.
-    @returns'The string is return in the function's result'}
+    The string is returned in the function's result}
     function ToString( const Digits: Integer = 8 ): String;
     procedure FromString( S: String );
 
@@ -162,8 +167,8 @@ end;
 {$UNDEF INTERFACE}
 {$ENDIF}
 
-{$IFDEF CONSTRUCTOR}
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
+{$IFDEF CONSTRUCTOR}
 function Vector(
   {$IF NUMFIELD = 1}
   x: TYPEX;
@@ -338,15 +343,15 @@ function Vector(
 {$IFDEF HELPERFUNCT}
 
 {$INCLUDE p3dmath_vector_functions.inc}
-//Operator for adding two vectors. Only same vector types can be added so far.
+//Operator for adding two vectors.
 operator + ( a, b: TVector ) c: TVector; inline;
-//Operator for adding one vector and a float. Only same vector types can be added so far.
+//Operator for adding one vector and a float.
 operator + ( a: TVector; b: Float ) c: TVector; inline;
-//Operator for subtracting two vectors. Only same vector types can be subtracted so far.
+//Operator for subtracting two vectors.
 operator - ( a, b: TVector ) c: TVector; inline;
-//Operator for subtracting one vector and a float. Only same vector types can be added so far.
+//Operator for subtracting one vector and a float.
 operator - ( a: TVector; b: Float ) c: TVector; inline;
-//Operator for multiplying two vectors component-wise. Only same vector types can be multiplied so far.
+//Operator for multiplying two vectors component-wise.
 operator * ( a, b: TVector ) c: TVector; inline;
 //Operator for calculating a dot product of two vectors.
 operator * ( a, b: TVector ) c: Float; inline;
@@ -354,12 +359,13 @@ operator * ( a, b: TVector ) c: Float; inline;
 operator * ( a: TVector; s: Float ) c: TVector; inline;
 //Operator for scaling a vector using a scalar (float).
 operator * ( s: Float; b: TVector ) c: TVector; inline;
-//Operator for dividing two vectors component-wise. Only same vector types can be divided so far.
+//Operator for dividing two vectors component-wise.
 operator / ( a, b: TVector ) c: TVector; inline;
 //Operator for scaling a vector using a scalar (float). This is the same as multiplying by -s
 operator / ( a: TVector; s: Float ) c: TVector; inline;
 //Operator for negating a vector.
 operator - ( a: TVector ) c: TVector; inline;
+//Operator for comparing two vectors.
 operator = ( a, b: TVector ) c: Boolean; inline;
 
 {$UNDEF HELPERFUNCT}
@@ -628,7 +634,7 @@ begin
 end;
 {$WARNINGS ON}
 
-operator*( a, b: TVector )c: Single;
+operator*(a, b: TVector) c : Float;
 begin
   Result:= a.DotProduct( b );
 end;
