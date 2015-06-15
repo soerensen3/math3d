@@ -36,6 +36,7 @@ uses
 
 type
   {$MACRO ON}
+  Float = Single;
 
   { TVec2 }
   {$DEFINE INTERFACE}
