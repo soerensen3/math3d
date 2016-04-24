@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 }
 
-{$IFDEF INTERFACE}
+{$IF DEFINED( INTERFACE )}
 
 {@abstract' @classname is a basic vector object wich can be modified with operators and functions
 and which provides some methods itself.
@@ -75,304 +75,99 @@ There is no solution for that for now i fear.
 For more information on swizzling see this
 doc: https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Swizzling
 }
-TVector = packed object
-  private
-    {@exclude} procedure SetCoord( AIndex: Integer; AValue: Float );
-    {@exclude} function GetCoord( AIndex: Integer ): Float;
+type
+  TVector = packed object
+    private
+      {@exclude} procedure SetCoord( AIndex: Integer; AValue: Float );
+      {@exclude} function GetCoord( AIndex: Integer ): Float;
 
-  protected
-    {@exclude}
-    FCoord: array[ 0..NUMFIELD-1 ] of Float;
+    protected
+      {@exclude}
+      FCoord: array[ 0..NUMFIELD-1 ] of Float;
 
-  public
-    {@abbr`Calculate the length of the current vector`.}
-    function GetDist: Float;
-    {@abbr`Normalizes the current vector`.
-    The vector will be returned in the function's result additionally.
-    @br@br
-    For returning a normalized vector without
-    changing the current one use the @link`p3dMath.normalize` function}
-    function Normalize: TVector;
+    public
+      {@abbr`Calculate the length of the current vector`.}
+      function GetDist: Float;
+      {@abbr`Normalizes the current vector`.
+      The vector will be returned in the function's result additionally.
+      @br@br
+      For returning a normalized vector without
+      changing the current one use the @link`p3dMath.normalize` function}
+      function Normalize: TVector;
 
-    {$IF NUMFIELD>2}
-    {@abbr`Calculate the cross product of the current vector and v`.}
-    function CrossProduct( v: TVector ): TVector;
-    {$ENDIF}
-    {@abbr`Calculate the dot product of the current vector and v`.}
-    function DotProduct( v: TVector ): Float;
-    {@abbr`Determines the biggest component (X, Y, Z, W)`.
-    The result is the index of the biggest component which can be used with @bold`Coord`@br
-    @code` s:= v.Coord[ v.GetBiggestComp ]; `}
-    function GetBiggestComp: Integer;
+      {$IF NUMFIELD>2}
+      {@abbr`Calculate the cross product of the current vector and v`.}
+      function CrossProduct( v: TVector ): TVector;
+      {$ENDIF}
+      {@abbr`Calculate the dot product of the current vector and v`.}
+      function DotProduct( v: TVector ): Float;
+      {@abbr`Determines the biggest component (X, Y, Z, W)`.
+      The result is the index of the biggest component which can be used with @bold`Coord`@br
+      @code` s:= v.Coord[ v.GetBiggestComp ]; `}
+      function GetBiggestComp: Integer;
 
-//    function RotateRad( Axis: TVec3; Angle: Float ): TVector;
-//    function RotateDeg( Axis: TVec3; Angle: Float ): TVector;
-//      function Transform( Matrix: TMatrix ): TVector;
+  //    function RotateRad( Axis: TVec3; Angle: Float ): TVector;
+  //    function RotateDeg( Axis: TVec3; Angle: Float ): TVector;
+  //      function Transform( Matrix: TMatrix ): TVector;
 
-    {@abbr`Negates the current vector without altering it`.
-    The result is only returned without altering the original vector.
-    This is exivalent to @code`v2:= -v;``}
-    function Invert: TVector;
-    {@abbr`Function to get access to the first element (@bold`X`) of the vector`.
-    The result is a pointer to the data of a vector. It can be used when passing to
-    opengl for example. This is equivalent to
-    @code`ptr:= @@v.Coord[ 0 ];`}
-    function Ptr: PFloat;
-//      function Mirror( Plane: pPlane ): TVector;
+      {@abbr`Negates the current vector without altering it`.
+      The result is only returned without altering the original vector.
+      This is exivalent to @code`v2:= -v;``}
+      function Invert: TVector;
+      {@abbr`Function to get access to the first element (@bold`X`) of the vector`.
+      The result is a pointer to the data of a vector. It can be used when passing to
+      opengl for example. This is equivalent to
+      @code`ptr:= @@v.Coord[ 0 ];`}
+      function Ptr: PFloat;
+  //      function Mirror( Plane: pPlane ): TVector;
 
-    {@abbr`Compares two vectors and returns if their field values are equal`.
-    The result is a boolean and is True if the vectors are equal.}
-    function Compare( v: TVector ): Boolean;
+      {@abbr`Compares two vectors and returns if their field values are equal`.
+      The result is a boolean and is True if the vectors are equal.}
+      function Compare( v: TVector ): Boolean;
 
 
-    property Coord[ Index: Integer ]: Float read GetCoord write SetCoord; default;
-    {@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can
-    be used for debugging or printing the values of a vector on screen.
-    The string is returned in the function's result}
-    function ToString( const Digits: Integer = 8 ): String;
-    procedure FromString( S: String );
+      property Coord[ Index: Integer ]: Float read GetCoord write SetCoord; default;
+      {@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can
+      be used for debugging or printing the values of a vector on screen.
+      The string is returned in the function's result}
+      function ToString( const Digits: Integer = 8 ): String;
+      procedure FromString( S: String );
 
-  published
-    property X: Float index 0 read FCoord[ 0 ] write SetCoord;
-    property R: Float index 0 read FCoord[ 0 ] write SetCoord;
-    property S: Float index 0 read FCoord[ 0 ] write SetCoord;
-    {$IF NUMFIELD>1}
-    property Y: Float index 1 read FCoord[ 1 ] write SetCoord;
-    property G: Float index 1 read FCoord[ 1 ] write SetCoord;
-    property T: Float index 1 read FCoord[ 1 ] write SetCoord;
-    {$ENDIF}
+    published
+      property X: Float index 0 read FCoord[ 0 ] write SetCoord;
+      property R: Float index 0 read FCoord[ 0 ] write SetCoord;
+      property S: Float index 0 read FCoord[ 0 ] write SetCoord;
+      {$IF NUMFIELD>1}
+      property Y: Float index 1 read FCoord[ 1 ] write SetCoord;
+      property G: Float index 1 read FCoord[ 1 ] write SetCoord;
+      property T: Float index 1 read FCoord[ 1 ] write SetCoord;
+      {$ENDIF}
 
-  published
-    {$IF NUMFIELD>2}
-    //This field will only exist from TVec3 on.
-    property Z: Float index 2 read FCoord[ 2 ] write SetCoord;
-    //This field will only exist from TVec3 on.
-    property B: Float index 2 read FCoord[ 2 ] write SetCoord;
-    //This field will only exist from TVec3 on.
-    property P: Float index 2 read FCoord[ 2 ] write SetCoord;
+    published
+      {$IF NUMFIELD>2}
+      //This field will only exist from TVec3 on.
+      property Z: Float index 2 read FCoord[ 2 ] write SetCoord;
+      //This field will only exist from TVec3 on.
+      property B: Float index 2 read FCoord[ 2 ] write SetCoord;
+      //This field will only exist from TVec3 on.
+      property P: Float index 2 read FCoord[ 2 ] write SetCoord;
 
-    {$ENDIF}
-  published
-    {$IF NUMFIELD>3}
-    //This field will only exist from TVec4 on.
-    property W: Float index 3 read FCoord[ 3 ] write SetCoord;
-    //This field will only exist from TVec4 on.
-    property A: Float index 3 read FCoord[ 3 ] write SetCoord;
-    //This field will only exist from TVec4 on.
-    property Q: Float index 3 read FCoord[ 3 ] write SetCoord;
-    {$ENDIF}
-    {$INCLUDE p3dmath_vector_swizzle.inc}
-end;
-
-{$UNDEF INTERFACE}
-{$ENDIF}
+      {$ENDIF}
+    published
+      {$IF NUMFIELD>3}
+      //This field will only exist from TVec4 on.
+      property W: Float index 3 read FCoord[ 3 ] write SetCoord;
+      //This field will only exist from TVec4 on.
+      property A: Float index 3 read FCoord[ 3 ] write SetCoord;
+      //This field will only exist from TVec4 on.
+      property Q: Float index 3 read FCoord[ 3 ] write SetCoord;
+      {$ENDIF}
+      {$INCLUDE p3dmath_vector_swizzle.inc}
+  end;
 
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-{$IFDEF CONSTRUCTOR}
-function Vector(
-  {$IF NUMFIELD = 1}
-  x: TYPEX;
-  {$ELSEIF NUMFIELD = 2}
-    {$IFDEF TYPEY}x{$ELSE}xy{$ENDIF}: TYPEX
-    {$IFDEF TYPEY }
-      ;y: TYPEY
-    {$ENDIF}
-  {$ELSEIF NUMFIELD = 3}
-    {$IFDEF TYPEY}x
-    {$ELSE}
-      {$IFDEF TYPEZ}xy
-      {$ELSE}xyz
-      {$ENDIF}
-    {$ENDIF}
-    : TYPEX
-    {$IFDEF TYPEY}
-     {$IFDEF TYPEZ};y{$ELSE};yz{$ENDIF}: TYPEY
-    {$ENDIF}
-    {$IFDEF TYPEZ}
-     ;z: TYPEZ
-    {$ENDIF}
-  {$ELSEIF NUMFIELD = 4}
-    {$IFDEF TYPEY}x
-    {$ELSE}
-      {$IFDEF TYPEZ}xy
-      {$ELSE}
-        {$IFDEF TYPEW}xyz
-        {$ELSE}xyzw
-        {$ENDIF}
-      {$ENDIF}
-    {$ENDIF}
-    : TYPEX
 
-    {$IFDEF TYPEY}
-      {$IFDEF TYPEZ};y
-      {$ELSE}
-        {$IFDEF TYPEW}
-          ;yz
-        {$ELSE}
-          ;yzw
-        {$ENDIF}
-      {$ENDIF}
-    : TYPEY
-    {$ENDIF}
-
-    {$IFDEF TYPEZ}
-      {$IFDEF TYPEW};z{$ELSE};zw{$ENDIF}: TYPEZ
-    {$ENDIF}
-
-    {$IFDEF TYPEW}
-      ;w: TYPEW
-    {$ENDIF}
-  {$ENDIF}
-  ): TVector; overload; inline;
-
-  {$IFDEF _IMPLEMENTATION}
-  begin
-    {$IF NUMFIELD=1}
-    Result.x:= x;
-    {$ELSEIF NUMFIELD=2}
-      {$IFDEF TYPEY}
-        Result.x:= x;
-      {$ELSE}
-        {$IF TYPEX = Float}
-          Result.x:= xy;
-          Result.y:= xy;
-        {$ELSE}
-          Result.x:= xy.x;
-          Result.y:= xy.y;
-        {$ENDIF}
-      {$ENDIF}
-      {$IFDEF TYPEY }
-        Result.y:= y;
-      {$ENDIF}
-    {$ELSEIF NUMFIELD = 3}
-      {$IFDEF TYPEY}
-        Result.x:= x;
-      {$ELSE}
-        {$IFDEF TYPEZ}
-          Result.x:= xy.x;
-          Result.y:= xy.y;
-        {$ELSE}
-          {$IF TYPEX = Float}
-            Result.x:= xyz;
-            Result.y:= xyz;
-            Result.z:= xyz;
-          {$ELSE}
-            Result.x:= xyz.x;
-            Result.y:= xyz.y;
-            Result.z:= xyz.z;
-          {$ENDIF}
-        {$ENDIF}
-      {$ENDIF}
-      {$IFDEF TYPEY}
-        {$IFDEF TYPEZ}
-          Result.y:= y;
-        {$ELSE}
-          Result.y:= yz.x;
-          Result.z:= yz.y;
-        {$ENDIF}
-      {$ENDIF}
-      {$IFDEF TYPEZ }
-        Result.z:= z;
-      {$ENDIF}
-    {$ELSEIF NUMFIELD = 4}
-      {$IFDEF TYPEY}
-        Result.x:= x;
-      {$ELSE}
-        {$IFDEF TYPEZ}
-          Result.x:= xy.x;
-          Result.y:= xy.y;
-        {$ELSE}
-          {$IFDEF TYPEW}
-            Result.x:= xyz.x;
-            Result.y:= xyz.y;
-            Result.z:= xyz.z;
-          {$ELSE}
-            {$IF TYPEX = Float}
-              Result.x:= xyzw;
-              Result.y:= xyzw;
-              Result.z:= xyzw;
-              Result.w:= 1.0;
-            {$ELSE}
-              Result.x:= xyzw.x;
-              Result.y:= xyzw.y;
-              Result.z:= xyzw.z;
-              Result.w:= xyzw.w;
-            {$ENDIF}
-          {$ENDIF}
-        {$ENDIF}
-      {$ENDIF}
-
-      {$IFDEF TYPEY}
-        {$IFDEF TYPEZ};
-          Result.y:= y;
-        {$ELSE}
-          {$IFDEF TYPEW}
-            Result.y:= yz.x;
-            Result.z:= yz.y;
-          {$ELSE}
-            Result.y:= yzw.x;
-            Result.z:= yzw.y;
-            Result.w:= yzw.z;
-          {$ENDIF}
-        {$ENDIF}
-      {$ENDIF}
-
-      {$IFDEF TYPEZ}
-        {$IFDEF TYPEW};
-          Result.z:= z;
-        {$ELSE};
-          Result.z:= zw.x;
-          Result.w:= zw.y;
-        {$ENDIF}
-      {$ENDIF}
-
-      {$IFDEF TYPEW}
-        Result.w:= w;
-      {$ENDIF}
-    {$ENDIF}
-  end;
-  {$ENDIF}
-
-  {$UNDEF TYPEX}
-  {$UNDEF TYPEY}
-  {$UNDEF TYPEZ}
-  {$UNDEF TYPEW}
-  {$WARNINGS ON}
-{$ENDIF}
-
-{$IFDEF HELPERFUNCT}
-
-{$INCLUDE p3dmath_vector_functions.inc}
-//Operator for adding two vectors.
-operator + ( a, b: TVector ) c: TVector; inline;
-//Operator for adding one vector and a float.
-operator + ( a: TVector; b: Float ) c: TVector; inline;
-//Operator for subtracting two vectors.
-operator - ( a, b: TVector ) c: TVector; inline;
-//Operator for subtracting one vector and a float.
-operator - ( a: TVector; b: Float ) c: TVector; inline;
-//Operator for multiplying two vectors component-wise.
-operator * ( a, b: TVector ) c: TVector; inline;
-//Operator for calculating a dot product of two vectors.
-operator * ( a, b: TVector ) c: Float; inline;
-//Operator for scaling a vector using a scalar (float).
-operator * ( a: TVector; s: Float ) c: TVector; inline;
-//Operator for scaling a vector using a scalar (float).
-operator * ( s: Float; b: TVector ) c: TVector; inline;
-//Operator for dividing two vectors component-wise.
-operator / ( a, b: TVector ) c: TVector; inline;
-//Operator for scaling a vector using a scalar (float). This is the same as multiplying by -s
-operator / ( a: TVector; s: Float ) c: TVector; inline;
-//Operator for negating a vector.
-operator - ( a: TVector ) c: TVector; inline;
-//Operator for comparing two vectors.
-operator = ( a, b: TVector ) c: Boolean; inline;
-
-{$UNDEF HELPERFUNCT}
-{$ENDIF}
-
-
-{$IFDEF IMPLEMENTATION}
+{$ELSEIF DEFINED( IMPLEMENTATION )}
 
 { TVector }
 
@@ -487,17 +282,22 @@ end;
 function TVector.ToString( const Digits: Integer = 8 ): String;
 var
   str: String;
+	d: String;
 begin
+  if ( Digits = -1 ) then
+    d:= 'g'
+  else
+    d:= '.' + IntToStr( Digits ) + 'f';
   {$IF NUMFIELD = 2}
-  str:= StringReplace( '%.#f,%.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  str:= StringReplace( '%#,%#', '#', d, [ rfReplaceAll ]);
   Result:= Format( str, [ X, Y ]);
   {$ENDIF}
   {$IF NUMFIELD = 3}
-  str:= StringReplace( '%.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  str:= StringReplace( '%#, %#, %#', '#', d, [ rfReplaceAll ]);
   Result:= Format( str, [ X, Y, Z ]);
   {$ENDIF}
   {$IF NUMFIELD = 4}
-  str:= StringReplace( '%.#f, %.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  str:= StringReplace( '%#, %#, %#, %#', '#', d, [ rfReplaceAll ]);
   Result:= Format( str, [ X, Y, Z, W ]);
   {$ENDIF}
 end;
@@ -727,5 +527,4 @@ end;
 
 {$INCLUDE p3dmath_vector_functions.inc}
 
-{$UNDEF IMPLEMENTATION}
 {$ENDIF}

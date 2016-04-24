@@ -10,13 +10,13 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Minor="5"/>
-    <Files Count="11">
+    <Files Count="13">
       <Item1>
-        <Filename Value="p3dmath_vector.inc"/>
-        <Type Value="Include"/>
+        <Filename Value="p3dmath.pas"/>
+        <UnitName Value="p3dMath"/>
       </Item1>
       <Item2>
-        <Filename Value="p3dmath_consts.inc"/>
+        <Filename Value="p3dmath_arrays.inc"/>
         <Type Value="Include"/>
       </Item2>
       <Item3>
@@ -24,37 +24,45 @@
         <Type Value="Include"/>
       </Item3>
       <Item4>
-        <Filename Value="p3dmath_quaternion.inc"/>
+        <Filename Value="p3dmath_consts.inc"/>
         <Type Value="Include"/>
       </Item4>
       <Item5>
-        <Filename Value="p3dmath_vector_constructors.inc"/>
+        <Filename Value="p3dmath_matrix.inc"/>
         <Type Value="Include"/>
       </Item5>
       <Item6>
-        <Filename Value="p3dmath_matrix.inc"/>
+        <Filename Value="p3dmath_matrix_constructors.inc"/>
         <Type Value="Include"/>
       </Item6>
       <Item7>
-        <Filename Value="p3dmath_vector_swizzle.inc"/>
+        <Filename Value="p3dmath_quaternion.inc"/>
         <Type Value="Include"/>
       </Item7>
       <Item8>
-        <Filename Value="p3dmath_matrix_constructors.inc"/>
+        <Filename Value="p3dmath_vector.inc"/>
         <Type Value="Include"/>
       </Item8>
       <Item9>
-        <Filename Value="p3dmath_arrays.inc"/>
-        <Type Value="Include"/>
+        <Filename Value="p3dmath_vector_constructor_template.inc"/>
+        <Type Value="Binary"/>
       </Item9>
       <Item10>
-        <Filename Value="p3dmath_vector_functions.inc"/>
-        <Type Value="Binary"/>
+        <Filename Value="p3dmath_vector_constructors.inc"/>
+        <Type Value="Include"/>
       </Item10>
       <Item11>
-        <Filename Value="p3dmath.pas"/>
-        <UnitName Value="p3dMath"/>
+        <Filename Value="p3dmath_vector_functions.inc"/>
+        <Type Value="Binary"/>
       </Item11>
+      <Item12>
+        <Filename Value="p3dmath_vector_swizzle.inc"/>
+        <Type Value="Include"/>
+      </Item12>
+      <Item13>
+        <Filename Value="p3dmath_vector_op.inc"/>
+        <Type Value="Include"/>
+      </Item13>
     </Files>
     <RequiredPkgs Count="1">
       <Item1>

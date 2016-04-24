@@ -47,14 +47,22 @@ type
     //to another API than OpenGL, like Direct 3D. You might need to transpose the matrix then.
 
     private
+      function GetCol( index: Integer ): TVector;
       function GetIndex( index: Integer ): Float; inline;
       function GetMField( AIndex: Integer ): Float; inline;
+      function GetRow( index: Integer ): TVector;
+      procedure SetCol( index: Integer ; AValue: TVector );
       procedure SetIndex( index: Integer ; AValue: Float );
       procedure SetMField( AIndex: Integer; AValue: Float );
+      procedure SetRow( index: Integer ; AValue: TVector );
 
     public
       //@abbr`Use this one dimensional array for directly accessing the fields in the matrix`.
       m: array [0..NUMFIELD*NUMFIELD-1] of Float;
+      property Row [ index: Integer ] : TVector read GetRow write SetRow;
+      property Col [ index: Integer ] : TVector read GetCol write SetCol;
+
+      function ToString( const LineBreaks: Boolean = False; const Digits: Integer = 8 ): String;
 
       //@abbr`Use these properties to access the fields of matrix using column and row.
       //The first value indicates the column, the second value indicates the row.
@@ -141,8 +149,6 @@ operator * ( a: TVector; b: TMatrix ) c: TVector; inline; // PRE-Multiply
 operator * ( a: TMatrix; b: TVector ) c: TVector; inline; // POST-Multiply
 //@abbr`Operator for comparing two matrices`.
 operator = ( a: TMatrix; b: TMatrix ) c: Boolean; inline;
-
-{$UNDEF INTERFACE}
 {$ENDIF}
 
 {$IFDEF IMPLEMENTATION}
@@ -171,6 +177,22 @@ end;
 
 { TMatrix }
 
+function TMatrix.GetCol( index: Integer ): TVector;
+var
+  offset: Integer;
+begin
+  {$IF NUMFIELD = 2}
+  offset:= 2;
+  Result:= vec2( _m[ offset + 0 ], _m[ offset + 4 ]);
+  {$ELSEIF NUMFIELD = 3}
+  offset:= 3;
+  Result:= vec3( _m[ offset + 0 ], _m[ offset + 4 ], _m[ offset + 8 ]);
+  {$ELSEIF NUMFIELD = 4}
+  offset:= 4;
+  Result:= vec4( _m[ offset + 0 ], _m[ offset + 4 ], _m[ offset + 8 ], _m[ offset + 12 ]);
+  {$ENDIF}
+end;
+
 function TMatrix.GetIndex( index: Integer ): Float;
 begin
   Result:= m[ index ];
@@ -179,6 +201,44 @@ end;
 function TMatrix.GetMField(AIndex: Integer): Float;
 begin
   Result:= m[ AIndex ];
+end;
+
+function TMatrix.GetRow( index: Integer ): TVector;
+var
+  offset: Integer;
+begin
+  {$IF NUMFIELD = 2}
+  offset:= 2 * index;
+  Result:= vec2( _m[ offset + 0 ], _m[ offset + 1 ]);
+  {$ELSEIF NUMFIELD = 3}
+  offset:= 3 * index;
+  Result:= vec3( _m[ offset + 0 ], _m[ offset + 1 ], _m[ offset + 2 ]);
+  {$ELSEIF NUMFIELD = 4}
+  offset:= 4 * index;
+  Result:= vec4( _m[ offset + 0 ], _m[ offset + 1 ], _m[ offset + 2 ], _m[ offset + 3 ]);
+  {$ENDIF}
+end;
+
+procedure TMatrix.SetCol( index: Integer ; AValue: TVector );
+var
+  offset: Integer;
+begin
+  {$IF NUMFIELD = 2}
+  offset:= 2;
+  _m[ offset + 0 ]:= AValue.x;
+  _m[ offset + 4 ]:= AValue.Y;
+  {$ELSEIF NUMFIELD = 3}
+  offset:= 3;
+  _m[ offset + 0 ]:= AValue.X;
+  _m[ offset + 4 ]:= AValue.Y;
+  _m[ offset + 8 ]:= AValue.Z;
+  {$ELSEIF NUMFIELD = 4}
+  offset:= 4;
+  _m[ offset + 0 ]:= AValue.X;
+  _m[ offset + 4 ]:= AValue.Y;
+  _m[ offset + 8 ]:= AValue.Z;
+  _m[ offset + 12 ]:= AValue.W;
+  {$ENDIF}
 end;
 
 procedure TMatrix.SetIndex( index: Integer ; AValue: Float);
@@ -190,6 +250,53 @@ procedure TMatrix.SetMField(AIndex: Integer; AValue: Float);
 begin
   m[ AIndex ]:= AValue;
 end;
+
+procedure TMatrix.SetRow( index: Integer ; AValue: TVector );
+var
+  offset: Integer;
+begin
+  {$IF NUMFIELD = 2}
+  offset:= 2 * index;
+  _m[ offset + 0 ]:= AValue.x;
+  _m[ offset + 1 ]:= AValue.Y;
+  {$ELSEIF NUMFIELD = 3}
+  offset:= 3 * index;
+  _m[ offset + 0 ]:= AValue.X;
+  _m[ offset + 1 ]:= AValue.Y;
+  _m[ offset + 2 ]:= AValue.Z;
+  {$ELSEIF NUMFIELD = 4}
+  offset:= 4 * index;
+  _m[ offset + 0 ]:= AValue.X;
+  _m[ offset + 1 ]:= AValue.Y;
+  _m[ offset + 2 ]:= AValue.Z;
+  _m[ offset + 3 ]:= AValue.W;
+  {$ENDIF}
+end;
+
+function TMatrix.ToString(const LineBreaks: Boolean; const Digits: Integer ): String;
+var
+  lb: String;
+  str: String;
+begin
+  if ( LineBreaks ) then
+    lb:= LineEnding
+  else
+    lb:= '';
+  {$IF NUMFIELD = 2}
+  str:= StringReplace( '%.#f,%.#f, %s%.#f,%.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ _00, _01, lb, _10, _11 ]);
+  {$ENDIF}
+  {$IF NUMFIELD = 3}
+  str:= StringReplace( '%.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ _00, _01, _02, lb, _10, _11, _12, lb, _20, _21, _22 ]);
+  {$ENDIF}
+  {$IF NUMFIELD = 4}
+  str:= StringReplace( '%.#f, %.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ _00, _01, _02, _03, lb, _10, _11, _12, _13, lb, _20, _21, _22, _23, lb, _30, _31, _32, _33 ]);
+  {$ENDIF}
+end;
+
+
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator * ( a: TMatrix; b: TMatrix ) c: TMatrix; inline;
 begin
@@ -279,92 +386,92 @@ begin
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator*( a: TVector; b: TMatrix ) c: TVector;
+operator*( a: TMatrix; b: TVector ) c: TVector;
 begin
-  Result.x:= ( a.x * b._00 )
+  Result.x:= ( b.x * a._00 )
            {$IF NUMFIELD > 1}
-           + ( a.y * b._10 )
+           + ( b.y * a._10 )
            {$ENDIF}
            {$IF NUMFIELD > 2}
-           + ( a.z * b._20 )
+           + ( b.z * a._20 )
            {$ENDIF}
            {$IF NUMFIELD > 3}
-           + ( a.w * b._30 )
+           + ( b.w * a._30 )
            {$ENDIF}
            ;
 
   {$IF NUMFIELD > 1}
-  Result.y:= ( a.x * b._01 )
-           + ( a.y * b._11 )
+  Result.y:= ( b.x * a._01 )
+           + ( b.y * a._11 )
            {$IF NUMFIELD > 2}
-           + ( a.z * b._21 )
+           + ( b.z * a._21 )
            {$ENDIF}
            {$IF NUMFIELD > 3}
-           + ( a.w * b._31 )
+           + ( b.w * a._31 )
            {$ENDIF}
            ;
   {$ENDIF}
 
   {$IF NUMFIELD > 2}
-  Result.z:= ( a.x * b._02 )
-           + ( a.y * b._12 )
-           + ( a.z * b._22 )
+  Result.z:= ( b.x * a._02 )
+           + ( b.y * a._12 )
+           + ( b.z * a._22 )
            {$IF NUMFIELD > 3}
-           + ( a.w * b._32 )
+           + ( b.w * a._32 )
            {$ENDIF}
            ;
   {$ENDIF}
 
   {$IF NUMFIELD > 3}
-  Result.w:= ( a.x * b._03 )
-           + ( a.y * b._13 )
-           + ( a.z * b._23 )
-           + ( a.w * b._33 );
+  Result.w:= ( b.x * a._03 )
+           + ( b.y * a._13 )
+           + ( b.z * a._23 )
+           + ( b.w * a._33 );
   {$ENDIF}
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator*( a: TMatrix; b: TVector )c: TVector;
+operator*( a: TVector; b: TMatrix ) c: TVector;
 begin
-  Result.x:= ( a._00 * b.x )
+  Result.x:= ( b._00 * a.x )
            {$IF NUMFIELD > 1}
-           + ( a._01 * b.y )
+           + ( b._01 * a.y )
            {$ENDIF}
            {$IF NUMFIELD > 2}
-           + ( a._02 * b.z )
+           + ( b._02 * a.z )
            {$ENDIF}
            {$IF NUMFIELD > 3}
-           + ( a._03 * b.w )
+           + ( b._03 * a.w )
            {$ENDIF}
            ;
 
   {$IF NUMFIELD > 1}
-  Result.y:= ( a._10 * b.x )
-           + ( a._11 * b.y )
+  Result.y:= ( b._10 * a.x )
+           + ( b._11 * a.y )
            {$IF NUMFIELD > 2}
-           + ( a._12 * b.z )
+           + ( b._12 * a.z )
            {$ENDIF}
            {$IF NUMFIELD > 3}
-           + ( a._13 * b.w )
+           + ( b._13 * a.w )
            {$ENDIF}
            ;
   {$ENDIF}
 
   {$IF NUMFIELD > 2}
-  Result.z:= ( a._20 * b.x )
-           + ( a._21 * b.y )
-           + ( a._22 * b.z )
+  Result.z:= ( b._20 * a.x )
+           + ( b._21 * a.y )
+           + ( b._22 * a.z )
            {$IF NUMFIELD > 3}
-           + ( a._23 * b.w )
+           + ( b._23 * a.w )
            {$ENDIF}
            ;
   {$ENDIF}
 
   {$IF NUMFIELD > 3}
-  Result.w:= ( a._30 * b.x )
-           + ( a._31 * b.y )
-           + ( a._32 * b.z )
-           + ( a._33 * b.w );
+  Result.w:= ( b._30 * a.x )
+           + ( b._31 * a.y )
+           + ( b._32 * a.z )
+           + ( b._33 * a.w );
   {$ENDIF}
 end;
 {$WARNINGS ON}
@@ -624,6 +731,5 @@ end;
 
 {$ENDIF}
 
-{$UNDEF IMPLEMENTATION}
 {$ENDIF}
 

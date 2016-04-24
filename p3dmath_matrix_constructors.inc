@@ -152,6 +152,26 @@ begin
 
 end;
 {$ENDIF}
+
+function mat3( quat: TQuaternion ): TMat3;
+//1 - 2*qy2 - 2*qz2 	2*qx*qy - 2*qz*qw 	2*qx*qz + 2*qy*qw
+//2*qx*qy + 2*qz*qw 	1 - 2*qx2 - 2*qz2 	2*qy*qz - 2*qx*qw
+//2*qx*qz - 2*qy*qw 	2*qy*qz + 2*qx*qw 	1 - 2*qx2 - 2*qy2
+{$IFDEF IMPLEMENTATION}
+begin
+  Result._00:= 1 - 2 * quat[ 1 ] * quat[ 1 ] - 2 * quat[ 2 ] * quat[ 2 ];
+  Result._01:=     2 * quat[ 0 ] * quat[ 1 ] - 2 * quat[ 2 ] * quat[ 3 ];
+  Result._02:=     2 * quat[ 0 ] * quat[ 2 ] - 2 * quat[ 1 ] * quat[ 3 ];
+  Result._10:=     2 * quat[ 0 ] * quat[ 2 ] + 2 * quat[ 2 ] * quat[ 3 ];
+  Result._11:= 1 - 2 * quat[ 0 ] * quat[ 0 ] - 2 * quat[ 2 ] * quat[ 2 ];
+  Result._12:=     2 * quat[ 1 ] * quat[ 2 ] - 2 * quat[ 0 ] * quat[ 3 ];
+  Result._20:=     2 * quat[ 0 ] * quat[ 2 ] - 2 * quat[ 1 ] * quat[ 3 ];
+  Result._21:=     2 * quat[ 1 ] * quat[ 2 ] - 2 * quat[ 0 ] * quat[ 3 ];
+  Result._22:= 1 - 2 * quat[ 0 ] * quat[ 0 ] - 2 * quat[ 1 ] * quat[ 1 ];
+end;
+{$ENDIF}
+
+
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
 //@abbr`Will create a four by four matrix using one float`. The float is used in a diagonal
@@ -343,3 +363,52 @@ begin
   Result._33:= 1;
 end;
 {$ENDIF}
+
+//@abbr`Returns a 4 by 4 Euler rotation matrix.` The vector PitchYawRoll is used for the angles Y, X, Z..
+function mat4rotateEuler( PitchYawRoll: TVec3 ): TMat4;
+{$IFDEF IMPLEMENTATION}
+// E( y, p, r ) = R_z( r ) * R_x( p ) * R_y( y )
+begin
+  Result:= mat4rotate( vec3_Axis_NZ, PitchYawRoll.Z ) *
+           mat4rotate( vec3_Axis_PX, PitchYawRoll.X ) *
+           mat4rotate( vec3_Axis_PY, PitchYawRoll.Y );
+end;
+{$ENDIF}
+//@abbr`Returns a 4 by 4 Euler rotation matrix.` Yaw, pitch and roll are used as angles..
+function mat4rotateEuler( Pitch, Yaw, Roll: Single ): TMat4;
+{$IFDEF IMPLEMENTATION}
+// E( y, p, r ) = R_z( r ) * R_x( p ) * R_y( y )
+begin
+  Result:= mat4rotate( vec3_Axis_NZ, Roll ) *
+           mat4rotate( vec3_Axis_PX, Pitch ) *
+           mat4rotate( vec3_Axis_PY, Yaw );
+end;
+
+{$ENDIF}
+
+function mat4toEuler( Matrix: TMat4 ): TVec3;
+{$IFDEF IMPLEMENTATION}
+begin
+  if ( abs( Matrix._20 ) <> 1 ) then //TWO SOLUTIONS, TAKE THE FIRST
+    begin
+      Result.Y:= -arcsin( Matrix._20 );
+      Result.X:= arctan2( Matrix._21 / cos( Result.Y ), Matrix._22 / cos( Result.Y ));
+      Result.Z:= arctan2( Matrix._10 / cos( Result.Y ), Matrix._00 / cos( Result.Y ));
+    end
+  else
+    begin // UNLIMITED SOLUTIONS, PICK ONE WHERE Z IS 0
+      Result.Z:= 0;
+      if ( Matrix._20 = -1 ) then
+        begin
+          Result.Y:= PI/2;
+          Result.X:= arctan2( Matrix._01, Matrix._02 );
+        end
+      else
+        begin
+          Result.Y:= PI/2;
+          Result.X:= arctan2( -Matrix._01, -Matrix._02 );
+        end;
+    end;
+end;
+{$ENDIF}
+

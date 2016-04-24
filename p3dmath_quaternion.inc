@@ -35,6 +35,7 @@ type
       property d: Float read FCoord[ 3 ] write FCoord[ 3 ];
 
       function Conj: TQuaternion;
+      function GetAxisAngle: TVec4; //with XYZ as Axis and A (=W) as angle
   end;
 
 //Multiplies two quaternions.
@@ -57,6 +58,31 @@ begin
   Result.b:= -b;
   Result.c:= -c;
   Result.d:= -d;
+end;
+
+function TQuaternion.GetAxisAngle: TVec4;
+var
+  q1: TQuaternion;
+  sp: Single;
+begin
+  q1:= Self;
+  if ( q1.w > 1) then
+    q1.Normalize(); // if w>1 acos and sqrt will produce errors, this cant happen if quaternion is normalised
+  Result.A:= 2 * arccos( q1.w );
+  sp:= sqrt( 1 - q1.w * q1.w ); // assuming quaternion normalised then w is less than 1, so term always positive.
+  if ( sp < 0.001 ) then // test to avoid divide by zero, sp is always positive due to sqrt
+    // if sp close to zero then direction of axis not important
+    begin
+      x:= q1.x; // if it is important that axis is normalised then replace with x=1; y=z=0;
+      y:= q1.y;
+      z:= q1.z;
+    end
+  else
+    begin
+      x:= q1.x / sp; // normalise axis
+      y:= q1.y / sp;
+      z:= q1.z / sp;
+    end;
 end;
 
 operator*(q1, q2: TQuaternion)q: TQuaternion;
