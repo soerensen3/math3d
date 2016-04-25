@@ -1,0 +1,20 @@
+p3dmath Version 1
+- Matrix
+- Matrix constructors glsl
+- Matrix helpers additional
+
+- Vector
+- Vector constructors glsl
+- Vector helpers glsl
+- Vector helpers additional
+
+- Quaternion
+- Quaternion constructors
+- Quaternion helpers
+
+
+p3dmath
+- Matrix
+- Vector
+- conversion
+- helpers

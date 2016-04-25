@@ -47,6 +47,7 @@ operator - ( a: TQuaternion ) b: TQuaternion;
 
 function quat( vec: TVector ): TQuaternion;
 function quat( a, b, c, d: Float ): TQuaternion;
+function quatEuler( YawPitchRoll: TVec3 ): TQuaternion;
 
 {$ENDIF}
 {$IFDEF IMPLEMENTATION}
@@ -161,6 +162,23 @@ begin
   Result.b:= b;
   Result.c:= c;
   Result.d:= d;
+end;
+
+function quatEuler( YawPitchRoll: TVec3 ): TQuaternion;
+var
+  c1, c2, c3, s1, s2, s3: Single;
+begin
+  c1:= cos( YawPitchRoll.y / 2 );
+  c2:= cos( YawPitchRoll.z / 2 );
+  c3:= cos( YawPitchRoll.x / 2 );
+  s1:= sin( YawPitchRoll.y / 2 );
+  s2:= sin( YawPitchRoll.z / 2 );
+  s3:= sin( YawPitchRoll.x / 2 );
+
+  Result.w:= c1 * c2 * c3 - s1 * s2 * s3;
+  Result.x:= s1 * s2 * c3 + c1 * c2 * s3;
+  Result.y:= s1 * c2 * c3 + c1 * s2 * s3;
+  Result.z:= c1 * s2 * c3 - s1 * c2 * s3;
 end;
 
 

@@ -161,12 +161,14 @@ function mat3( quat: TQuaternion ): TMat3;
 begin
   Result._00:= 1 - 2 * quat[ 1 ] * quat[ 1 ] - 2 * quat[ 2 ] * quat[ 2 ];
   Result._01:=     2 * quat[ 0 ] * quat[ 1 ] - 2 * quat[ 2 ] * quat[ 3 ];
-  Result._02:=     2 * quat[ 0 ] * quat[ 2 ] - 2 * quat[ 1 ] * quat[ 3 ];
-  Result._10:=     2 * quat[ 0 ] * quat[ 2 ] + 2 * quat[ 2 ] * quat[ 3 ];
+  Result._02:=     2 * quat[ 0 ] * quat[ 2 ] + 2 * quat[ 1 ] * quat[ 3 ];
+
+  Result._10:=     2 * quat[ 0 ] * quat[ 1 ] + 2 * quat[ 2 ] * quat[ 3 ];
   Result._11:= 1 - 2 * quat[ 0 ] * quat[ 0 ] - 2 * quat[ 2 ] * quat[ 2 ];
   Result._12:=     2 * quat[ 1 ] * quat[ 2 ] - 2 * quat[ 0 ] * quat[ 3 ];
+
   Result._20:=     2 * quat[ 0 ] * quat[ 2 ] - 2 * quat[ 1 ] * quat[ 3 ];
-  Result._21:=     2 * quat[ 1 ] * quat[ 2 ] - 2 * quat[ 0 ] * quat[ 3 ];
+  Result._21:=     2 * quat[ 1 ] * quat[ 2 ] + 2 * quat[ 0 ] * quat[ 3 ];
   Result._22:= 1 - 2 * quat[ 0 ] * quat[ 0 ] - 2 * quat[ 1 ] * quat[ 1 ];
 end;
 {$ENDIF}
@@ -412,3 +414,11 @@ begin
 end;
 {$ENDIF}
 
+function mat3toScale( Matrix: TMat3 ): TVec3;
+{$IFDEF IMPLEMENTATION}
+begin
+  Result.X:= len( vec3( Matrix._00, Matrix._01, Matrix._02 ));
+  Result.Y:= len( vec3( Matrix._10, Matrix._11, Matrix._12 ));
+  Result.Z:= len( vec3( Matrix._20, Matrix._21, Matrix._22 ));
+end;
+{$ENDIF}
