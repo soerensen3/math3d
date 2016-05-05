@@ -2,7 +2,7 @@
   This source is only used to compile and install the package.
  }
 
-unit p3d_math;
+unit pascal3d_math;
 
 interface
 
@@ -16,5 +16,5 @@ begin
 end;
 
 initialization
-  RegisterPackage('p3d_math', @Register);
+  RegisterPackage('pascal3d_math', @Register);
 end.

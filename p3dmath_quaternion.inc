@@ -29,11 +29,6 @@ type
     // Using TVector instead of TVec4 as descendent so it can be easily
     // replaced with double vectors for higher precision if necessary in the future
     public
-      property a: Float read FCoord[ 0 ] write FCoord[ 0 ];
-      property b: Float read FCoord[ 1 ] write FCoord[ 1 ];
-      property c: Float read FCoord[ 2 ] write FCoord[ 2 ];
-      property d: Float read FCoord[ 3 ] write FCoord[ 3 ];
-
       function Conj: TQuaternion;
       function GetAxisAngle: TVec4; //with XYZ as Axis and A (=W) as angle
   end;
@@ -46,7 +41,7 @@ operator * ( a: TQuaternion; b: TVector ) c: TVector;
 operator - ( a: TQuaternion ) b: TQuaternion;
 
 function quat( vec: TVector ): TQuaternion;
-function quat( a, b, c, d: Float ): TQuaternion;
+function quat(x, y, z, w: Float): TQuaternion;
 function quatEuler( YawPitchRoll: TVec3 ): TQuaternion;
 
 {$ENDIF}
@@ -55,10 +50,10 @@ function quatEuler( YawPitchRoll: TVec3 ): TQuaternion;
 
 function TQuaternion.Conj: TQuaternion;
 begin
-  Result.a:= a;
-  Result.b:= -b;
-  Result.c:= -c;
-  Result.d:= -d;
+  Result.w:= w;
+  Result.x:= -x;
+  Result.y:= -y;
+  Result.z:= -z;
 end;
 
 function TQuaternion.GetAxisAngle: TVec4;
@@ -69,7 +64,7 @@ begin
   q1:= Self;
   if ( q1.w > 1) then
     q1.Normalize(); // if w>1 acos and sqrt will produce errors, this cant happen if quaternion is normalised
-  Result.A:= 2 * arccos( q1.w );
+  Result.w:= 2 * arccos( q1.w );
   sp:= sqrt( 1 - q1.w * q1.w ); // assuming quaternion normalised then w is less than 1, so term always positive.
   if ( sp < 0.001 ) then // test to avoid divide by zero, sp is always positive due to sqrt
     // if sp close to zero then direction of axis not important
@@ -88,22 +83,22 @@ end;
 
 operator*(q1, q2: TQuaternion)q: TQuaternion;
 begin
-  q.a:=   q1.a * q2.a
-        - q1.b * q2.b
-        - q1.c * q2.c
-        - q1.d * q2.d;
-  q.b:=   q1.a * q2.b
-        + q1.b * q2.a
-        + q1.c * q2.d
-        - q1.d * q2.c;
-  q.c:=   q1.a * q2.c
-        - q1.b * q2.d
-        + q1.c * q2.a
-        + q1.d * q2.b;
-  q.d:=   q1.a * q2.d
-        + q1.b * q2.c
-        - q1.c * q2.b
-        + q1.d * q2.a;
+  q.w:=   q1.w * q2.w
+        - q1.x * q2.x
+        - q1.y * q2.y
+        - q1.z * q2.z;
+  q.x:=   q1.w * q2.x
+        + q1.x * q2.w
+        + q1.y * q2.z
+        - q1.z * q2.y;
+  q.y:=   q1.w * q2.y
+        - q1.x * q2.z
+        + q1.y * q2.w
+        + q1.z * q2.x;
+  q.z:=   q1.w * q2.z
+        + q1.x * q2.y
+        - q1.y * q2.x
+        + q1.z * q2.w;
 end;
 
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
@@ -150,18 +145,18 @@ end;
 
 function quat(vec: TVec4): TQuaternion;
 begin
-  Result.a:= vec.x;
-  Result.b:= vec.y;
-  Result.c:= vec.z;
-  Result.d:= vec.w;
+  Result.w:= vec.w;
+  Result.x:= vec.x;
+  Result.y:= vec.y;
+  Result.z:= vec.z;
 end;
 
-function quat(a, b, c, d: Float): TQuaternion;
+function quat(x, y, z, w: Float): TQuaternion;
 begin
-  Result.a:= a;
-  Result.b:= b;
-  Result.c:= c;
-  Result.d:= d;
+  Result.w:= w;
+  Result.x:= x;
+  Result.y:= y;
+  Result.z:= z;
 end;
 
 function quatEuler( YawPitchRoll: TVec3 ): TQuaternion;
