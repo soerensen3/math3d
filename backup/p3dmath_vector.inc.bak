@@ -186,6 +186,18 @@ function TVector.GetDist: Float;
 var
   sq: Float;
 begin
+  {Result:= sqrt( sqr( x )
+         {$IF NUMFIELD>1}
+         + sqr( y )
+         {$ENDIF}
+         {$IF NUMFIELD>2}
+         + sqr( z )
+         {$ENDIF}
+         {$IF NUMFIELD>3}
+         + sqr( w )
+         {$ENDIF}
+         );}
+
   sq:= sqr( Max( epsilon, x ))
        {$IF NUMFIELD>1}
        + sqr( Max( epsilon, y ))

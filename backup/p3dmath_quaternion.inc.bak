@@ -44,7 +44,6 @@ operator - ( a: TQuaternion ) b: TQuaternion;
 
 function quat( vec: TVector ): TQuaternion;
 function quat(x, y, z, w: Float): TQuaternion;
-function quatRotation( Axis: TVec3; Alpha: Float ): TQuaternion;
 
 {$ENDIF}
 {$IFDEF IMPLEMENTATION}

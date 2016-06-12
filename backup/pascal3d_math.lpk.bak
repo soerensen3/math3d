@@ -10,7 +10,7 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Minor="5"/>
-    <Files Count="14">
+    <Files Count="15">
       <Item1>
         <Filename Value="p3dmath.pas"/>
         <UnitName Value="p3dMath"/>
@@ -67,6 +67,10 @@
         <Filename Value="p3dmath_vector_swizzle.inc"/>
         <Type Value="Include"/>
       </Item14>
+      <Item15>
+        <Filename Value="../pascal3d/src/p3dgraphics/p3dmath_arrays.inc"/>
+        <Type Value="Include"/>
+      </Item15>
     </Files>
     <RequiredPkgs Count="1">
       <Item1>

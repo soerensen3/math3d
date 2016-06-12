@@ -688,13 +688,10 @@ begin
 end;
 
 function mat4normalize( Mat: TMatrix ): TMatrix;
-var
-  d: Float;
-  i: Integer;
 begin
   d:= mat4determinant( Mat );
   if ( d > 0 ) then
-  for i:= 0 to high( Mat.m ) do
+  for i:= 0 to high( Mat.m )
     Result.m[ i ]:= Mat.m[ i ]/d;
 end;
 

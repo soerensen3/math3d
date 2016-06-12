@@ -107,8 +107,6 @@ type
   {Type Arrays}
   {$INCLUDE p3dmath_arrays_decl.inc}
 
-  {$INCLUDE p3dmath_conversion.inc}
-
   {$UNDEF INTERFACE}
 
 implementation
@@ -116,7 +114,6 @@ implementation
 {$DEFINE IMPLEMENTATION}
 {$INCLUDE p3dmath_vector_constructors.inc}
 {$INCLUDE p3dmath_matrix_constructors.inc}
-{$INCLUDE p3dmath_conversion.inc}
 
 { TVec2 }
 {$DEFINE TVECTOR:= TVec2}
