@@ -145,10 +145,11 @@ function mat4transpose( Matrix: TMatrix ): TMatrix;
 operator * ( a: TMatrix; b: Float ) c: TMatrix; inline;
 //@abbr`Operator for multiplying two matrices`. If you multiply two transformations, the left value is the transformation applied first.
 operator * ( a: TMatrix; b: TMatrix ) c: TMatrix; inline; // left first - right last
+                                                          //TODO: Matrix rotation order seems to be different from glsl, check and maybe switch
 //@abbr`Operator for transforming a vec using a matrix`. The operation is Pre-Multiply in this order.
 operator * ( a: TVector; b: TMatrix ) c: TVector; inline; // PRE-Multiply
 //@abbr`Operator for transforming a vec using a matrix`. The operation is Post-Multiply in this order.
-operator * ( a: TMatrix; b: TVector ) c: TVector; inline; // POST-Multiply
+operator * ( a: TMatrix; b: TVector ) c: TVector; //inline; // POST-Multiply
 //@abbr`Operator for comparing two matrices`.
 operator = ( a: TMatrix; b: TMatrix ) c: Boolean; inline;
 {$ENDIF}
