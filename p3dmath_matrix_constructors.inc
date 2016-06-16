@@ -393,9 +393,9 @@ function mat4rotateEuler( PitchYawRoll: TVec3 ): TMat4;
 {$IFDEF IMPLEMENTATION}
 // E( y, p, r ) = R_z( r ) * R_x( p ) * R_y( y )
 begin
-  Result:= mat4rotate( vec3_Axis_NZ, PitchYawRoll.Z ) *
+  Result:= mat4rotate( vec3_Axis_NZ, PitchYawRoll.Y ) *
            mat4rotate( vec3_Axis_PX, PitchYawRoll.X ) *
-           mat4rotate( vec3_Axis_PY, PitchYawRoll.Y );
+           mat4rotate( vec3_Axis_PY, PitchYawRoll.Z );
 end;
 {$ENDIF}
 //@abbr`Returns a 4 by 4 Euler rotation matrix.` Yaw, pitch and roll are used as angles..
@@ -403,9 +403,9 @@ function mat4rotateEuler( Pitch, Yaw, Roll: Single ): TMat4;
 {$IFDEF IMPLEMENTATION}
 // E( y, p, r ) = R_z( r ) * R_x( p ) * R_y( y )
 begin
-  Result:= mat4rotate( vec3_Axis_NZ, Roll ) *
+  Result:= mat4rotate( vec3_Axis_NZ, Yaw ) *
            mat4rotate( vec3_Axis_PX, Pitch ) *
-           mat4rotate( vec3_Axis_PY, Yaw );
+           mat4rotate( vec3_Axis_PY, Roll );
 end;
 
 {$ENDIF}

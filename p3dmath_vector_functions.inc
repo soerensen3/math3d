@@ -103,7 +103,7 @@ begin
 
   // Get the inverse view matrix
 
-  mat4inverse( matWorld * matView, m );
+  mat4inverse( matView * matWorld, m );
 
   // Transform the screen space pick ray into 3D space
   vDirection.x:= Result.x * m._00 + Result.y * m._10 + Result.z * m._20;
