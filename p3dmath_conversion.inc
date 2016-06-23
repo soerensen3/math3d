@@ -3,6 +3,9 @@ function EulerToQuat( Euler: TVec3; Order: TRotationOrder ): TQuaternion;
 function QuatToEuler( Q: TQuaternion; OldRotation:TVec3; Order: TRotationOrder ): TVec3;
 procedure MatToEuler2( M: TMat3; out Euler1, Euler2: TVec3; Order: TRotationOrder );
 function MatToEuler( M: TMat3; OldRot: TVec3; Order: TRotationOrder ): TVec3;
+
+//@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).
+function clamp( x: Float; minVal, maxVal: Float ): Float; overload;
 {$ENDIF}
 
 {$IFDEF IMPLEMENTATION}
@@ -49,6 +52,7 @@ var
   cc, cs, sc, ss: Float;
   a: TVec3;
 begin
+  WriteLn( 'Euler to Quat!' );
   R:= RotOrderInfo[ Order ];
 	i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
@@ -88,6 +92,7 @@ end;
 
 function QuatToEuler( Q: TQuaternion; OldRotation:TVec3; Order: TRotationOrder ): TVec3;
 begin
+  WriteLn( 'Quat to Euler!' );
   Result:= MatToEuler( mat3( Q ), OldRotation, Order );
 end;
 
@@ -110,6 +115,7 @@ var
   si, sj, sh,
   cc, cs, sc, ss: Float;
 begin
+  WriteLn( 'Euler to Mat!' );
   R:= RotOrderInfo[ Order ];
 	i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
@@ -158,6 +164,7 @@ var
   i, j, k: Byte;
   cy: Float;
 begin
+  WriteLn( 'Matrix to euler 2!' );
   R:= RotOrderInfo[ Order ];
 	i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
@@ -166,7 +173,7 @@ begin
 	(* process the matrix first *)
 	m:= mat3normalize(m);
 
-	cy:= sqrt( m.Row[i][i] * m.Row[i][i] + m.Row[i][j] * m.Row[i][j] );
+	cy:= sqrt( m.Row[i][i] * m.Row[i][i] + m.Row[i][j] * m.Row[i][j]);
 
 	if (cy > 16.0 * epsilon ) then //TODO: MatToEuler2 causes exception on (+-)NAN
     begin
@@ -210,6 +217,7 @@ var
   i: Integer;
   deul: TVec3;
 begin
+  WriteLn( 'Compatible Euler!' );
 	(* correct differences of about 360 degrees first *)
 	for i:= 0 to 2 do
     begin
@@ -236,7 +244,7 @@ begin
 		if (deul[1] > 0.0) then
       Euler[1]:= Euler[1] - pi_x2
 		else
-      Euler[1]:= Euler[1] - pi_x2;
+      Euler[1]:= Euler[1] + pi_x2;
 	if (( abs(deul[2]) > 3.2 ) and ( abs(deul[0]) < 1.6 ) and ( abs(deul[1]) < 1.6)) then
 		if (deul[2] > 0.0) then
       Euler[2]:= Euler[2] - pi_x2
@@ -250,6 +258,7 @@ var
   eul1, eul2: TVec3;
   d1, d2: Float;
 begin
+  WriteLn( 'Matrix to euler!' );
 	MatToEuler2( M, eul1, eul2, Order );
 
 	compatible_eul(eul1, oldrot);
@@ -263,6 +272,12 @@ begin
 		Result:= eul2
 	else
 		Result:= eul1;
+end;
+
+//@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).
+function clamp( x: Float; minVal, maxVal: Float ): Float; overload;
+begin
+  Result:= min( max( x, minVal ), maxVal );
 end;
 
 {$ENDIF}

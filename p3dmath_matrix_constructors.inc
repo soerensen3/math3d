@@ -154,6 +154,42 @@ end;
 {$ENDIF}
 
 function mat3( quat: TQuaternion ): TMat3;
+{$IFDEF IMPLEMENTATION}
+const M_SQRT2 = 1.41421356237309504880;
+var
+  qw, qx, qy, qz, qda, qdb, qdc, qaa, qab, qac, qbb, qbc, qcc: Float;
+begin
+  qw:= M_SQRT2 * quat.W;
+	qx:= M_SQRT2 * quat.X;
+	qy:= M_SQRT2 * quat.Y;
+	qz:= M_SQRT2 * quat.Z;
+
+	qda:= qw * qx;
+	qdb:= qw * qy;
+	qdc:= qw * qz;
+	qaa:= qx * qx;
+	qab:= qx * qy;
+	qac:= qx * qz;
+	qbb:= qy * qy;
+	qbc:= qy * qz;
+	qcc:= qz * qz;
+
+	Result._00:= 1.0 - qbb - qcc;
+	Result._01:= qdc + qab;
+	Result._02:= -qdb + qac;
+
+	Result._10:= -qdc + qab;
+	Result._11:= 1.0 - qaa - qcc;
+	Result._12:= qda + qbc;
+
+	Result._20:= qdb + qac;
+	Result._21:= -qda + qbc;
+	Result._22:= 1.0 - qaa - qbb;
+end;
+{$ENDIF}
+
+{
+function mat3( quat: TQuaternion ): TMat3;
 //1 - 2*qy2 - 2*qz2 	2*qx*qy - 2*qz*qw 	2*qx*qz + 2*qy*qw
 //2*qx*qy + 2*qz*qw 	1 - 2*qx2 - 2*qz2 	2*qy*qz - 2*qx*qw
 //2*qx*qz - 2*qy*qw 	2*qy*qz + 2*qx*qw 	1 - 2*qx2 - 2*qy2
@@ -172,7 +208,7 @@ begin
   Result._22:= 1 - 2 * quat[ 0 ] * quat[ 0 ] - 2 * quat[ 1 ] * quat[ 1 ];
 end;
 {$ENDIF}
-
+}
 
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
@@ -387,7 +423,7 @@ begin
   Result._33:= 1;
 end;
 {$ENDIF}
-
+(*
 //@abbr`Returns a 4 by 4 Euler rotation matrix.` The vector PitchYawRoll is used for the angles Y, X, Z..
 function mat4rotateEuler( PitchYawRoll: TVec3 ): TMat4;
 {$IFDEF IMPLEMENTATION}
@@ -398,6 +434,7 @@ begin
            mat4rotate( vec3_Axis_PY, PitchYawRoll.Z );
 end;
 {$ENDIF}
+
 //@abbr`Returns a 4 by 4 Euler rotation matrix.` Yaw, pitch and roll are used as angles..
 function mat4rotateEuler( Pitch, Yaw, Roll: Single ): TMat4;
 {$IFDEF IMPLEMENTATION}
@@ -434,7 +471,7 @@ begin
         end;
     end;
 end;
-{$ENDIF}
+{$ENDIF} *)
 
 function mat3toScale( Matrix: TMat3 ): TVec3;
 {$IFDEF IMPLEMENTATION}
