@@ -366,7 +366,7 @@ end;
 function TVector.Compare(v: TVector): Boolean;
 begin
   Result:= ( v.x = x )
-       {$IF NUMFIELD > 2}
+       {$IF NUMFIELD > 1}
        and ( v.y = y )
        {$ENDIF}
        {$IF NUMFIELD > 2}

@@ -336,6 +336,15 @@ begin
   {$ENDIF}
 end;
 {$ENDIF}
+
+//TODO: Write Doc
+function mix( x, y: TVector; a: Single ): TVector;
+{$IFDEF IMPLEMENTATION}
+begin
+  Result:= x * ( 1 - a)+y*a;
+end;
+{$ENDIF}
+
 {$WARNINGS ON}
 {
 //@abbr`Will make a gradient between two edges`.

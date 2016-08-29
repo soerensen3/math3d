@@ -52,7 +52,6 @@ var
   cc, cs, sc, ss: Float;
   a: TVec3;
 begin
-  WriteLn( 'Euler to Quat!' );
   R:= RotOrderInfo[ Order ];
 	i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
@@ -92,7 +91,6 @@ end;
 
 function QuatToEuler( Q: TQuaternion; OldRotation:TVec3; Order: TRotationOrder ): TVec3;
 begin
-  WriteLn( 'Quat to Euler!' );
   Result:= MatToEuler( mat3( Q ), OldRotation, Order );
 end;
 
@@ -115,7 +113,6 @@ var
   si, sj, sh,
   cc, cs, sc, ss: Float;
 begin
-  WriteLn( 'Euler to Mat!' );
   R:= RotOrderInfo[ Order ];
 	i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
@@ -164,7 +161,6 @@ var
   i, j, k: Byte;
   cy: Float;
 begin
-  WriteLn( 'Matrix to euler 2!' );
   R:= RotOrderInfo[ Order ];
 	i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
@@ -217,7 +213,6 @@ var
   i: Integer;
   deul: TVec3;
 begin
-  WriteLn( 'Compatible Euler!' );
 	(* correct differences of about 360 degrees first *)
 	for i:= 0 to 2 do
     begin
@@ -258,7 +253,6 @@ var
   eul1, eul2: TVec3;
   d1, d2: Float;
 begin
-  WriteLn( 'Matrix to euler!' );
 	MatToEuler2( M, eul1, eul2, Order );
 
 	compatible_eul(eul1, oldrot);
