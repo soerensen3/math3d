@@ -58,6 +58,13 @@ SOFTWARE.
   {$DEFINE TListEnumerator:= TVec4ListEnumerator}
   {$INCLUDE p3dmath_arrays.inc}
 
+  {$DEFINE TItem:= TQuaternion}
+  {$DEFINE TItemArray:= TQuaternionArray}
+  {$DEFINE TItemList:= TQuaternionList}
+  {$DEFINE pItemArray:= pQuaternionArray}
+  {$DEFINE TListEnumerator:= TQuaternionListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
   {$DEFINE TItem:= TMat2}
   {$DEFINE TItemArray:= TMat2Array}
   {$DEFINE TItemList:= TMat2List}
