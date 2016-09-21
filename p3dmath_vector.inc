@@ -234,6 +234,9 @@ begin
           {$IF NUMFIELD>2}
            + z * v.z
           {$ENDIF}
+          {$IF NUMFIELD>3}
+           + w * v.w
+          {$ENDIF}
           ;
 end;
 {$WARNINGS ON}

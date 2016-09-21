@@ -181,18 +181,13 @@ end;
 { TMatrix }
 
 function TMatrix.GetCol( index: Integer ): TVector;
-var
-  offset: Integer;
 begin
   {$IF NUMFIELD = 2}
-  offset:= 2;
-  Result:= vec2( _m[ offset + 0 ], _m[ offset + 4 ]);
+  Result:= vec2( m[ index + 0 ], m[ index + 2 ]);
   {$ELSEIF NUMFIELD = 3}
-  offset:= 3;
-  Result:= vec3( _m[ offset + 0 ], _m[ offset + 4 ], _m[ offset + 8 ]);
+  Result:= vec3( m[ index + 0 ], m[ index + 3 ], m[ index + 6 ]);
   {$ELSEIF NUMFIELD = 4}
-  offset:= 4;
-  Result:= vec4( _m[ offset + 0 ], _m[ offset + 4 ], _m[ offset + 8 ], _m[ offset + 12 ]);
+  Result:= vec4( m[ index + 0 ], m[ index + 4 ], m[ index + 8 ], m[ index + 12 ]);
   {$ENDIF}
 end;
 
@@ -212,35 +207,31 @@ var
 begin
   {$IF NUMFIELD = 2}
   offset:= 2 * index;
-  Result:= vec2( _m[ offset + 0 ], _m[ offset + 1 ]);
+  Result:= vec2( m[ offset + 0 ], m[ offset + 1 ]);
   {$ELSEIF NUMFIELD = 3}
   offset:= 3 * index;
-  Result:= vec3( _m[ offset + 0 ], _m[ offset + 1 ], _m[ offset + 2 ]);
+  Result:= vec3( m[ offset + 0 ], m[ offset + 1 ], m[ offset + 2 ]);
   {$ELSEIF NUMFIELD = 4}
   offset:= 4 * index;
-  Result:= vec4( _m[ offset + 0 ], _m[ offset + 1 ], _m[ offset + 2 ], _m[ offset + 3 ]);
+  Result:= vec4( m[ offset + 0 ], m[ offset + 1 ], m[ offset + 2 ], m[ offset + 3 ]);
   {$ENDIF}
 end;
 
 procedure TMatrix.SetCol( index: Integer ; AValue: TVector );
-var
-  offset: Integer;
 begin
   {$IF NUMFIELD = 2}
-  offset:= 2;
-  _m[ offset + 0 ]:= AValue.x;
-  _m[ offset + 4 ]:= AValue.Y;
-  {$ELSEIF NUMFIELD = 3}
-  offset:= 3;
-  _m[ offset + 0 ]:= AValue.X;
-  _m[ offset + 4 ]:= AValue.Y;
-  _m[ offset + 8 ]:= AValue.Z;
-  {$ELSEIF NUMFIELD = 4}
-  offset:= 4;
-  _m[ offset + 0 ]:= AValue.X;
-  _m[ offset + 4 ]:= AValue.Y;
-  _m[ offset + 8 ]:= AValue.Z;
-  _m[ offset + 12 ]:= AValue.W;
+  m[ index + 0 ]:= AValue.x;
+  m[ index + 2 ]:= AValue.Y;
+  {$ENDIF}
+  {$IF NUMFIELD = 3}
+  m[ index + 0 ]:= AValue.x;
+  m[ index + 3 ]:= AValue.Y;
+  m[ index + 6 ]:= AValue.Z;
+  {$ENDIF}
+  {$IF NUMFIELD = 4}
+  m[ index + 4 ]:= AValue.Y;
+  m[ index + 8 ]:= AValue.Z;
+  m[ index + 12 ]:= AValue.W;
   {$ENDIF}
 end;
 
@@ -260,19 +251,19 @@ var
 begin
   {$IF NUMFIELD = 2}
   offset:= 2 * index;
-  _m[ offset + 0 ]:= AValue.x;
-  _m[ offset + 1 ]:= AValue.Y;
+  m[ offset + 0 ]:= AValue.x;
+  m[ offset + 1 ]:= AValue.Y;
   {$ELSEIF NUMFIELD = 3}
   offset:= 3 * index;
-  _m[ offset + 0 ]:= AValue.X;
-  _m[ offset + 1 ]:= AValue.Y;
-  _m[ offset + 2 ]:= AValue.Z;
+  m[ offset + 0 ]:= AValue.X;
+  m[ offset + 1 ]:= AValue.Y;
+  m[ offset + 2 ]:= AValue.Z;
   {$ELSEIF NUMFIELD = 4}
   offset:= 4 * index;
-  _m[ offset + 0 ]:= AValue.X;
-  _m[ offset + 1 ]:= AValue.Y;
-  _m[ offset + 2 ]:= AValue.Z;
-  _m[ offset + 3 ]:= AValue.W;
+  m[ offset + 0 ]:= AValue.X;
+  m[ offset + 1 ]:= AValue.Y;
+  m[ offset + 2 ]:= AValue.Z;
+  m[ offset + 3 ]:= AValue.W;
   {$ENDIF}
 end;
 
