@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 }
 
-
+{$IFDEF FLOATTYPE}
 {$IF NUMFIELD>2}
 //@abbr`This will return the cross product of two vectors`.
 function cross( x: TVector; y: TVector ): TVector; overload;
@@ -33,8 +33,9 @@ end;
   {$ENDIF}
 {$ENDIF}
 
+
 //@abbr`This will return the dot product of two vectors`.
-function dot( x: TVector; y: TVector ): Float; overload;
+function dot( x: TVector; y: TVector ): Fieldtype; overload;
 {$IFDEF IMPLEMENTATION}
 begin
   Result:= x.DotProduct( y );
@@ -59,10 +60,10 @@ end;
 //of the medium on the other side of the surface. Thus, if a ray comes from air
 //(refractive index about 1.0) and hits the surface of water (refractive index 1.33),
 //then the ratio r is 1.0 / 1.33 = 0.75.
-function refract( i, n: TVector; r: Float ): TVector; overload;
+function refract( i, n: TVector; r: Fieldtype ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 var
-  d: Float;
+  d: Fieldtype;
 begin
   d:= 1.0 - r * r * (1.0 - dot(n, i) * dot(n, i));
   if ( d < 0.0 ) then
@@ -116,6 +117,7 @@ begin
 end;
   {$ENDIF}
 {$ENDIF}
+{$ENDIF}
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
@@ -158,7 +160,7 @@ end;
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
 //@abbr`Will return the bigger components of one vector and a scalar`. It works component-wise.
-function max( x: TVector; s: Single ): TVector; overload;
+function max( x: TVector; s: FieldType ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
   Result.x:= max( x.x, s );
@@ -177,7 +179,7 @@ end;
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
 //@abbr`Will return the smaller components of one vector and a scalar`. It works component-wise.
-function min( x: TVector; s: Single ): TVector; overload;
+function min( x: TVector; s: Fieldtype ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
   Result.x:= min( x.x, s );
@@ -225,7 +227,7 @@ end;
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
 //@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).
-function clamp( x: TVector; minVal, maxVal: Float ): TVector; overload;
+function clamp( x: TVector; minVal, maxVal: Fieldtype ): TVector; overload;
 {$IFDEF IMPLEMENTATION}
 begin
   Result.x:= min( max( x.x, minVal ), maxVal );
@@ -242,6 +244,7 @@ end;
 {$ENDIF}
 
 
+{$IFDEF FLOATTYPE}
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 
 //@abbr`Returns a value equal to the nearest integer that is less than or equal to x`.
@@ -301,7 +304,7 @@ end;
 {$WARNINGS ON}
 
 //@abbr`Returns the distance between the two points p0 and p1`.
-function distance( p0, p1: TVector ): Float; overload;
+function distance( p0, p1: TVector ): Fieldtype; overload;
 {$IFDEF IMPLEMENTATION}
 begin
   Result:= ( p1 - p0 ).GetDist;
@@ -310,7 +313,7 @@ end;
 
 //@abbr`Returns the length of the vector`. It's not called length because it would
 //override the function Length from system, which is invisible then.
-function len( p: TVector ): Float; overload;
+function len( p: TVector ): Fieldtype; overload;
 {$IFDEF IMPLEMENTATION}
 begin
   Result:= p.GetDist;
@@ -381,5 +384,7 @@ begin
   Result.y:= m._31;
   Result.z:= m._32;
 end;
+
+{$ENDIF}
 {$ENDIF}
 

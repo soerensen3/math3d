@@ -78,16 +78,17 @@ doc: https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Swizzling
 type
   TVector = packed object
     private
-      {@exclude} procedure SetCoord( AIndex: Integer; AValue: Float );
-      {@exclude} function GetCoord( AIndex: Integer ): Float;
+      {@exclude} procedure SetCoord( AIndex: Integer; AValue: FieldType );
+      {@exclude} function GetCoord( AIndex: Integer ): FieldType;
 
     protected
       {@exclude}
-      FCoord: array[ 0..NUMFIELD-1 ] of Float;
+      FCoord: array[ 0..NUMFIELD-1 ] of FieldType;
 
     public
+      {$IFDEF FLOATTYPE}
       {@abbr`Calculate the length of the current vector`.}
-      function GetDist: Float;
+      function GetDist: FieldType;
       {@abbr`Normalizes the current vector`.
       The vector will be returned in the function's result additionally.
       @br@br
@@ -100,10 +101,11 @@ type
       function CrossProduct( v: TVector ): TVector;
       {$ENDIF}
       {@abbr`Calculate the dot product of the current vector and v`.}
-      function DotProduct( v: TVector ): Float;
+      function DotProduct( v: TVector ): FieldType;
       {@abbr`Determines the biggest component (X, Y, Z, W)`.
       The result is the index of the biggest component which can be used with @bold`Coord`@br
       @code` s:= v.Coord[ v.GetBiggestComp ]; `}
+      {$ENDIF}
       function GetBiggestComp: Integer;
 
   //    function RotateRad( Axis: TVec3; Angle: Float ): TVector;
@@ -118,7 +120,7 @@ type
       The result is a pointer to the data of a vector. It can be used when passing to
       opengl for example. This is equivalent to
       @code`ptr:= @@v.Coord[ 0 ];`}
-      function Ptr: PFloat;
+      function Ptr: PFieldType;
   //      function Mirror( Plane: pPlane ): TVector;
 
       {@abbr`Compares two vectors and returns if their field values are equal`.
@@ -126,41 +128,41 @@ type
       function Compare( v: TVector ): Boolean;
 
 
-      property Coord[ Index: Integer ]: Float read GetCoord write SetCoord; default;
+      property Coord[ Index: Integer ]: FieldType read GetCoord write SetCoord; default;
       {@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can
       be used for debugging or printing the values of a vector on screen.
       The string is returned in the function's result}
-      function ToString( const Digits: Integer = 8 ): String;
+      function ToString( {$IFDEF FLOATTYPE}const Digits: Integer = 8 {$ENDIF} ): String;
       procedure FromString( S: String );
 
     published
-      property X: Float index 0 read FCoord[ 0 ] write SetCoord;
-      property R: Float index 0 read FCoord[ 0 ] write SetCoord;
-      property S: Float index 0 read FCoord[ 0 ] write SetCoord;
+      property X: FieldType index 0 read FCoord[ 0 ] write SetCoord;
+      property R: FieldType index 0 read FCoord[ 0 ] write SetCoord;
+      property S: FieldType index 0 read FCoord[ 0 ] write SetCoord;
       {$IF NUMFIELD>1}
-      property Y: Float index 1 read FCoord[ 1 ] write SetCoord;
-      property G: Float index 1 read FCoord[ 1 ] write SetCoord;
-      property T: Float index 1 read FCoord[ 1 ] write SetCoord;
+      property Y: FieldType index 1 read FCoord[ 1 ] write SetCoord;
+      property G: FieldType index 1 read FCoord[ 1 ] write SetCoord;
+      property T: FieldType index 1 read FCoord[ 1 ] write SetCoord;
       {$ENDIF}
 
     published
       {$IF NUMFIELD>2}
       //This field will only exist from TVec3 on.
-      property Z: Float index 2 read FCoord[ 2 ] write SetCoord;
+      property Z: FieldType index 2 read FCoord[ 2 ] write SetCoord;
       //This field will only exist from TVec3 on.
-      property B: Float index 2 read FCoord[ 2 ] write SetCoord;
+      property B: FieldType index 2 read FCoord[ 2 ] write SetCoord;
       //This field will only exist from TVec3 on.
-      property P: Float index 2 read FCoord[ 2 ] write SetCoord;
+      property P: FieldType index 2 read FCoord[ 2 ] write SetCoord;
 
       {$ENDIF}
     published
       {$IF NUMFIELD>3}
       //This field will only exist from TVec4 on.
-      property W: Float index 3 read FCoord[ 3 ] write SetCoord;
+      property W: FieldType index 3 read FCoord[ 3 ] write SetCoord;
       //This field will only exist from TVec4 on.
-      property A: Float index 3 read FCoord[ 3 ] write SetCoord;
+      property A: FieldType index 3 read FCoord[ 3 ] write SetCoord;
       //This field will only exist from TVec4 on.
-      property Q: Float index 3 read FCoord[ 3 ] write SetCoord;
+      property Q: FieldType index 3 read FCoord[ 3 ] write SetCoord;
       {$ENDIF}
       {$INCLUDE p3dmath_vector_swizzle.inc}
   end;
@@ -171,20 +173,22 @@ type
 
 { TVector }
 
-procedure TVector.SetCoord(AIndex: Integer; AValue: Float);
+procedure TVector.SetCoord(AIndex: Integer; AValue: FieldType);
 begin
   FCoord[ AIndex ]:= AValue;
   //TODO: ONCHANGE EVENT
 end;
 
-function TVector.GetCoord( AIndex: Integer ): Float;
+function TVector.GetCoord(AIndex: Integer): FieldType;
 begin
   Result:= FCoord[ AIndex ];
 end;
 
-function TVector.GetDist: Float;
+{$IFDEF FLOATTYPE}
+
+function TVector.GetDist: FieldType;
 var
-  sq: Float;
+  sq: FieldType;
 begin
   sq:= sqr( x )
        {$IF NUMFIELD>1}
@@ -204,7 +208,7 @@ end;
 
 function TVector.Normalize: TVector;
 var
-  len: Float;
+  len: FieldType;
 begin
   len:= GetDist;
   if ( len > 0 ) then
@@ -225,9 +229,9 @@ begin
 end;
 {$ENDIF}
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-function TVector.DotProduct(v: TVector): Float;
+function TVector.DotProduct(v: TVector): FieldType;
 begin
-  Result:= x * v.x
+  Result:=   x * v.x
           {$IF NUMFIELD>1}
            + y * v.y
           {$ENDIF}
@@ -240,6 +244,7 @@ begin
           ;
 end;
 {$WARNINGS ON}
+{$ENDIF}
 
 function TVector.GetBiggestComp: Integer;
 var
@@ -279,7 +284,7 @@ begin
   Result:= Self;
 end;
 
-function TVector.Ptr: PFloat;
+function TVector.Ptr: PFieldType;
 begin
   Result:= @FCoord[ 0 ];
 end;
@@ -287,15 +292,22 @@ end;
 {$INCLUDE p3dmath_vector_swizzle.inc}
 
 
-function TVector.ToString( const Digits: Integer = 8 ): String;
+function TVector.ToString( {$IFDEF FLOATTYPE} const Digits: Integer = 8 {$ENDIF} ): String;
 var
   str: String;
 	d: String;
 begin
+  {$IFDEF FLOATTYPE}
   if ( Digits = -1 ) then
     d:= 'g'
   else
     d:= '.' + IntToStr( Digits ) + 'f';
+  {$ELSE}
+  {$IFDEF INTTYPE}
+  d:= 'd';
+  {$ENDIF}
+  {$ENDIF}
+
   {$IF NUMFIELD = 2}
   str:= StringReplace( '%#,%#', '#', d, [ rfReplaceAll ]);
   Result:= Format( str, [ X, Y ]);
@@ -363,7 +375,13 @@ begin
   if ( n <> exp_wc ) then
     raise Exception.Create( Format( 'Error while converting string ''%s'' to TVec%d. Wrong number of values given: %d.', [ S, exp_wc, n ]));
   for i:= 1 to n do
+    {$IFDEF FLOATTYPE}
     Coord[ i - 1 ]:= StrToFloat( GetWord( i ));
+    {$ELSE}
+    {$IFDEF INTTYPE}
+    Coord[ i - 1 ]:= StrToInt( GetWord( i ));
+    {$ENDIF}
+    {$ENDIF}
 end;
 
 function TVector.Compare(v: TVector): Boolean;
@@ -397,7 +415,7 @@ begin
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator+(a: TVector; b: Float)c: TVector;
+operator+(a: TVector; b: FieldType)c: TVector;
 begin
   c.x:= a.x + b;
   {$IF NUMFIELD > 1}
@@ -427,7 +445,7 @@ begin
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator-(a: TVector; b: Float)c: TVector;
+operator-(a: TVector; b: FieldType)c: TVector;
 begin
   c.x:= a.x - b;
   {$IF NUMFIELD > 1}
@@ -441,11 +459,6 @@ begin
   {$ENDIF}
 end;
 {$WARNINGS ON}
-
-operator*( a, b: TVector ) c: Float;
-begin
-  Result:= a.DotProduct( b );
-end;
 
 {$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator*(a, b: TVector )c: TVector;
@@ -463,7 +476,7 @@ begin
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator*(a: TVector; s: Float)c: TVector;
+operator*(a: TVector; s: FieldType)c: TVector;
 begin
   c.x:= a.x * s;
   {$IF NUMFIELD > 1}
@@ -478,7 +491,7 @@ begin
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator*(s: Float; b: TVector)c: TVector;
+operator*(s: FieldType; b: TVector)c: TVector;
 begin
   c.x:= b.x * s;
   {$IF NUMFIELD > 1}
@@ -491,6 +504,8 @@ begin
   c.w:= b.w * s;
   {$ENDIF}
 end;
+
+{$IFDEF FloatType}
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 operator/(a, b: TVector)c: TVector;
@@ -508,7 +523,7 @@ begin
 end;
 
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
-operator/(a: TVector; s: Float)c: TVector;
+operator/(a: TVector; s: FieldType)c: TVector;
 begin
   c.x:= a.x / s;
   {$IF NUMFIELD > 1}
@@ -522,6 +537,71 @@ begin
   {$ENDIF}
 end;
 {$WARNINGS ON}
+{$ENDIF}
+
+{$IFDEF IntType}
+
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
+operator div(a, b: TVector)c: TVector;
+begin
+  c.x:= a.x div b.x;
+  {$IF NUMFIELD > 1}
+  c.y:= a.y div b.y;
+  {$ENDIF}
+  {$IF NUMFIELD > 2}
+  c.z:= a.z div b.z;
+  {$ENDIF}
+  {$IF NUMFIELD > 3}
+  c.w:= a.w div b.w;
+  {$ENDIF}
+end;
+
+{>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
+operator div(a: TVector; s: FieldType)c: TVector;
+begin
+  c.x:= a.x div s;
+  {$IF NUMFIELD > 1}
+  c.y:= a.y div s;
+  {$ENDIF}
+  {$IF NUMFIELD > 2}
+  c.z:= a.z div s;
+  {$ENDIF}
+  {$IF NUMFIELD > 3}
+  c.w:= a.w div s;
+  {$ENDIF}
+end;
+
+operator mod(a, b: TVector)c: TVector;
+begin
+  c.x:= a.x mod b.x;
+  {$IF NUMFIELD > 1}
+  c.y:= a.y mod b.y;
+  {$ENDIF}
+  {$IF NUMFIELD > 2}
+  c.z:= a.z mod b.z;
+  {$ENDIF}
+  {$IF NUMFIELD > 3}
+  c.w:= a.w mod b.w;
+  {$ENDIF}
+end;
+
+
+operator mod(a: TVector; s: FieldType)c: TVector;
+begin
+  c.x:= a.x mod s;
+  {$IF NUMFIELD > 1}
+  c.y:= a.y mod s;
+  {$ENDIF}
+  {$IF NUMFIELD > 2}
+  c.z:= a.z mod s;
+  {$ENDIF}
+  {$IF NUMFIELD > 3}
+  c.w:= a.w mod s;
+  {$ENDIF}
+end;
+
+{$WARNINGS ON}
+{$ENDIF}
 
 operator-(a: TVector)c: TVector;
 begin

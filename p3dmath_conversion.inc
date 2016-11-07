@@ -5,7 +5,7 @@ procedure MatToEuler2( M: TMat3; out Euler1, Euler2: TVec3; Order: TRotationOrde
 function MatToEuler( M: TMat3; OldRot: TVec3; Order: TRotationOrder ): TVec3;
 
 //@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).
-function clamp( x: Float; minVal, maxVal: Float ): Float; overload;
+function clamp( x: Fieldtype; minVal, maxVal: Fieldtype ): Float; overload;
 {$ENDIF}
 
 {$IFDEF IMPLEMENTATION}

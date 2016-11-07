@@ -44,7 +44,7 @@ operator * ( a: TQuaternion; b: TVec3 ) c: TVec3;
 operator - ( a: TQuaternion ) b: TQuaternion;
 
 function quat( vec: TVector ): TQuaternion;
-function quat(x, y, z, w: Float): TQuaternion;
+function quat( x, y, z, w: Fieldtype ): TQuaternion;
 function quat( mat: TMat3 ): TQuaternion;
 function quatRotation( Axis: TVec3; Alpha: Float ): TQuaternion;
 
@@ -159,7 +159,7 @@ end;
 operator -( a: TQuaternion ) b: TQuaternion;
 var
   len: Single;
-  f: Float;
+  f: Fieldtype;
 begin
   //len:= a.GetDist;
   //len:= len * len;
@@ -178,7 +178,7 @@ begin
   Result.z:= vec.z;
 end;
 
-function quat(x, y, z, w: Float): TQuaternion;
+function quat(x, y, z, w: Fieldtype): TQuaternion;
 begin
   Result.w:= w;
   Result.x:= x;

@@ -29,7 +29,7 @@
       </Item4>
       <Item5>
         <Filename Value="p3dmath_conversion.inc"/>
-        <Type Value="Binary"/>
+        <Type Value="Include"/>
       </Item5>
       <Item6>
         <Filename Value="p3dmath_matrix.inc"/>
@@ -49,7 +49,7 @@
       </Item9>
       <Item10>
         <Filename Value="p3dmath_vector_constructor_template.inc"/>
-        <Type Value="Binary"/>
+        <Type Value="Include"/>
       </Item10>
       <Item11>
         <Filename Value="p3dmath_vector_constructors.inc"/>
@@ -57,7 +57,7 @@
       </Item11>
       <Item12>
         <Filename Value="p3dmath_vector_functions.inc"/>
-        <Type Value="Binary"/>
+        <Type Value="Include"/>
       </Item12>
       <Item13>
         <Filename Value="p3dmath_vector_op.inc"/>

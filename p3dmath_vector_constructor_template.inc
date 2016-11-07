@@ -62,7 +62,7 @@ function Vector(
       {$IFDEF TYPEY}
         Result.x:= x;
       {$ELSE}
-        {$IF TYPEX = Float}
+        {$IF TYPEX = Fieldtype}
           Result.x:= xy;
           Result.y:= xy;
         {$ELSE}
@@ -81,7 +81,7 @@ function Vector(
           Result.x:= xy.x;
           Result.y:= xy.y;
         {$ELSE}
-          {$IF TYPEX = Float}
+          {$IF TYPEX = Fieldtype}
             Result.x:= xyz;
             Result.y:= xyz;
             Result.z:= xyz;
@@ -116,11 +116,11 @@ function Vector(
             Result.y:= xyz.y;
             Result.z:= xyz.z;
           {$ELSE}
-            {$IF TYPEX = Float}
+            {$IF TYPEX = Fieldtype}
               Result.x:= xyzw;
               Result.y:= xyzw;
               Result.z:= xyzw;
-              Result.w:= 1.0;
+              Result.w:= 1;
             {$ELSE}
               Result.x:= xyzw.x;
               Result.y:= xyzw.y;

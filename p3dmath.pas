@@ -37,6 +37,14 @@ uses
 type
   {$MACRO ON}
   Float = Single;
+  PFloat = ^Single;
+  Int = Integer;
+  PInt = ^Integer;
+
+  {$DEFINE FieldType:=Float}
+  {$DEFINE PFieldType:= PFloat}
+  {$DEFINE FLOATTYPE}
+  {$UNDEF INTTYPE}
 
   { TVec2 }
   {$DEFINE INTERFACE}
@@ -77,7 +85,57 @@ type
   {$DEFINE TVECTOR:= TVec4}
   {$INCLUDE p3dmath_quaternion.inc}
 
+  {$DEFINE FieldType:=Int}
+  {$DEFINE PFieldType:= PInt}
+  {$UNDEF FLOATTYPE}
+  {$DEFINE INTTYPE}
+
+  { TIVec2 }
+  {$DEFINE INTERFACE}
+
+  {$DEFINE TVECTOR:= TIVec2}
+  {$DEFINE NUMFIELD:=2}
+  {$INCLUDE p3dmath_vector.inc}
+
+  { TIVec3 }
+  {$DEFINE TVECTOR:= TIVec3}
+  {$DEFINE NUMFIELD:=3}
+  {$INCLUDE p3dmath_vector.inc}
+
+  { TIVec4 }
+  {$DEFINE TVECTOR:= TIVec4}
+  {$DEFINE NUMFIELD:=4}
+  {$INCLUDE p3dmath_vector.inc}
+
   {$INCLUDE p3dmath_consts.inc}
+
+
+  { TIVec2 }
+  {$DEFINE TVECTOR:= TIVec2}
+  {$DEFINE NUMFIELD:=2}
+  //HELPER FUNCTIONS AND OPERATORS
+  {$INCLUDE p3dmath_vector_functions.inc}
+  {$INCLUDE p3dmath_vector_op.inc}
+
+  { TIVec3 }
+  {$DEFINE TVECTOR:= TIVec3}
+  {$DEFINE NUMFIELD:=3}
+  //HELPER FUNCTIONS AND OPERATORS
+  {$INCLUDE p3dmath_vector_functions.inc}
+  {$INCLUDE p3dmath_vector_op.inc}
+
+  { TIVec4 }
+  {$DEFINE TVECTOR:= TIVec4}
+  {$DEFINE NUMFIELD:=4}
+  //HELPER FUNCTIONS AND OPERATORS
+  {$INCLUDE p3dmath_vector_functions.inc}
+  {$INCLUDE p3dmath_vector_op.inc}
+
+
+  {$DEFINE FieldType:=Float}
+  {$DEFINE PFieldType:= PFloat}
+  {$DEFINE FLOATTYPE}
+  {$UNDEF INTTYPE}
 
   //CONSTRUCTORS
   {$INCLUDE p3dmath_vector_constructors.inc}
@@ -135,6 +193,34 @@ implementation
 {$DEFINE NUMFIELD:=4}
 {$DEFINE IMPLEMENTATION}
 {$INCLUDE p3dmath_vector.inc}
+
+{$DEFINE FieldType:=Int}
+{$DEFINE PFieldType:= PInt}
+{$UNDEF FLOATTYPE}
+{$DEFINE INTTYPE}
+
+{ TIVec2 }
+{$DEFINE TVECTOR:= TIVec2}
+{$DEFINE NUMFIELD:=2}
+{$DEFINE IMPLEMENTATION}
+{$INCLUDE p3dmath_vector.inc}
+
+{ TIVec3 }
+{$DEFINE TVECTOR:= TIVec3}
+{$DEFINE NUMFIELD:=3}
+{$DEFINE IMPLEMENTATION}
+{$INCLUDE p3dmath_vector.inc}
+
+{ TIVec4 }
+{$DEFINE TVECTOR:= TIVec4}
+{$DEFINE NUMFIELD:=4}
+{$DEFINE IMPLEMENTATION}
+{$INCLUDE p3dmath_vector.inc}
+
+{$DEFINE FieldType:=Float}
+{$DEFINE PFieldType:= PFloat}
+{$DEFINE FLOATTYPE}
+{$UNDEF INTTYPE}
 
 { TMat2 }
 {$DEFINE IMPLEMENTATION}
