@@ -135,9 +135,9 @@ end;
 function mat3( c1, c2, c3: TVec3 ): TMat3;
 {$IFDEF IMPLEMENTATION}
 begin
-  Result:= mat3( c1.x, c1.y, c1.z,
-                 c2.x, c2.y, c2.z,
-                 c3.x, c3.y, c3.z );
+  Result:= mat3( c1.x, c2.x, c3.x,
+                 c1.y, c2.y, c3.y,
+                 c1.z, c2.z, c3.z );
 end;
 {$ENDIF}
 

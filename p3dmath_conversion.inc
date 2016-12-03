@@ -253,19 +253,19 @@ var
   eul1, eul2: TVec3;
   d1, d2: Float;
 begin
-	MatToEuler2( M, eul1, eul2, Order );
+  MatToEuler2( M, eul1, eul2, Order );
 
-	compatible_eul(eul1, oldrot);
-	compatible_eul(eul2, oldrot);
+  compatible_eul(eul1, oldrot);
+  compatible_eul(eul2, oldrot);
 
-	d1:= abs(eul1[0] - OldRot[0]) + abs(eul1[1] - OldRot[1]) + abs(eul1[2] - OldRot[2]);
-	d2:= abs(eul2[0] - OldRot[0]) + abs(eul2[1] - OldRot[1]) + abs(eul2[2] - OldRot[2]);
+  d1:= abs(eul1[0] - OldRot[0]) + abs(eul1[1] - OldRot[1]) + abs(eul1[2] - OldRot[2]);
+  d2:= abs(eul2[0] - OldRot[0]) + abs(eul2[1] - OldRot[1]) + abs(eul2[2] - OldRot[2]);
 
-	(* return best, which is just the one with lowest difference *)
-	if (d1 > d2) then
-		Result:= eul2
-	else
-		Result:= eul1;
+  (* return best, which is just the one with lowest difference *)
+  if (d1 > d2) then
+	  Result:= eul2
+  else
+	  Result:= eul1;
 end;
 
 //@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).

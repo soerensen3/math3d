@@ -21,9 +21,48 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 }
+  {$IFDEF INTERFACE}
+  type
+    TItemListOnChangeAction = ( actAdd, actDelete, actClear, actAssignBefore, actAssignAfter, actSet );
+    TItemListOnChangeEvent = procedure ( Sender: TPersistent; ItemIndex: Integer; Action: TItemListOnChangeAction ) of object;
+  {$ENDIF}
 
-  { TIntList }
-  {$DEFINE TItem:= Integer}
+  {$DEFINE TItem:= Byte}
+  {$DEFINE TItemArray:= TByteArray}
+  {$DEFINE TItemList:=
+    { TByteList }
+
+    { TByteList }
+
+    { TByteList }
+
+    TByteList}
+  {$DEFINE pItemArray:= pByteArray}
+  {$DEFINE TListEnumerator:= TByteListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= ShortInt}
+  {$DEFINE TItemArray:= TShortIntArray}
+  {$DEFINE TItemList:= TShortIntList}
+  {$DEFINE pItemArray:= pShortIntArray}
+  {$DEFINE TListEnumerator:= TShortIntListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= Word}
+  {$DEFINE TItemArray:= TWordArray}
+  {$DEFINE TItemList:= TWordList}
+  {$DEFINE pItemArray:= pWordArray}
+  {$DEFINE TListEnumerator:= TWordListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= SmallInt}
+  {$DEFINE TItemArray:= TSmallIntArray}
+  {$DEFINE TItemList:= TSmallIntList}
+  {$DEFINE pItemArray:= pSmallIntArray}
+  {$DEFINE TListEnumerator:= TSmallIntListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= LongInt}
   {$DEFINE TItemArray:= TIntArray}
   {$DEFINE TItemList:= TIntList}
   {$DEFINE pItemArray:= pIntArray}
@@ -63,6 +102,27 @@ SOFTWARE.
   {$DEFINE TItemList:= TQuaternionList}
   {$DEFINE pItemArray:= pQuaternionArray}
   {$DEFINE TListEnumerator:= TQuaternionListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= TIVec2}
+  {$DEFINE TItemArray:= TIVec2Array}
+  {$DEFINE TItemList:= TIVec2List}
+  {$DEFINE pItemArray:= pIVec2Array}
+  {$DEFINE TListEnumerator:= TIVec2ListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= TIVec3}
+  {$DEFINE TItemArray:= TIVec3Array}
+  {$DEFINE TItemList:= TIVec3List}
+  {$DEFINE pItemArray:= pIVec3Array}
+  {$DEFINE TListEnumerator:= TIVec3ListEnumerator}
+  {$INCLUDE p3dmath_arrays.inc}
+
+  {$DEFINE TItem:= TIVec4}
+  {$DEFINE TItemArray:= TIVec4Array}
+  {$DEFINE TItemList:= TIVec4List}
+  {$DEFINE pItemArray:= pIVec4Array}
+  {$DEFINE TListEnumerator:= TIVec4ListEnumerator}
   {$INCLUDE p3dmath_arrays.inc}
 
   {$DEFINE TItem:= TMat2}

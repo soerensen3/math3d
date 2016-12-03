@@ -31,18 +31,23 @@ type
 
     TListEnumerator = class;
     TItemList = class ( TPersistent )
+      type
+        TItemListOnSetEvent = procedure ( Sender: TPersistent; ItemIndex: Integer; AValue: TItem ) of object;
+
       private
         FItems: pItemArray;
         FCount: Integer;
         FCapacity: Integer;
         FGrowth: Integer;
+        FOnChange: TItemListOnChangeEvent;
+        FOnSet: TItemListOnSetEvent;
         FSizeLimit: Integer;
 
         function GetItem( Index: Integer ): TItem;
         procedure SetCapacity( const Value: Integer );
         procedure SetCount( AValue: Integer );
         procedure SetGrowth( const Value: Integer );
-        procedure SetItem( Index: Integer; const Value: TItem );
+        procedure SetItem( Index: Integer; const AValue: TItem );
         procedure Grow;
         procedure Shrink;
 
@@ -56,32 +61,36 @@ type
         function Add( Item: TItem ): Integer; overload;
         function Add( Items: array of TItem ): Integer; overload;
         procedure Delete( Index: Integer ); overload;
+        procedure Remove( Item: TItem );
         procedure Clear;
         function PtrTo( Index: Integer ): Pointer;
         function Ptr: Pointer;
         procedure AssignTo( Dest: TItemList ); reintroduce;
         function GetEnumerator(): TListEnumerator;
+        function IndexOf( Item: TItem ): Integer;
 
         property Items[ Index: Integer ]: TItem read GetItem write SetItem; default;
         property Count: Integer read FCount write SetCount;
         property Capacity: Integer read FCapacity write SetCapacity;
         property Growth: Integer read FGrowth write SetGrowth;
         property SizeLimit: Integer read FSizeLimit;
+        property OnChange: TItemListOnChangeEvent read FOnChange write FOnChange;
+        property OnSet: TItemListOnSetEvent read FOnSet write FOnSet;
     end;
 
     { TListEnumerator }
 
     TListEnumerator = class
-    private
-      FCurrent: TItem;
-      FCurrentIdx: Integer;
-      FItemList: TItemList;
+      private
+        FCurrent: TItem;
+        FCurrentIdx: Integer;
+        FItemList: TItemList;
 
-    public
-      constructor Create( ItemList: TItemList );
-      function MoveNext: Boolean;
-      property Current: TItem read FCurrent;
-      property CurrentIdx: Integer read FCurrentIdx;
+      public
+        constructor Create( ItemList: TItemList );
+        function MoveNext: Boolean;
+        property Current: TItem read FCurrent;
+        property CurrentIdx: Integer read FCurrentIdx;
     end;
 {$ENDIF}
 
@@ -97,6 +106,8 @@ begin
   Result:= FCount;
 
   Inc( FCount );
+  if ( Assigned( OnChange )) then
+    OnChange( Self, Result, actAdd );
 end;
 
 function TItemList.Add( Items: array of TItem ): Integer;
@@ -110,8 +121,12 @@ end;
 
 procedure TItemList.AssignTo( Dest: TItemList );
 begin
+  if ( Assigned( Dest.OnChange )) then
+    Dest.OnChange( Self, -1, actAssignBefore );
   Dest.Count:= Count;
   Move( FItems^, Dest.FItems^, SizeOf( TItem ) * Count );
+  if ( Assigned( Dest.OnChange )) then
+    Dest.OnChange( Self, -1, actAssignAfter );
 end;
 
 function TItemList.GetEnumerator: TListEnumerator;
@@ -119,8 +134,24 @@ begin
   Result:= TListEnumerator.Create( Self );
 end;
 
+function TItemList.IndexOf( Item: TItem ): Integer;
+var
+  i: Integer;
+begin
+  Result:= -1;
+  for i:= 0 to Count - 1 do
+    if ( Item = Items[ i ]) then
+      begin
+        Result:= i;
+        break;
+      end;
+end;
+
 procedure TItemList.Clear;
 begin
+  if ( Assigned( OnChange )) then
+    OnChange( Self, -1, actClear );
+
   FreeMem( FItems );
   FCount:= 0;
   FCapacity:= 0;
@@ -141,9 +172,23 @@ procedure TItemList.Delete( Index: Integer );
 var
   i: Integer;
 begin
-  for i:= Index to Count - 2 do
-    FItems[ i ]:= FItems[ i + 1 ];
+  if ( Assigned( OnChange )) then
+    OnChange( Self, Index, actDelete );
+
+  Move( FItems^[ Index + 1 ], FItems^[ Index ], SizeOf( TItem ) * ( Count - 1 - Index )); //Move does a check for overlapping regions
+
+  //for i:= Index to Count - 2 do
+  //  FItems[ i ]:= FItems[ i + 1 ];
   FCount:= FCount - 1;
+end;
+
+procedure TItemList.Remove( Item: TItem );
+var
+  Index: Integer;
+begin
+  Index:= IndexOf( Item );
+  if ( Index > -1 ) then
+    Delete( Index );
 end;
 
 destructor TItemList.Destroy;
@@ -194,9 +239,14 @@ begin
   FGrowth:= Math.Max( 16, Value ); // Minimum Value 16
 end;
 
-procedure TItemList.SetItem( Index: Integer; const Value: TItem );
+procedure TItemList.SetItem( Index: Integer; const AValue: TItem );
 begin
-  FItems^[ Index ]:= Value;
+  if ( Assigned( OnChange )) then
+    OnChange( Self, Index, actSet );
+  if ( Assigned( OnSet )) then
+    OnSet( Self, Index, AValue );
+
+  FItems^[ Index ]:= AValue;
 end;
 
 procedure TItemList.Shrink;

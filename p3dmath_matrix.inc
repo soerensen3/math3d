@@ -60,7 +60,7 @@ type
       //@abbr`Use this one dimensional array for directly accessing the fields in the matrix`.
       m: array [0..NUMFIELD*NUMFIELD-1] of Float;
       property Row [ index: Integer ] : TVector read GetRow write SetRow;
-      property Col [ index: Integer ] : TVector read GetCol write SetCol;
+      property Col [ index: Integer ] : TVector read GetCol write SetCol; default;
 
       function ToString( const LineBreaks: Boolean = False; const Digits: Integer = 8 ): String;
 
@@ -92,7 +92,7 @@ type
       //This property is only provided for the use with OnChange events if needed in the future.
 
 
-      property _m[ index: Integer ]: Float read GetIndex write SetIndex; default; //@exclude
+      property _m[ index: Integer ]: Float read GetIndex write SetIndex; //@exclude
   end;
 //@abbr`Will generate a translation matrix` of the size depending on the fields of @bold`Vec`.
 //If the vector has 3 fields the corresponding matrix will be 3 by 3.
@@ -122,6 +122,7 @@ function
 function mat3rotate( Axis: TVec3; Angle: Float ): TMatrix; overload;
 function mat3determinant( M: TMatrix ): Float;
 function mat3normalize( M: TMatrix ): TMatrix;
+procedure mat3decompose( mat: TMat3; out rot: TMat3; out scale: TVec3 );
 {$ENDIF}
 {$IF NUMFIELD = 4}
 //@abbr`Will generate a 4 by 4 rotation matrix using an axis and an angle`.
@@ -135,6 +136,8 @@ function mat4inverse( Mat: TMatrix; out MatInv: TMatrix ): Boolean;
 //@abbr`Will return the the transpose of a 4 by 4 matrix` which means it will swap
 //colums and rows.
 function mat4transpose( Matrix: TMatrix ): TMatrix;
+
+procedure mat4decompose( mat: TMat4; out loc: TVec3; out rot: TMat3; out scale: TVec3 );
 
 {function MatrixMirror( Plane: TPlane ): TMatrix;}
 {function MatrixCubeMap( Face: Cardinal ): TMatrix;}
@@ -160,7 +163,7 @@ var
   i: Integer;
 begin
   for i:= 0 to 15 do
-    a[ i ]:= a[ i ] * b;
+    a._m[ i ]:= a._m[ i ] * b;
   c:= a;
 end;
 
@@ -353,29 +356,67 @@ begin
         + b._13 * a._32
         {$ENDIF}
         ;
+
+  c._20:= b._20 * a._00
+        + b._21 * a._10
+        + b._22 * a._20
+        {$IF NUMFIELD > 3}
+        + b._23 * a._30
+        {$ENDIF}
+        ;
+
+  c._21:= b._20 * a._01
+        + b._21 * a._11
+        + b._22 * a._21
+          {$IF NUMFIELD > 3}
+        + b._23 * a._31
+          {$ENDIF}
+        ;
+
+  c._22:= b._20 * a._02
+        + b._21 * a._12
+        + b._22 * a._22
+          {$IF NUMFIELD > 3}
+        + b._23 * a._32
+          {$ENDIF}
+        ;
   {$ENDIF}
 
   {$IF NUMFIELD > 3}
   c._03:= b._00 * a._03
         + b._01 * a._13
         + b._02 * a._23
-        + b._03 * a._33
-        ;
+        + b._03 * a._33;
 
-  c._20:= b._20 * a._00
-        + b._21 * a._10
-        + b._22 * a._20
-        + b._23 * a._30
-        ;
+  c._13:= b._10 * a._03
+        + b._11 * a._13
+        + b._12 * a._23
+        + b._13 * a._33;
 
-  c._21:= b._20 * a._01 + b._21 * a._11 + b._22 * a._21 + b._23 * a._31;
-  c._22:= b._20 * a._02 + b._21 * a._12 + b._22 * a._22 + b._23 * a._32;
-  c._13:= b._10 * a._03 + b._11 * a._13 + b._12 * a._23 + b._13 * a._33;
-  c._23:= b._20 * a._03 + b._21 * a._13 + b._22 * a._23 + b._23 * a._33;
-  c._30:= b._30 * a._00 + b._31 * a._10 + b._32 * a._20 + b._33 * a._30;
-  c._31:= b._30 * a._01 + b._31 * a._11 + b._32 * a._21 + b._33 * a._31;
-  c._32:= b._30 * a._02 + b._31 * a._12 + b._32 * a._22 + b._33 * a._32;
-  c._33:= b._30 * a._03 + b._31 * a._13 + b._32 * a._23 + b._33 * a._33;
+  c._23:= b._20 * a._03
+        + b._21 * a._13
+        + b._22 * a._23
+        + b._23 * a._33;
+
+  c._30:= b._30 * a._00
+        + b._31 * a._10
+        + b._32 * a._20
+        + b._33 * a._30;
+
+  c._31:= b._30 * a._01
+        + b._31 * a._11
+        + b._32 * a._21
+        + b._33 * a._31;
+
+  c._32:= b._30 * a._02
+        + b._31 * a._12
+        + b._32 * a._22
+        + b._33 * a._32;
+
+  c._33:= b._30 * a._03
+        + b._31 * a._13
+        + b._32 * a._23
+        + b._33 * a._33;
   {$ENDIF}
 end;
 
@@ -590,14 +631,97 @@ begin
 end;
 
 function mat3normalize( M: TMatrix ): TMatrix;
+begin
+  Result:= mat3( M[ 0 ].Normalize, m[ 1 ].Normalize, m[ 2 ].Normalize );
+end;
+
+{
 var
   d: Float;
   i: Integer;
 begin
   d:= mat3determinant( M );
   if ( d > 0 ) then
-  for i:= 0 to high( M.m ) do
-    Result.m[ i ]:= M.m[ i ]/d;
+    for i:= 0 to high( M.m ) do
+      Result.m[ i ]:= M.m[ i ]/d
+  else
+    Result:= M;
+end;
+}
+function mat3adjoint( Mat: TMat3 ): TMat3;
+var
+  m_out: TMat3;
+begin
+  m_out._00:=  Mat._11 * Mat._22 - Mat._12 * Mat._21;
+  m_out._01:= -Mat._01 * Mat._22 + Mat._02 * Mat._21;
+  m_out._02:=  Mat._01 * Mat._12 - Mat._02 * Mat._11;
+
+  m_out._10:= -Mat._10 * Mat._22 + Mat._12 * Mat._20;
+  m_out._11:=  Mat._00 * Mat._22 - Mat._02 * Mat._20;
+  m_out._12:= -Mat._00 * Mat._12 + Mat._02 * Mat._10;
+
+  m_out._20:=  Mat._10 * Mat._21 - Mat._11 * Mat._20;
+  m_out._21:= -Mat._00 * Mat._21 + Mat._01 * Mat._20;
+  m_out._22:=  Mat._00 * Mat._11 - Mat._01 * Mat._10;
+  Result:= m_out;
+end;
+
+function mat3inverse( Mat: TMat3; out MatInv: TMat3 ): Boolean;
+var
+  matadj, MatOut: TMat3;
+  det: Float;
+  i: Integer;
+begin
+  { calc adjoint }
+  matadj:= mat3adjoint( Mat );
+
+  { then determinant old matrix! }
+  det:= mat3determinant( Mat );
+
+  Result:= ( det <> 0 );
+
+  if ( Result ) then //if (LIKELY(det != 0.0f))
+    begin
+      det:= 1 / det;
+      for i:= 0 to 3 do
+        MatOut[ i ]:= matadj[ i ] * det;
+      MatInv:= MatOut;
+    end
+  else
+    MatInv:= Mat;
+end;
+
+//based on mat3_to_rot_size in math_matrix.c from the blender source
+
+procedure mat3decompose( mat: TMat3; out rot: TMat3; out scale: TVec3 );
+  function mat3_is_negative( m: TMat3 ): Boolean;
+  begin
+    Result:= ( dot( cross( mat[ 0 ], mat[ 1 ]), mat[ 2 ]) < 0 );
+  end;
+
+var
+  mat_n, mat_sz: TMat3;
+begin
+  { rotation & scale are linked, we need to create the mat's
+   * for these together since they are related. }
+
+  { so scale doesn't interfere with rotation [#24291] }
+  { note: this is a workaround for negative matrix not working for rotation conversion, FIXME }
+
+  mat_n:= mat3normalize( mat );
+  if ( mat3_is_negative( mat )) then
+    mat_n:= mat3( -mat[ 0 ], -mat[ 1 ], -mat[ 2 ]);
+
+  { rotation }
+  { keep rot as a 3x3 matrix, the caller can convert into a quat or euler }
+  rot:= mat_n;
+
+  { scale }
+  { note: mat4_to_size(ob->size, mat) fails for negative scale }
+  mat3inverse( mat_n, mat_n );
+  mat_sz:= mat_n * mat;
+
+  scale:= vec3( mat_sz[ 0 ][ 0 ], mat_sz[ 1 ][ 1 ], mat_sz[ 2 ][ 2 ]);
 end;
 {$ENDIF}
 {$IF NUMFIELD = 4}
@@ -662,21 +786,21 @@ end;
 
 function mat4determinant(Mat: TMatrix): Float;
 begin
-  Result:= Mat._00 * MatrixDet( Mat[ 5 ], Mat[ 9 ], Mat[ 13 ],
-                                Mat[ 6 ], Mat[ 10 ], Mat[ 14 ],
-                                Mat[ 7 ], Mat[ 11 ], Mat[ 15 ])
+  Result:= Mat._00 * MatrixDet( Mat.m[ 5 ], Mat.m[ 9 ], Mat.m[ 13 ],
+                                Mat.m[ 6 ], Mat.m[ 10 ], Mat.m[ 14 ],
+                                Mat.m[ 7 ], Mat.m[ 11 ], Mat.m[ 15 ])
 
-         - Mat._01 * MatrixDet( Mat[ 4 ], Mat[ 8 ], Mat[ 12 ],
-                                Mat[ 6 ], Mat[ 10 ], Mat[ 14 ],
-                                Mat[ 7 ], Mat[ 11 ], Mat[ 15 ])
+         - Mat._01 * MatrixDet( Mat.m[ 4 ], Mat.m[ 8 ], Mat.m[ 12 ],
+                                Mat.m[ 6 ], Mat.m[ 10 ], Mat.m[ 14 ],
+                                Mat.m[ 7 ], Mat.m[ 11 ], Mat.m[ 15 ])
 
-         + Mat._02 * MatrixDet( Mat[ 4 ], Mat[ 8 ], Mat[ 12 ],
-                                Mat[ 5 ], Mat[ 9 ], Mat[ 13 ],
-                                Mat[ 7 ], Mat[ 11 ], Mat[ 15 ])
+         + Mat._02 * MatrixDet( Mat.m[ 4 ], Mat.m[ 8 ], Mat.m[ 12 ],
+                                Mat.m[ 5 ], Mat.m[ 9 ], Mat.m[ 13 ],
+                                Mat.m[ 7 ], Mat.m[ 11 ], Mat.m[ 15 ])
 
-         - Mat._03 * MatrixDet( Mat[ 4 ], Mat[ 8 ], Mat[ 12 ],
-                                Mat[ 5 ], Mat[ 9 ], Mat[ 13 ],
-                                Mat[ 6 ], Mat[ 10 ], Mat[ 14 ]);
+         - Mat._03 * MatrixDet( Mat.m[ 4 ], Mat.m[ 8 ], Mat.m[ 12 ],
+                                Mat.m[ 5 ], Mat.m[ 9 ], Mat.m[ 13 ],
+                                Mat.m[ 6 ], Mat.m[ 10 ], Mat.m[ 14 ]);
 end;
 
 function mat4normalize( Mat: TMatrix ): TMatrix;
@@ -798,6 +922,13 @@ begin
   Result._23:= Matrix._32;
   Result._33:= Matrix._33;
 end;
+
+procedure mat4decompose( mat: TMat4; out loc: TVec3; out rot: TMat3; out scale: TVec3 );
+begin
+  mat3decompose( mat3( mat ), rot, scale );
+  loc:= mat.Row[ 3 ].xyz;
+end;
+
 {$WARNINGS ON}
 
 
