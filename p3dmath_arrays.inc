@@ -30,9 +30,9 @@ type
     { TItemList }
 
     TListEnumerator = class;
-    TItemList = class ( TPersistent )
+    TItemList = class ( TInterfacedPersistent )
       type
-        TItemListOnSetEvent = procedure ( Sender: TPersistent; ItemIndex: Integer; AValue: TItem ) of object;
+        TItemListOnSetEvent = function ( Sender: TPersistent; ItemIndex: Integer; AValue: TItem ): Boolean of object;
 
       private
         FItems: pItemArray;
@@ -193,7 +193,7 @@ end;
 
 destructor TItemList.Destroy;
 begin
-  FreeMem( FItems);
+  FreeMem( FItems );
   inherited;
 end;
 
@@ -241,10 +241,11 @@ end;
 
 procedure TItemList.SetItem( Index: Integer; const AValue: TItem );
 begin
+  if ( Assigned( OnSet ) and ( not OnSet( Self, Index, AValue ))) then
+    exit;
+
   if ( Assigned( OnChange )) then
     OnChange( Self, Index, actSet );
-  if ( Assigned( OnSet )) then
-    OnSet( Self, Index, AValue );
 
   FItems^[ Index ]:= AValue;
 end;

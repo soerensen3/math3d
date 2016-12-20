@@ -1,0 +1,1101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unit name="p3dMath">
+  <uses>
+    <file name="Classes"/>
+    <file name="SysUtils"/>
+    <file name="Math"/>
+  </uses>
+  <class name="TVec2" type="Object">
+    <section visibility="Private">
+      <procedure name="SetCoord" proctype="procedure" definition="@code`procedure SetCoord( AIndex: Integer; AValue: Float );`" description="@exclude@br "/>
+      <procedure name="GetCoord" proctype="function" definition="@code`function GetCoord( AIndex: Integer ): Float;`" description="@exclude@br "/>
+      <procedure name="GetVec2" proctype="function" definition="@code`function GetVec2( AIndex: Integer ): TVec2;`" description="@exclude@br "/>
+    </section>
+    <section visibility="Protected">
+      <variable name="FCoord" type="array[0..2-1]of Float" definition="@code`FCoord: array[0..2-1]of Float`" description="@exclude@br "/>
+    </section>
+    <section visibility="Public">
+      <procedure name="GetDist" proctype="function" definition="@code`function GetDist: Float;`" description="@abbr`Calculate the length of the current vector`.@br "/>
+      <procedure name="Normalize" proctype="function" definition="@code`function Normalize: TVec2;`" description="@abbr`Normalizes the current vector`.    The vector will be returned in the function's result additionally.    @br@br    For returning a normalized vector without    changing the current one use the @link`p3dMath.normalize` function@br "/>
+      <procedure name="DotProduct" proctype="function" definition="@code`function DotProduct( v: TVec2 ): Float;`" description="@abbr`Calculate the dot product of the current vector and v`.@br "/>
+      <procedure name="GetBiggestComp" proctype="function" definition="@code`function GetBiggestComp: Integer;`" description="@abbr`Determines the biggest component (X, Y, Z, W)`.    The result is the index of the biggest component which can be used with @bold`Coord`@br    @code` s:= v.Coord[ v.GetBiggestComp ]; `@br "/>
+      <procedure name="Invert" proctype="function" definition="@code`function Invert: TVec2;`" description="@abbr`Negates the current vector without altering it`.    The result is only returned without altering the original vector.    This is exivalent to @code`v2:= -v;``@br "/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: PFloat;`" description="@abbr`Function to get access to the first element (@bold`X`) of the vector`.    The result is a pointer to the data of a vector. It can be used when passing to    opengl for example. This is equivalent to    @code`ptr:= @@v.Coord[ 0 ];`@br "/>
+      <procedure name="Compare" proctype="function" definition="@code`function Compare( v: TVec2 ): Boolean;`" description="@abbr`Compares two vectors and returns if their field values are equal`.    The result is a boolean and is True if the vectors are equal.@br "/>
+      <property name="Coord" type="Float" definition="@code`property Coord[Index:Integer]:Float`"/>
+      <procedure name="ToString" proctype="function" definition="@code`function ToString( const Digits: Integer = 8 ): String;`" description="@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can    be used for debugging or printing the values of a vector on screen.    The string is returned in the function's result@br "/>
+      <procedure name="FromString" proctype="procedure" definition="@code`procedure FromString( S: String );`"/>
+      <property name="XX" type="TVec2" definition="@code`property XX:TVec2`" description="@exclude@br "/>
+      <property name="XY" type="TVec2" definition="@code`property XY:TVec2`" description="@exclude@br "/>
+      <property name="YX" type="TVec2" definition="@code`property YX:TVec2`" description="@exclude@br "/>
+      <property name="YY" type="TVec2" definition="@code`property YY:TVec2`" description="@exclude@br "/>
+    </section>
+    <section visibility="Published">
+      <property name="X" type="Float" definition="@code`property X:Float`"/>
+      <property name="R" type="Float" definition="@code`property R:Float`"/>
+      <property name="S" type="Float" definition="@code`property S:Float`"/>
+      <property name="Y" type="Float" definition="@code`property Y:Float`"/>
+      <property name="G" type="Float" definition="@code`property G:Float`"/>
+      <property name="T" type="Float" definition="@code`property T:Float`"/>
+    </section>
+  </class>
+  <class name="TVec3" type="Object">
+    <section visibility="Private">
+      <procedure name="SetCoord" proctype="procedure" definition="@code`procedure SetCoord( AIndex: Integer; AValue: Float );`" description="@exclude@br "/>
+      <procedure name="GetCoord" proctype="function" definition="@code`function GetCoord( AIndex: Integer ): Float;`" description="@exclude@br "/>
+      <procedure name="GetVec2" proctype="function" definition="@code`function GetVec2( AIndex: Integer ): TVec2;`" description="@exclude@br "/>
+      <procedure name="GetVec3" proctype="function" definition="@code`function GetVec3( AIndex: Integer ): TVec3;`" description="@exclude@br "/>
+    </section>
+    <section visibility="Protected">
+      <variable name="FCoord" type="array[0..3-1]of Float" definition="@code`FCoord: array[0..3-1]of Float`" description="@exclude@br "/>
+    </section>
+    <section visibility="Public">
+      <procedure name="GetDist" proctype="function" definition="@code`function GetDist: Float;`" description="@abbr`Calculate the length of the current vector`.@br "/>
+      <procedure name="Normalize" proctype="function" definition="@code`function Normalize: TVec3;`" description="@abbr`Normalizes the current vector`.    The vector will be returned in the function's result additionally.    @br@br    For returning a normalized vector without    changing the current one use the @link`p3dMath.normalize` function@br "/>
+      <procedure name="CrossProduct" proctype="function" definition="@code`function CrossProduct( v: TVec3 ): TVec3;`" description="@abbr`Calculate the cross product of the current vector and v`.@br "/>
+      <procedure name="DotProduct" proctype="function" definition="@code`function DotProduct( v: TVec3 ): Float;`" description="@abbr`Calculate the dot product of the current vector and v`.@br "/>
+      <procedure name="GetBiggestComp" proctype="function" definition="@code`function GetBiggestComp: Integer;`" description="@abbr`Determines the biggest component (X, Y, Z, W)`.    The result is the index of the biggest component which can be used with @bold`Coord`@br    @code` s:= v.Coord[ v.GetBiggestComp ]; `@br "/>
+      <procedure name="Invert" proctype="function" definition="@code`function Invert: TVec3;`" description="@abbr`Negates the current vector without altering it`.    The result is only returned without altering the original vector.    This is exivalent to @code`v2:= -v;``@br "/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: PFloat;`" description="@abbr`Function to get access to the first element (@bold`X`) of the vector`.    The result is a pointer to the data of a vector. It can be used when passing to    opengl for example. This is equivalent to    @code`ptr:= @@v.Coord[ 0 ];`@br "/>
+      <procedure name="Compare" proctype="function" definition="@code`function Compare( v: TVec3 ): Boolean;`" description="@abbr`Compares two vectors and returns if their field values are equal`.    The result is a boolean and is True if the vectors are equal.@br "/>
+      <property name="Coord" type="Float" definition="@code`property Coord[Index:Integer]:Float`"/>
+      <procedure name="ToString" proctype="function" definition="@code`function ToString( const Digits: Integer = 8 ): String;`" description="@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can    be used for debugging or printing the values of a vector on screen.    The string is returned in the function's result@br "/>
+      <procedure name="FromString" proctype="procedure" definition="@code`procedure FromString( S: String );`"/>
+      <property name="XX" type="TVec2" definition="@code`property XX:TVec2`" description="@exclude@br "/>
+      <property name="XY" type="TVec2" definition="@code`property XY:TVec2`" description="@exclude@br "/>
+      <property name="XZ" type="TVec2" definition="@code`property XZ:TVec2`" description="@exclude@br "/>
+      <property name="YX" type="TVec2" definition="@code`property YX:TVec2`" description="@exclude@br "/>
+      <property name="YY" type="TVec2" definition="@code`property YY:TVec2`" description="@exclude@br "/>
+      <property name="YZ" type="TVec2" definition="@code`property YZ:TVec2`" description="@exclude@br "/>
+      <property name="ZX" type="TVec2" definition="@code`property ZX:TVec2`" description="@exclude@br "/>
+      <property name="ZY" type="TVec2" definition="@code`property ZY:TVec2`" description="@exclude@br "/>
+      <property name="ZZ" type="TVec2" definition="@code`property ZZ:TVec2`" description="@exclude@br "/>
+      <property name="XXX" type="TVec3" definition="@code`property XXX:TVec3`" description="@exclude@br "/>
+      <property name="XXY" type="TVec3" definition="@code`property XXY:TVec3`" description="@exclude@br "/>
+      <property name="XXZ" type="TVec3" definition="@code`property XXZ:TVec3`" description="@exclude@br "/>
+      <property name="XYX" type="TVec3" definition="@code`property XYX:TVec3`" description="@exclude@br "/>
+      <property name="XYY" type="TVec3" definition="@code`property XYY:TVec3`" description="@exclude@br "/>
+      <property name="XYZ" type="TVec3" definition="@code`property XYZ:TVec3`" description="@exclude@br "/>
+      <property name="XZX" type="TVec3" definition="@code`property XZX:TVec3`" description="@exclude@br "/>
+      <property name="XZY" type="TVec3" definition="@code`property XZY:TVec3`" description="@exclude@br "/>
+      <property name="XZZ" type="TVec3" definition="@code`property XZZ:TVec3`" description="@exclude@br "/>
+      <property name="YXX" type="TVec3" definition="@code`property YXX:TVec3`" description="@exclude@br "/>
+      <property name="YXY" type="TVec3" definition="@code`property YXY:TVec3`" description="@exclude@br "/>
+      <property name="YXZ" type="TVec3" definition="@code`property YXZ:TVec3`" description="@exclude@br "/>
+      <property name="YYX" type="TVec3" definition="@code`property YYX:TVec3`" description="@exclude@br "/>
+      <property name="YYY" type="TVec3" definition="@code`property YYY:TVec3`" description="@exclude@br "/>
+      <property name="YYZ" type="TVec3" definition="@code`property YYZ:TVec3`" description="@exclude@br "/>
+      <property name="YZX" type="TVec3" definition="@code`property YZX:TVec3`" description="@exclude@br "/>
+      <property name="YZY" type="TVec3" definition="@code`property YZY:TVec3`" description="@exclude@br "/>
+      <property name="YZZ" type="TVec3" definition="@code`property YZZ:TVec3`" description="@exclude@br "/>
+      <property name="ZXX" type="TVec3" definition="@code`property ZXX:TVec3`" description="@exclude@br "/>
+      <property name="ZXY" type="TVec3" definition="@code`property ZXY:TVec3`" description="@exclude@br "/>
+      <property name="ZXZ" type="TVec3" definition="@code`property ZXZ:TVec3`" description="@exclude@br "/>
+      <property name="ZYX" type="TVec3" definition="@code`property ZYX:TVec3`" description="@exclude@br "/>
+      <property name="ZYY" type="TVec3" definition="@code`property ZYY:TVec3`" description="@exclude@br "/>
+      <property name="ZYZ" type="TVec3" definition="@code`property ZYZ:TVec3`" description="@exclude@br "/>
+      <property name="ZZX" type="TVec3" definition="@code`property ZZX:TVec3`" description="@exclude@br "/>
+      <property name="ZZY" type="TVec3" definition="@code`property ZZY:TVec3`" description="@exclude@br "/>
+      <property name="ZZZ" type="TVec3" definition="@code`property ZZZ:TVec3`" description="@exclude@br "/>
+    </section>
+    <section visibility="Published">
+      <property name="X" type="Float" definition="@code`property X:Float`"/>
+      <property name="R" type="Float" definition="@code`property R:Float`"/>
+      <property name="S" type="Float" definition="@code`property S:Float`"/>
+      <property name="Y" type="Float" definition="@code`property Y:Float`"/>
+      <property name="G" type="Float" definition="@code`property G:Float`"/>
+      <property name="T" type="Float" definition="@code`property T:Float`"/>
+      <property name="Z" type="Float" definition="@code`property Z:Float`" description="This field will only exist from TVec3 on.@br "/>
+      <property name="B" type="Float" definition="@code`property B:Float`" description="This field will only exist from TVec3 on.@br "/>
+      <property name="P" type="Float" definition="@code`property P:Float`" description="This field will only exist from TVec3 on.@br "/>
+    </section>
+  </class>
+  <class name="TVec4" type="Object">
+    <section visibility="Private">
+      <procedure name="SetCoord" proctype="procedure" definition="@code`procedure SetCoord( AIndex: Integer; AValue: Float );`" description="@exclude@br "/>
+      <procedure name="GetCoord" proctype="function" definition="@code`function GetCoord( AIndex: Integer ): Float;`" description="@exclude@br "/>
+      <procedure name="GetVec2" proctype="function" definition="@code`function GetVec2( AIndex: Integer ): TVec2;`" description="@exclude@br "/>
+      <procedure name="GetVec3" proctype="function" definition="@code`function GetVec3( AIndex: Integer ): TVec3;`" description="@exclude@br "/>
+      <procedure name="GetVec4" proctype="function" definition="@code`function GetVec4( AIndex: Integer ): TVec4;`" description="@exclude@br "/>
+    </section>
+    <section visibility="Protected">
+      <variable name="FCoord" type="array[0..4-1]of Float" definition="@code`FCoord: array[0..4-1]of Float`" description="@exclude@br "/>
+    </section>
+    <section visibility="Public">
+      <procedure name="GetDist" proctype="function" definition="@code`function GetDist: Float;`" description="@abbr`Calculate the length of the current vector`.@br "/>
+      <procedure name="Normalize" proctype="function" definition="@code`function Normalize: TVec4;`" description="@abbr`Normalizes the current vector`.    The vector will be returned in the function's result additionally.    @br@br    For returning a normalized vector without    changing the current one use the @link`p3dMath.normalize` function@br "/>
+      <procedure name="CrossProduct" proctype="function" definition="@code`function CrossProduct( v: TVec4 ): TVec4;`" description="@abbr`Calculate the cross product of the current vector and v`.@br "/>
+      <procedure name="DotProduct" proctype="function" definition="@code`function DotProduct( v: TVec4 ): Float;`" description="@abbr`Calculate the dot product of the current vector and v`.@br "/>
+      <procedure name="GetBiggestComp" proctype="function" definition="@code`function GetBiggestComp: Integer;`" description="@abbr`Determines the biggest component (X, Y, Z, W)`.    The result is the index of the biggest component which can be used with @bold`Coord`@br    @code` s:= v.Coord[ v.GetBiggestComp ]; `@br "/>
+      <procedure name="Invert" proctype="function" definition="@code`function Invert: TVec4;`" description="@abbr`Negates the current vector without altering it`.    The result is only returned without altering the original vector.    This is exivalent to @code`v2:= -v;``@br "/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: PFloat;`" description="@abbr`Function to get access to the first element (@bold`X`) of the vector`.    The result is a pointer to the data of a vector. It can be used when passing to    opengl for example. This is equivalent to    @code`ptr:= @@v.Coord[ 0 ];`@br "/>
+      <procedure name="Compare" proctype="function" definition="@code`function Compare( v: TVec4 ): Boolean;`" description="@abbr`Compares two vectors and returns if their field values are equal`.    The result is a boolean and is True if the vectors are equal.@br "/>
+      <property name="Coord" type="Float" definition="@code`property Coord[Index:Integer]:Float`"/>
+      <procedure name="ToString" proctype="function" definition="@code`function ToString( const Digits: Integer = 8 ): String;`" description="@abbr`This will generate a string with the vector's separated with comma (and a space)`. It can    be used for debugging or printing the values of a vector on screen.    The string is returned in the function's result@br "/>
+      <procedure name="FromString" proctype="procedure" definition="@code`procedure FromString( S: String );`"/>
+      <property name="XX" type="TVec2" definition="@code`property XX:TVec2`" description="@exclude@br "/>
+      <property name="XY" type="TVec2" definition="@code`property XY:TVec2`" description="@exclude@br "/>
+      <property name="XZ" type="TVec2" definition="@code`property XZ:TVec2`" description="@exclude@br "/>
+      <property name="XW" type="TVec2" definition="@code`property XW:TVec2`" description="@exclude@br "/>
+      <property name="YX" type="TVec2" definition="@code`property YX:TVec2`" description="@exclude@br "/>
+      <property name="YY" type="TVec2" definition="@code`property YY:TVec2`" description="@exclude@br "/>
+      <property name="YZ" type="TVec2" definition="@code`property YZ:TVec2`" description="@exclude@br "/>
+      <property name="YW" type="TVec2" definition="@code`property YW:TVec2`" description="@exclude@br "/>
+      <property name="ZX" type="TVec2" definition="@code`property ZX:TVec2`" description="@exclude@br "/>
+      <property name="ZY" type="TVec2" definition="@code`property ZY:TVec2`" description="@exclude@br "/>
+      <property name="ZZ" type="TVec2" definition="@code`property ZZ:TVec2`" description="@exclude@br "/>
+      <property name="ZW" type="TVec2" definition="@code`property ZW:TVec2`" description="@exclude@br "/>
+      <property name="WX" type="TVec2" definition="@code`property WX:TVec2`" description="@exclude@br "/>
+      <property name="WY" type="TVec2" definition="@code`property WY:TVec2`" description="@exclude@br "/>
+      <property name="WZ" type="TVec2" definition="@code`property WZ:TVec2`" description="@exclude@br "/>
+      <property name="WW" type="TVec2" definition="@code`property WW:TVec2`" description="@exclude@br "/>
+      <property name="XXX" type="TVec3" definition="@code`property XXX:TVec3`" description="@exclude@br "/>
+      <property name="XXY" type="TVec3" definition="@code`property XXY:TVec3`" description="@exclude@br "/>
+      <property name="XXZ" type="TVec3" definition="@code`property XXZ:TVec3`" description="@exclude@br "/>
+      <property name="XXW" type="TVec3" definition="@code`property XXW:TVec3`" description="@exclude@br "/>
+      <property name="XYX" type="TVec3" definition="@code`property XYX:TVec3`" description="@exclude@br "/>
+      <property name="XYY" type="TVec3" definition="@code`property XYY:TVec3`" description="@exclude@br "/>
+      <property name="XYZ" type="TVec3" definition="@code`property XYZ:TVec3`" description="@exclude@br "/>
+      <property name="XYW" type="TVec3" definition="@code`property XYW:TVec3`" description="@exclude@br "/>
+      <property name="XZX" type="TVec3" definition="@code`property XZX:TVec3`" description="@exclude@br "/>
+      <property name="XZY" type="TVec3" definition="@code`property XZY:TVec3`" description="@exclude@br "/>
+      <property name="XZZ" type="TVec3" definition="@code`property XZZ:TVec3`" description="@exclude@br "/>
+      <property name="XZW" type="TVec3" definition="@code`property XZW:TVec3`" description="@exclude@br "/>
+      <property name="YXX" type="TVec3" definition="@code`property YXX:TVec3`" description="@exclude@br "/>
+      <property name="YXY" type="TVec3" definition="@code`property YXY:TVec3`" description="@exclude@br "/>
+      <property name="YXZ" type="TVec3" definition="@code`property YXZ:TVec3`" description="@exclude@br "/>
+      <property name="YXW" type="TVec3" definition="@code`property YXW:TVec3`" description="@exclude@br "/>
+      <property name="YYX" type="TVec3" definition="@code`property YYX:TVec3`" description="@exclude@br "/>
+      <property name="YYY" type="TVec3" definition="@code`property YYY:TVec3`" description="@exclude@br "/>
+      <property name="YYZ" type="TVec3" definition="@code`property YYZ:TVec3`" description="@exclude@br "/>
+      <property name="YYW" type="TVec3" definition="@code`property YYW:TVec3`" description="@exclude@br "/>
+      <property name="YZX" type="TVec3" definition="@code`property YZX:TVec3`" description="@exclude@br "/>
+      <property name="YZY" type="TVec3" definition="@code`property YZY:TVec3`" description="@exclude@br "/>
+      <property name="YZZ" type="TVec3" definition="@code`property YZZ:TVec3`" description="@exclude@br "/>
+      <property name="YZW" type="TVec3" definition="@code`property YZW:TVec3`" description="@exclude@br "/>
+      <property name="ZXX" type="TVec3" definition="@code`property ZXX:TVec3`" description="@exclude@br "/>
+      <property name="ZXY" type="TVec3" definition="@code`property ZXY:TVec3`" description="@exclude@br "/>
+      <property name="ZXZ" type="TVec3" definition="@code`property ZXZ:TVec3`" description="@exclude@br "/>
+      <property name="ZXW" type="TVec3" definition="@code`property ZXW:TVec3`" description="@exclude@br "/>
+      <property name="ZYX" type="TVec3" definition="@code`property ZYX:TVec3`" description="@exclude@br "/>
+      <property name="ZYY" type="TVec3" definition="@code`property ZYY:TVec3`" description="@exclude@br "/>
+      <property name="ZYZ" type="TVec3" definition="@code`property ZYZ:TVec3`" description="@exclude@br "/>
+      <property name="ZYW" type="TVec3" definition="@code`property ZYW:TVec3`" description="@exclude@br "/>
+      <property name="ZZX" type="TVec3" definition="@code`property ZZX:TVec3`" description="@exclude@br "/>
+      <property name="ZZY" type="TVec3" definition="@code`property ZZY:TVec3`" description="@exclude@br "/>
+      <property name="ZZZ" type="TVec3" definition="@code`property ZZZ:TVec3`" description="@exclude@br "/>
+      <property name="ZZW" type="TVec3" definition="@code`property ZZW:TVec3`" description="@exclude@br "/>
+      <property name="WXX" type="TVec3" definition="@code`property WXX:TVec3`" description="@exclude@br "/>
+      <property name="WXY" type="TVec3" definition="@code`property WXY:TVec3`" description="@exclude@br "/>
+      <property name="WXZ" type="TVec3" definition="@code`property WXZ:TVec3`" description="@exclude@br "/>
+      <property name="WXW" type="TVec3" definition="@code`property WXW:TVec3`" description="@exclude@br "/>
+      <property name="WYX" type="TVec3" definition="@code`property WYX:TVec3`" description="@exclude@br "/>
+      <property name="WYY" type="TVec3" definition="@code`property WYY:TVec3`" description="@exclude@br "/>
+      <property name="WYZ" type="TVec3" definition="@code`property WYZ:TVec3`" description="@exclude@br "/>
+      <property name="WYW" type="TVec3" definition="@code`property WYW:TVec3`" description="@exclude@br "/>
+      <property name="WZX" type="TVec3" definition="@code`property WZX:TVec3`" description="@exclude@br "/>
+      <property name="WZY" type="TVec3" definition="@code`property WZY:TVec3`" description="@exclude@br "/>
+      <property name="WZZ" type="TVec3" definition="@code`property WZZ:TVec3`" description="@exclude@br "/>
+      <property name="WZW" type="TVec3" definition="@code`property WZW:TVec3`" description="@exclude@br "/>
+      <property name="WWX" type="TVec3" definition="@code`property WWX:TVec3`" description="@exclude@br "/>
+      <property name="WWY" type="TVec3" definition="@code`property WWY:TVec3`" description="@exclude@br "/>
+      <property name="WWZ" type="TVec3" definition="@code`property WWZ:TVec3`" description="@exclude@br "/>
+      <property name="WWW" type="TVec3" definition="@code`property WWW:TVec3`" description="@exclude@br "/>
+      <property name="XXXX" type="TVec4" definition="@code`property XXXX:TVec4`" description="@exclude@br "/>
+      <property name="XXXY" type="TVec4" definition="@code`property XXXY:TVec4`" description="@exclude@br "/>
+      <property name="XXXZ" type="TVec4" definition="@code`property XXXZ:TVec4`" description="@exclude@br "/>
+      <property name="XXXW" type="TVec4" definition="@code`property XXXW:TVec4`" description="@exclude@br "/>
+      <property name="XXYX" type="TVec4" definition="@code`property XXYX:TVec4`" description="@exclude@br "/>
+      <property name="XXYY" type="TVec4" definition="@code`property XXYY:TVec4`" description="@exclude@br "/>
+      <property name="XXYZ" type="TVec4" definition="@code`property XXYZ:TVec4`" description="@exclude@br "/>
+      <property name="XXYW" type="TVec4" definition="@code`property XXYW:TVec4`" description="@exclude@br "/>
+      <property name="XXZX" type="TVec4" definition="@code`property XXZX:TVec4`" description="@exclude@br "/>
+      <property name="XXZY" type="TVec4" definition="@code`property XXZY:TVec4`" description="@exclude@br "/>
+      <property name="XXZZ" type="TVec4" definition="@code`property XXZZ:TVec4`" description="@exclude@br "/>
+      <property name="XXZW" type="TVec4" definition="@code`property XXZW:TVec4`" description="@exclude@br "/>
+      <property name="XXWX" type="TVec4" definition="@code`property XXWX:TVec4`" description="@exclude@br "/>
+      <property name="XXWY" type="TVec4" definition="@code`property XXWY:TVec4`" description="@exclude@br "/>
+      <property name="XXWZ" type="TVec4" definition="@code`property XXWZ:TVec4`" description="@exclude@br "/>
+      <property name="XXWW" type="TVec4" definition="@code`property XXWW:TVec4`" description="@exclude@br "/>
+      <property name="XYXX" type="TVec4" definition="@code`property XYXX:TVec4`" description="@exclude@br "/>
+      <property name="XYXY" type="TVec4" definition="@code`property XYXY:TVec4`" description="@exclude@br "/>
+      <property name="XYXZ" type="TVec4" definition="@code`property XYXZ:TVec4`" description="@exclude@br "/>
+      <property name="XYXW" type="TVec4" definition="@code`property XYXW:TVec4`" description="@exclude@br "/>
+      <property name="XYYX" type="TVec4" definition="@code`property XYYX:TVec4`" description="@exclude@br "/>
+      <property name="XYYY" type="TVec4" definition="@code`property XYYY:TVec4`" description="@exclude@br "/>
+      <property name="XYYZ" type="TVec4" definition="@code`property XYYZ:TVec4`" description="@exclude@br "/>
+      <property name="XYYW" type="TVec4" definition="@code`property XYYW:TVec4`" description="@exclude@br "/>
+      <property name="XYZX" type="TVec4" definition="@code`property XYZX:TVec4`" description="@exclude@br "/>
+      <property name="XYZY" type="TVec4" definition="@code`property XYZY:TVec4`" description="@exclude@br "/>
+      <property name="XYZZ" type="TVec4" definition="@code`property XYZZ:TVec4`" description="@exclude@br "/>
+      <property name="XYZW" type="TVec4" definition="@code`property XYZW:TVec4`" description="@exclude@br "/>
+      <property name="XYWX" type="TVec4" definition="@code`property XYWX:TVec4`" description="@exclude@br "/>
+      <property name="XYWY" type="TVec4" definition="@code`property XYWY:TVec4`" description="@exclude@br "/>
+      <property name="XYWZ" type="TVec4" definition="@code`property XYWZ:TVec4`" description="@exclude@br "/>
+      <property name="XYWW" type="TVec4" definition="@code`property XYWW:TVec4`" description="@exclude@br "/>
+      <property name="XZXX" type="TVec4" definition="@code`property XZXX:TVec4`" description="@exclude@br "/>
+      <property name="XZXY" type="TVec4" definition="@code`property XZXY:TVec4`" description="@exclude@br "/>
+      <property name="XZXZ" type="TVec4" definition="@code`property XZXZ:TVec4`" description="@exclude@br "/>
+      <property name="XZXW" type="TVec4" definition="@code`property XZXW:TVec4`" description="@exclude@br "/>
+      <property name="XZYX" type="TVec4" definition="@code`property XZYX:TVec4`" description="@exclude@br "/>
+      <property name="XZYY" type="TVec4" definition="@code`property XZYY:TVec4`" description="@exclude@br "/>
+      <property name="XZYZ" type="TVec4" definition="@code`property XZYZ:TVec4`" description="@exclude@br "/>
+      <property name="XZYW" type="TVec4" definition="@code`property XZYW:TVec4`" description="@exclude@br "/>
+      <property name="XZZX" type="TVec4" definition="@code`property XZZX:TVec4`" description="@exclude@br "/>
+      <property name="XZZY" type="TVec4" definition="@code`property XZZY:TVec4`" description="@exclude@br "/>
+      <property name="XZZZ" type="TVec4" definition="@code`property XZZZ:TVec4`" description="@exclude@br "/>
+      <property name="XZZW" type="TVec4" definition="@code`property XZZW:TVec4`" description="@exclude@br "/>
+      <property name="XZWX" type="TVec4" definition="@code`property XZWX:TVec4`" description="@exclude@br "/>
+      <property name="XZWY" type="TVec4" definition="@code`property XZWY:TVec4`" description="@exclude@br "/>
+      <property name="XZWZ" type="TVec4" definition="@code`property XZWZ:TVec4`" description="@exclude@br "/>
+      <property name="XZWW" type="TVec4" definition="@code`property XZWW:TVec4`" description="@exclude@br "/>
+      <property name="XWXX" type="TVec4" definition="@code`property XWXX:TVec4`" description="@exclude@br "/>
+      <property name="XWXY" type="TVec4" definition="@code`property XWXY:TVec4`" description="@exclude@br "/>
+      <property name="XWXZ" type="TVec4" definition="@code`property XWXZ:TVec4`" description="@exclude@br "/>
+      <property name="XWXW" type="TVec4" definition="@code`property XWXW:TVec4`" description="@exclude@br "/>
+      <property name="XWYX" type="TVec4" definition="@code`property XWYX:TVec4`" description="@exclude@br "/>
+      <property name="XWYY" type="TVec4" definition="@code`property XWYY:TVec4`" description="@exclude@br "/>
+      <property name="XWYZ" type="TVec4" definition="@code`property XWYZ:TVec4`" description="@exclude@br "/>
+      <property name="XWYW" type="TVec4" definition="@code`property XWYW:TVec4`" description="@exclude@br "/>
+      <property name="XWZX" type="TVec4" definition="@code`property XWZX:TVec4`" description="@exclude@br "/>
+      <property name="XWZY" type="TVec4" definition="@code`property XWZY:TVec4`" description="@exclude@br "/>
+      <property name="XWZZ" type="TVec4" definition="@code`property XWZZ:TVec4`" description="@exclude@br "/>
+      <property name="XWZW" type="TVec4" definition="@code`property XWZW:TVec4`" description="@exclude@br "/>
+      <property name="XWWX" type="TVec4" definition="@code`property XWWX:TVec4`" description="@exclude@br "/>
+      <property name="XWWY" type="TVec4" definition="@code`property XWWY:TVec4`" description="@exclude@br "/>
+      <property name="XWWZ" type="TVec4" definition="@code`property XWWZ:TVec4`" description="@exclude@br "/>
+      <property name="XWWW" type="TVec4" definition="@code`property XWWW:TVec4`" description="@exclude@br "/>
+      <property name="YXXX" type="TVec4" definition="@code`property YXXX:TVec4`" description="@exclude@br "/>
+      <property name="YXXY" type="TVec4" definition="@code`property YXXY:TVec4`" description="@exclude@br "/>
+      <property name="YXXZ" type="TVec4" definition="@code`property YXXZ:TVec4`" description="@exclude@br "/>
+      <property name="YXXW" type="TVec4" definition="@code`property YXXW:TVec4`" description="@exclude@br "/>
+      <property name="YXYX" type="TVec4" definition="@code`property YXYX:TVec4`" description="@exclude@br "/>
+      <property name="YXYY" type="TVec4" definition="@code`property YXYY:TVec4`" description="@exclude@br "/>
+      <property name="YXYZ" type="TVec4" definition="@code`property YXYZ:TVec4`" description="@exclude@br "/>
+      <property name="YXYW" type="TVec4" definition="@code`property YXYW:TVec4`" description="@exclude@br "/>
+      <property name="YXZX" type="TVec4" definition="@code`property YXZX:TVec4`" description="@exclude@br "/>
+      <property name="YXZY" type="TVec4" definition="@code`property YXZY:TVec4`" description="@exclude@br "/>
+      <property name="YXZZ" type="TVec4" definition="@code`property YXZZ:TVec4`" description="@exclude@br "/>
+      <property name="YXZW" type="TVec4" definition="@code`property YXZW:TVec4`" description="@exclude@br "/>
+      <property name="YXWX" type="TVec4" definition="@code`property YXWX:TVec4`" description="@exclude@br "/>
+      <property name="YXWY" type="TVec4" definition="@code`property YXWY:TVec4`" description="@exclude@br "/>
+      <property name="YXWZ" type="TVec4" definition="@code`property YXWZ:TVec4`" description="@exclude@br "/>
+      <property name="YXWW" type="TVec4" definition="@code`property YXWW:TVec4`" description="@exclude@br "/>
+      <property name="YYXX" type="TVec4" definition="@code`property YYXX:TVec4`" description="@exclude@br "/>
+      <property name="YYXY" type="TVec4" definition="@code`property YYXY:TVec4`" description="@exclude@br "/>
+      <property name="YYXZ" type="TVec4" definition="@code`property YYXZ:TVec4`" description="@exclude@br "/>
+      <property name="YYXW" type="TVec4" definition="@code`property YYXW:TVec4`" description="@exclude@br "/>
+      <property name="YYYX" type="TVec4" definition="@code`property YYYX:TVec4`" description="@exclude@br "/>
+      <property name="YYYY" type="TVec4" definition="@code`property YYYY:TVec4`" description="@exclude@br "/>
+      <property name="YYYZ" type="TVec4" definition="@code`property YYYZ:TVec4`" description="@exclude@br "/>
+      <property name="YYYW" type="TVec4" definition="@code`property YYYW:TVec4`" description="@exclude@br "/>
+      <property name="YYZX" type="TVec4" definition="@code`property YYZX:TVec4`" description="@exclude@br "/>
+      <property name="YYZY" type="TVec4" definition="@code`property YYZY:TVec4`" description="@exclude@br "/>
+      <property name="YYZZ" type="TVec4" definition="@code`property YYZZ:TVec4`" description="@exclude@br "/>
+      <property name="YYZW" type="TVec4" definition="@code`property YYZW:TVec4`" description="@exclude@br "/>
+      <property name="YYWX" type="TVec4" definition="@code`property YYWX:TVec4`" description="@exclude@br "/>
+      <property name="YYWY" type="TVec4" definition="@code`property YYWY:TVec4`" description="@exclude@br "/>
+      <property name="YYWZ" type="TVec4" definition="@code`property YYWZ:TVec4`" description="@exclude@br "/>
+      <property name="YYWW" type="TVec4" definition="@code`property YYWW:TVec4`" description="@exclude@br "/>
+      <property name="YZXX" type="TVec4" definition="@code`property YZXX:TVec4`" description="@exclude@br "/>
+      <property name="YZXY" type="TVec4" definition="@code`property YZXY:TVec4`" description="@exclude@br "/>
+      <property name="YZXZ" type="TVec4" definition="@code`property YZXZ:TVec4`" description="@exclude@br "/>
+      <property name="YZXW" type="TVec4" definition="@code`property YZXW:TVec4`" description="@exclude@br "/>
+      <property name="YZYX" type="TVec4" definition="@code`property YZYX:TVec4`" description="@exclude@br "/>
+      <property name="YZYY" type="TVec4" definition="@code`property YZYY:TVec4`" description="@exclude@br "/>
+      <property name="YZYZ" type="TVec4" definition="@code`property YZYZ:TVec4`" description="@exclude@br "/>
+      <property name="YZYW" type="TVec4" definition="@code`property YZYW:TVec4`" description="@exclude@br "/>
+      <property name="YZZX" type="TVec4" definition="@code`property YZZX:TVec4`" description="@exclude@br "/>
+      <property name="YZZY" type="TVec4" definition="@code`property YZZY:TVec4`" description="@exclude@br "/>
+      <property name="YZZZ" type="TVec4" definition="@code`property YZZZ:TVec4`" description="@exclude@br "/>
+      <property name="YZZW" type="TVec4" definition="@code`property YZZW:TVec4`" description="@exclude@br "/>
+      <property name="YZWX" type="TVec4" definition="@code`property YZWX:TVec4`" description="@exclude@br "/>
+      <property name="YZWY" type="TVec4" definition="@code`property YZWY:TVec4`" description="@exclude@br "/>
+      <property name="YZWZ" type="TVec4" definition="@code`property YZWZ:TVec4`" description="@exclude@br "/>
+      <property name="YZWW" type="TVec4" definition="@code`property YZWW:TVec4`" description="@exclude@br "/>
+      <property name="YWXX" type="TVec4" definition="@code`property YWXX:TVec4`" description="@exclude@br "/>
+      <property name="YWXY" type="TVec4" definition="@code`property YWXY:TVec4`" description="@exclude@br "/>
+      <property name="YWXZ" type="TVec4" definition="@code`property YWXZ:TVec4`" description="@exclude@br "/>
+      <property name="YWXW" type="TVec4" definition="@code`property YWXW:TVec4`" description="@exclude@br "/>
+      <property name="YWYX" type="TVec4" definition="@code`property YWYX:TVec4`" description="@exclude@br "/>
+      <property name="YWYY" type="TVec4" definition="@code`property YWYY:TVec4`" description="@exclude@br "/>
+      <property name="YWYZ" type="TVec4" definition="@code`property YWYZ:TVec4`" description="@exclude@br "/>
+      <property name="YWYW" type="TVec4" definition="@code`property YWYW:TVec4`" description="@exclude@br "/>
+      <property name="YWZX" type="TVec4" definition="@code`property YWZX:TVec4`" description="@exclude@br "/>
+      <property name="YWZY" type="TVec4" definition="@code`property YWZY:TVec4`" description="@exclude@br "/>
+      <property name="YWZZ" type="TVec4" definition="@code`property YWZZ:TVec4`" description="@exclude@br "/>
+      <property name="YWZW" type="TVec4" definition="@code`property YWZW:TVec4`" description="@exclude@br "/>
+      <property name="YWWX" type="TVec4" definition="@code`property YWWX:TVec4`" description="@exclude@br "/>
+      <property name="YWWY" type="TVec4" definition="@code`property YWWY:TVec4`" description="@exclude@br "/>
+      <property name="YWWZ" type="TVec4" definition="@code`property YWWZ:TVec4`" description="@exclude@br "/>
+      <property name="YWWW" type="TVec4" definition="@code`property YWWW:TVec4`" description="@exclude@br "/>
+      <property name="ZXXX" type="TVec4" definition="@code`property ZXXX:TVec4`" description="@exclude@br "/>
+      <property name="ZXXY" type="TVec4" definition="@code`property ZXXY:TVec4`" description="@exclude@br "/>
+      <property name="ZXXZ" type="TVec4" definition="@code`property ZXXZ:TVec4`" description="@exclude@br "/>
+      <property name="ZXXW" type="TVec4" definition="@code`property ZXXW:TVec4`" description="@exclude@br "/>
+      <property name="ZXYX" type="TVec4" definition="@code`property ZXYX:TVec4`" description="@exclude@br "/>
+      <property name="ZXYY" type="TVec4" definition="@code`property ZXYY:TVec4`" description="@exclude@br "/>
+      <property name="ZXYZ" type="TVec4" definition="@code`property ZXYZ:TVec4`" description="@exclude@br "/>
+      <property name="ZXYW" type="TVec4" definition="@code`property ZXYW:TVec4`" description="@exclude@br "/>
+      <property name="ZXZX" type="TVec4" definition="@code`property ZXZX:TVec4`" description="@exclude@br "/>
+      <property name="ZXZY" type="TVec4" definition="@code`property ZXZY:TVec4`" description="@exclude@br "/>
+      <property name="ZXZZ" type="TVec4" definition="@code`property ZXZZ:TVec4`" description="@exclude@br "/>
+      <property name="ZXZW" type="TVec4" definition="@code`property ZXZW:TVec4`" description="@exclude@br "/>
+      <property name="ZXWX" type="TVec4" definition="@code`property ZXWX:TVec4`" description="@exclude@br "/>
+      <property name="ZXWY" type="TVec4" definition="@code`property ZXWY:TVec4`" description="@exclude@br "/>
+      <property name="ZXWZ" type="TVec4" definition="@code`property ZXWZ:TVec4`" description="@exclude@br "/>
+      <property name="ZXWW" type="TVec4" definition="@code`property ZXWW:TVec4`" description="@exclude@br "/>
+      <property name="ZYXX" type="TVec4" definition="@code`property ZYXX:TVec4`" description="@exclude@br "/>
+      <property name="ZYXY" type="TVec4" definition="@code`property ZYXY:TVec4`" description="@exclude@br "/>
+      <property name="ZYXZ" type="TVec4" definition="@code`property ZYXZ:TVec4`" description="@exclude@br "/>
+      <property name="ZYXW" type="TVec4" definition="@code`property ZYXW:TVec4`" description="@exclude@br "/>
+      <property name="ZYYX" type="TVec4" definition="@code`property ZYYX:TVec4`" description="@exclude@br "/>
+      <property name="ZYYY" type="TVec4" definition="@code`property ZYYY:TVec4`" description="@exclude@br "/>
+      <property name="ZYYZ" type="TVec4" definition="@code`property ZYYZ:TVec4`" description="@exclude@br "/>
+      <property name="ZYYW" type="TVec4" definition="@code`property ZYYW:TVec4`" description="@exclude@br "/>
+      <property name="ZYZX" type="TVec4" definition="@code`property ZYZX:TVec4`" description="@exclude@br "/>
+      <property name="ZYZY" type="TVec4" definition="@code`property ZYZY:TVec4`" description="@exclude@br "/>
+      <property name="ZYZZ" type="TVec4" definition="@code`property ZYZZ:TVec4`" description="@exclude@br "/>
+      <property name="ZYZW" type="TVec4" definition="@code`property ZYZW:TVec4`" description="@exclude@br "/>
+      <property name="ZYWX" type="TVec4" definition="@code`property ZYWX:TVec4`" description="@exclude@br "/>
+      <property name="ZYWY" type="TVec4" definition="@code`property ZYWY:TVec4`" description="@exclude@br "/>
+      <property name="ZYWZ" type="TVec4" definition="@code`property ZYWZ:TVec4`" description="@exclude@br "/>
+      <property name="ZYWW" type="TVec4" definition="@code`property ZYWW:TVec4`" description="@exclude@br "/>
+      <property name="ZZXX" type="TVec4" definition="@code`property ZZXX:TVec4`" description="@exclude@br "/>
+      <property name="ZZXY" type="TVec4" definition="@code`property ZZXY:TVec4`" description="@exclude@br "/>
+      <property name="ZZXZ" type="TVec4" definition="@code`property ZZXZ:TVec4`" description="@exclude@br "/>
+      <property name="ZZXW" type="TVec4" definition="@code`property ZZXW:TVec4`" description="@exclude@br "/>
+      <property name="ZZYX" type="TVec4" definition="@code`property ZZYX:TVec4`" description="@exclude@br "/>
+      <property name="ZZYY" type="TVec4" definition="@code`property ZZYY:TVec4`" description="@exclude@br "/>
+      <property name="ZZYZ" type="TVec4" definition="@code`property ZZYZ:TVec4`" description="@exclude@br "/>
+      <property name="ZZYW" type="TVec4" definition="@code`property ZZYW:TVec4`" description="@exclude@br "/>
+      <property name="ZZZX" type="TVec4" definition="@code`property ZZZX:TVec4`" description="@exclude@br "/>
+      <property name="ZZZY" type="TVec4" definition="@code`property ZZZY:TVec4`" description="@exclude@br "/>
+      <property name="ZZZZ" type="TVec4" definition="@code`property ZZZZ:TVec4`" description="@exclude@br "/>
+      <property name="ZZZW" type="TVec4" definition="@code`property ZZZW:TVec4`" description="@exclude@br "/>
+      <property name="ZZWX" type="TVec4" definition="@code`property ZZWX:TVec4`" description="@exclude@br "/>
+      <property name="ZZWY" type="TVec4" definition="@code`property ZZWY:TVec4`" description="@exclude@br "/>
+      <property name="ZZWZ" type="TVec4" definition="@code`property ZZWZ:TVec4`" description="@exclude@br "/>
+      <property name="ZZWW" type="TVec4" definition="@code`property ZZWW:TVec4`" description="@exclude@br "/>
+      <property name="ZWXX" type="TVec4" definition="@code`property ZWXX:TVec4`" description="@exclude@br "/>
+      <property name="ZWXY" type="TVec4" definition="@code`property ZWXY:TVec4`" description="@exclude@br "/>
+      <property name="ZWXZ" type="TVec4" definition="@code`property ZWXZ:TVec4`" description="@exclude@br "/>
+      <property name="ZWXW" type="TVec4" definition="@code`property ZWXW:TVec4`" description="@exclude@br "/>
+      <property name="ZWYX" type="TVec4" definition="@code`property ZWYX:TVec4`" description="@exclude@br "/>
+      <property name="ZWYY" type="TVec4" definition="@code`property ZWYY:TVec4`" description="@exclude@br "/>
+      <property name="ZWYZ" type="TVec4" definition="@code`property ZWYZ:TVec4`" description="@exclude@br "/>
+      <property name="ZWYW" type="TVec4" definition="@code`property ZWYW:TVec4`" description="@exclude@br "/>
+      <property name="ZWZX" type="TVec4" definition="@code`property ZWZX:TVec4`" description="@exclude@br "/>
+      <property name="ZWZY" type="TVec4" definition="@code`property ZWZY:TVec4`" description="@exclude@br "/>
+      <property name="ZWZZ" type="TVec4" definition="@code`property ZWZZ:TVec4`" description="@exclude@br "/>
+      <property name="ZWZW" type="TVec4" definition="@code`property ZWZW:TVec4`" description="@exclude@br "/>
+      <property name="ZWWX" type="TVec4" definition="@code`property ZWWX:TVec4`" description="@exclude@br "/>
+      <property name="ZWWY" type="TVec4" definition="@code`property ZWWY:TVec4`" description="@exclude@br "/>
+      <property name="ZWWZ" type="TVec4" definition="@code`property ZWWZ:TVec4`" description="@exclude@br "/>
+      <property name="ZWWW" type="TVec4" definition="@code`property ZWWW:TVec4`" description="@exclude@br "/>
+      <property name="WXXX" type="TVec4" definition="@code`property WXXX:TVec4`" description="@exclude@br "/>
+      <property name="WXXY" type="TVec4" definition="@code`property WXXY:TVec4`" description="@exclude@br "/>
+      <property name="WXXZ" type="TVec4" definition="@code`property WXXZ:TVec4`" description="@exclude@br "/>
+      <property name="WXXW" type="TVec4" definition="@code`property WXXW:TVec4`" description="@exclude@br "/>
+      <property name="WXYX" type="TVec4" definition="@code`property WXYX:TVec4`" description="@exclude@br "/>
+      <property name="WXYY" type="TVec4" definition="@code`property WXYY:TVec4`" description="@exclude@br "/>
+      <property name="WXYZ" type="TVec4" definition="@code`property WXYZ:TVec4`" description="@exclude@br "/>
+      <property name="WXYW" type="TVec4" definition="@code`property WXYW:TVec4`" description="@exclude@br "/>
+      <property name="WXZX" type="TVec4" definition="@code`property WXZX:TVec4`" description="@exclude@br "/>
+      <property name="WXZY" type="TVec4" definition="@code`property WXZY:TVec4`" description="@exclude@br "/>
+      <property name="WXZZ" type="TVec4" definition="@code`property WXZZ:TVec4`" description="@exclude@br "/>
+      <property name="WXZW" type="TVec4" definition="@code`property WXZW:TVec4`" description="@exclude@br "/>
+      <property name="WXWX" type="TVec4" definition="@code`property WXWX:TVec4`" description="@exclude@br "/>
+      <property name="WXWY" type="TVec4" definition="@code`property WXWY:TVec4`" description="@exclude@br "/>
+      <property name="WXWZ" type="TVec4" definition="@code`property WXWZ:TVec4`" description="@exclude@br "/>
+      <property name="WXWW" type="TVec4" definition="@code`property WXWW:TVec4`" description="@exclude@br "/>
+      <property name="WYXX" type="TVec4" definition="@code`property WYXX:TVec4`" description="@exclude@br "/>
+      <property name="WYXY" type="TVec4" definition="@code`property WYXY:TVec4`" description="@exclude@br "/>
+      <property name="WYXZ" type="TVec4" definition="@code`property WYXZ:TVec4`" description="@exclude@br "/>
+      <property name="WYXW" type="TVec4" definition="@code`property WYXW:TVec4`" description="@exclude@br "/>
+      <property name="WYYX" type="TVec4" definition="@code`property WYYX:TVec4`" description="@exclude@br "/>
+      <property name="WYYY" type="TVec4" definition="@code`property WYYY:TVec4`" description="@exclude@br "/>
+      <property name="WYYZ" type="TVec4" definition="@code`property WYYZ:TVec4`" description="@exclude@br "/>
+      <property name="WYYW" type="TVec4" definition="@code`property WYYW:TVec4`" description="@exclude@br "/>
+      <property name="WYZX" type="TVec4" definition="@code`property WYZX:TVec4`" description="@exclude@br "/>
+      <property name="WYZY" type="TVec4" definition="@code`property WYZY:TVec4`" description="@exclude@br "/>
+      <property name="WYZZ" type="TVec4" definition="@code`property WYZZ:TVec4`" description="@exclude@br "/>
+      <property name="WYZW" type="TVec4" definition="@code`property WYZW:TVec4`" description="@exclude@br "/>
+      <property name="WYWX" type="TVec4" definition="@code`property WYWX:TVec4`" description="@exclude@br "/>
+      <property name="WYWY" type="TVec4" definition="@code`property WYWY:TVec4`" description="@exclude@br "/>
+      <property name="WYWZ" type="TVec4" definition="@code`property WYWZ:TVec4`" description="@exclude@br "/>
+      <property name="WYWW" type="TVec4" definition="@code`property WYWW:TVec4`" description="@exclude@br "/>
+      <property name="WZXX" type="TVec4" definition="@code`property WZXX:TVec4`" description="@exclude@br "/>
+      <property name="WZXY" type="TVec4" definition="@code`property WZXY:TVec4`" description="@exclude@br "/>
+      <property name="WZXZ" type="TVec4" definition="@code`property WZXZ:TVec4`" description="@exclude@br "/>
+      <property name="WZXW" type="TVec4" definition="@code`property WZXW:TVec4`" description="@exclude@br "/>
+      <property name="WZYX" type="TVec4" definition="@code`property WZYX:TVec4`" description="@exclude@br "/>
+      <property name="WZYY" type="TVec4" definition="@code`property WZYY:TVec4`" description="@exclude@br "/>
+      <property name="WZYZ" type="TVec4" definition="@code`property WZYZ:TVec4`" description="@exclude@br "/>
+      <property name="WZYW" type="TVec4" definition="@code`property WZYW:TVec4`" description="@exclude@br "/>
+      <property name="WZZX" type="TVec4" definition="@code`property WZZX:TVec4`" description="@exclude@br "/>
+      <property name="WZZY" type="TVec4" definition="@code`property WZZY:TVec4`" description="@exclude@br "/>
+      <property name="WZZZ" type="TVec4" definition="@code`property WZZZ:TVec4`" description="@exclude@br "/>
+      <property name="WZZW" type="TVec4" definition="@code`property WZZW:TVec4`" description="@exclude@br "/>
+      <property name="WZWX" type="TVec4" definition="@code`property WZWX:TVec4`" description="@exclude@br "/>
+      <property name="WZWY" type="TVec4" definition="@code`property WZWY:TVec4`" description="@exclude@br "/>
+      <property name="WZWZ" type="TVec4" definition="@code`property WZWZ:TVec4`" description="@exclude@br "/>
+      <property name="WZWW" type="TVec4" definition="@code`property WZWW:TVec4`" description="@exclude@br "/>
+      <property name="WWXX" type="TVec4" definition="@code`property WWXX:TVec4`" description="@exclude@br "/>
+      <property name="WWXY" type="TVec4" definition="@code`property WWXY:TVec4`" description="@exclude@br "/>
+      <property name="WWXZ" type="TVec4" definition="@code`property WWXZ:TVec4`" description="@exclude@br "/>
+      <property name="WWXW" type="TVec4" definition="@code`property WWXW:TVec4`" description="@exclude@br "/>
+      <property name="WWYX" type="TVec4" definition="@code`property WWYX:TVec4`" description="@exclude@br "/>
+      <property name="WWYY" type="TVec4" definition="@code`property WWYY:TVec4`" description="@exclude@br "/>
+      <property name="WWYZ" type="TVec4" definition="@code`property WWYZ:TVec4`" description="@exclude@br "/>
+      <property name="WWYW" type="TVec4" definition="@code`property WWYW:TVec4`" description="@exclude@br "/>
+      <property name="WWZX" type="TVec4" definition="@code`property WWZX:TVec4`" description="@exclude@br "/>
+      <property name="WWZY" type="TVec4" definition="@code`property WWZY:TVec4`" description="@exclude@br "/>
+      <property name="WWZZ" type="TVec4" definition="@code`property WWZZ:TVec4`" description="@exclude@br "/>
+      <property name="WWZW" type="TVec4" definition="@code`property WWZW:TVec4`" description="@exclude@br "/>
+      <property name="WWWX" type="TVec4" definition="@code`property WWWX:TVec4`" description="@exclude@br "/>
+      <property name="WWWY" type="TVec4" definition="@code`property WWWY:TVec4`" description="@exclude@br "/>
+      <property name="WWWZ" type="TVec4" definition="@code`property WWWZ:TVec4`" description="@exclude@br "/>
+      <property name="WWWW" type="TVec4" definition="@code`property WWWW:TVec4`" description="@exclude@br "/>
+    </section>
+    <section visibility="Published">
+      <property name="X" type="Float" definition="@code`property X:Float`"/>
+      <property name="R" type="Float" definition="@code`property R:Float`"/>
+      <property name="S" type="Float" definition="@code`property S:Float`"/>
+      <property name="Y" type="Float" definition="@code`property Y:Float`"/>
+      <property name="G" type="Float" definition="@code`property G:Float`"/>
+      <property name="T" type="Float" definition="@code`property T:Float`"/>
+      <property name="Z" type="Float" definition="@code`property Z:Float`" description="This field will only exist from TVec3 on.@br "/>
+      <property name="B" type="Float" definition="@code`property B:Float`" description="This field will only exist from TVec3 on.@br "/>
+      <property name="P" type="Float" definition="@code`property P:Float`" description="This field will only exist from TVec3 on.@br "/>
+      <property name="W" type="Float" definition="@code`property W:Float`" description="This field will only exist from TVec4 on.@br "/>
+      <property name="A" type="Float" definition="@code`property A:Float`" description="This field will only exist from TVec4 on.@br "/>
+      <property name="Q" type="Float" definition="@code`property Q:Float`" description="This field will only exist from TVec4 on.@br "/>
+    </section>
+  </class>
+  <class name="TMat2" type="Object">
+    <section visibility="Private">
+      <procedure name="GetIndex" proctype="function" definition="@code`function GetIndex( index: Integer ): Float;`"/>
+      <procedure name="GetMField" proctype="function" definition="@code`function GetMField( AIndex: Integer ): Float;`"/>
+      <procedure name="SetIndex" proctype="procedure" definition="@code`procedure SetIndex( index: Integer ; AValue: Float );`"/>
+      <procedure name="SetMField" proctype="procedure" definition="@code`procedure SetMField( AIndex: Integer; AValue: Float );`"/>
+    </section>
+    <section visibility="Public">
+      <variable name="m" type="array[0..2*2-1]of Float" definition="@code`m: array[0..2*2-1]of Float`" description="@abbr`Use this one dimensional array for directly accessing the fields in the matrix`.@br "/>
+      <property name="_00" type="Float" definition="@code`property _00:Float`" description="@abbr`Use these properties to access the fields of matrix using column and row.@br The first value indicates the column, the second value indicates the row.@br "/>
+      <property name="_01" type="Float" definition="@code`property _01:Float`"/>
+      <property name="_10" type="Float" definition="@code`property _10:Float`"/>
+      <property name="_11" type="Float" definition="@code`property _11:Float`"/>
+      <property name="_m" type="Float" definition="@code`property _m[index:Integer]:Float`" description="@exclude@br "/>
+    </section>
+  </class>
+  <procedure name="mat2translate" proctype="function" definition="@code`function mat2translate ( Vec: TVec2 ): TMat2;`" description="@abbr`Will generate a translation matrix` of the size depending on the fields of @bold`Vec`.@br If the vector has 3 fields the corresponding matrix will be 3 by 3.@br "/>
+  <procedure name="mat2scale" proctype="function" definition="@code`function mat2scale ( Vec: TVec2 ): TMat2;`" description="@abbr`Will generate a scale matrix` of the size depending on the fields of @bold`Vec`.@br If the vector has 3 fields the corresponding matrix will be 3 by 3.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat2; b: Float ) c: TMat2;`" description="@abbr`Operator for multiplying a matrix with a float`. All values are affected.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat2; b: TMat2 ) c: TMat2;`" description="@abbr`Operator for multiplying two matrices`. If you multiply two transformations, the left value is the transformation applied first.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TVec2; b: TMat2 ) c: TVec2;`" description="@abbr`Operator for transforming a vec using a matrix`. The operation is Pre-Multiply in this order.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat2; b: TVec2 ) c: TVec2;`" description="@abbr`Operator for transforming a vec using a matrix`. The operation is Post-Multiply in this order.@br "/>
+  <operator name="=" proctype="operator" definition="@code`operator = ( a: TMat2; b: TMat2 ) c: Boolean;`" description="@abbr`Operator for comparing two matrices`.@br "/>
+  <class name="TMat3" type="Object">
+    <section visibility="Private">
+      <procedure name="GetIndex" proctype="function" definition="@code`function GetIndex( index: Integer ): Float;`"/>
+      <procedure name="GetMField" proctype="function" definition="@code`function GetMField( AIndex: Integer ): Float;`"/>
+      <procedure name="SetIndex" proctype="procedure" definition="@code`procedure SetIndex( index: Integer ; AValue: Float );`"/>
+      <procedure name="SetMField" proctype="procedure" definition="@code`procedure SetMField( AIndex: Integer; AValue: Float );`"/>
+    </section>
+    <section visibility="Public">
+      <variable name="m" type="array[0..3*3-1]of Float" definition="@code`m: array[0..3*3-1]of Float`" description="@abbr`Use this one dimensional array for directly accessing the fields in the matrix`.@br "/>
+      <property name="_00" type="Float" definition="@code`property _00:Float`" description="@abbr`Use these properties to access the fields of matrix using column and row.@br The first value indicates the column, the second value indicates the row.@br "/>
+      <property name="_01" type="Float" definition="@code`property _01:Float`"/>
+      <property name="_10" type="Float" definition="@code`property _10:Float`"/>
+      <property name="_11" type="Float" definition="@code`property _11:Float`"/>
+      <property name="_02" type="Float" definition="@code`property _02:Float`"/>
+      <property name="_12" type="Float" definition="@code`property _12:Float`"/>
+      <property name="_20" type="Float" definition="@code`property _20:Float`"/>
+      <property name="_21" type="Float" definition="@code`property _21:Float`"/>
+      <property name="_22" type="Float" definition="@code`property _22:Float`"/>
+      <property name="_m" type="Float" definition="@code`property _m[index:Integer]:Float`" description="@exclude@br "/>
+    </section>
+  </class>
+  <procedure name="mat3translate" proctype="function" definition="@code`function mat3translate ( Vec: TVec3 ): TMat3;`" description="@abbr`Will generate a translation matrix` of the size depending on the fields of @bold`Vec`.@br If the vector has 3 fields the corresponding matrix will be 3 by 3.@br "/>
+  <procedure name="mat3scale" proctype="function" definition="@code`function mat3scale ( Vec: TVec3 ): TMat3;`" description="@abbr`Will generate a scale matrix` of the size depending on the fields of @bold`Vec`.@br If the vector has 3 fields the corresponding matrix will be 3 by 3.@br "/>
+  <procedure name="mat3rotate" proctype="function" definition="@code`function mat3rotate( Axis: TVec3; Angle: Float ): TMat3;`" description="@abbr`Will generate a 3 by 3 rotation matrix using an axis and an angle`.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat3; b: Float ) c: TMat3;`" description="@abbr`Operator for multiplying a matrix with a float`. All values are affected.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat3; b: TMat3 ) c: TMat3;`" description="@abbr`Operator for multiplying two matrices`. If you multiply two transformations, the left value is the transformation applied first.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TVec3; b: TMat3 ) c: TVec3;`" description="@abbr`Operator for transforming a vec using a matrix`. The operation is Pre-Multiply in this order.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat3; b: TVec3 ) c: TVec3;`" description="@abbr`Operator for transforming a vec using a matrix`. The operation is Post-Multiply in this order.@br "/>
+  <operator name="=" proctype="operator" definition="@code`operator = ( a: TMat3; b: TMat3 ) c: Boolean;`" description="@abbr`Operator for comparing two matrices`.@br "/>
+  <class name="TMat4" type="Object">
+    <section visibility="Private">
+      <procedure name="GetIndex" proctype="function" definition="@code`function GetIndex( index: Integer ): Float;`"/>
+      <procedure name="GetMField" proctype="function" definition="@code`function GetMField( AIndex: Integer ): Float;`"/>
+      <procedure name="SetIndex" proctype="procedure" definition="@code`procedure SetIndex( index: Integer ; AValue: Float );`"/>
+      <procedure name="SetMField" proctype="procedure" definition="@code`procedure SetMField( AIndex: Integer; AValue: Float );`"/>
+    </section>
+    <section visibility="Public">
+      <variable name="m" type="array[0..4*4-1]of Float" definition="@code`m: array[0..4*4-1]of Float`" description="@abbr`Use this one dimensional array for directly accessing the fields in the matrix`.@br "/>
+      <property name="_00" type="Float" definition="@code`property _00:Float`" description="@abbr`Use these properties to access the fields of matrix using column and row.@br The first value indicates the column, the second value indicates the row.@br "/>
+      <property name="_01" type="Float" definition="@code`property _01:Float`"/>
+      <property name="_10" type="Float" definition="@code`property _10:Float`"/>
+      <property name="_11" type="Float" definition="@code`property _11:Float`"/>
+      <property name="_02" type="Float" definition="@code`property _02:Float`"/>
+      <property name="_12" type="Float" definition="@code`property _12:Float`"/>
+      <property name="_20" type="Float" definition="@code`property _20:Float`"/>
+      <property name="_21" type="Float" definition="@code`property _21:Float`"/>
+      <property name="_22" type="Float" definition="@code`property _22:Float`"/>
+      <property name="_03" type="Float" definition="@code`property _03:Float`"/>
+      <property name="_13" type="Float" definition="@code`property _13:Float`"/>
+      <property name="_23" type="Float" definition="@code`property _23:Float`"/>
+      <property name="_30" type="Float" definition="@code`property _30:Float`"/>
+      <property name="_31" type="Float" definition="@code`property _31:Float`"/>
+      <property name="_32" type="Float" definition="@code`property _32:Float`"/>
+      <property name="_33" type="Float" definition="@code`property _33:Float`"/>
+      <property name="_m" type="Float" definition="@code`property _m[index:Integer]:Float`" description="@exclude@br "/>
+    </section>
+  </class>
+  <procedure name="mat4translate" proctype="function" definition="@code`function mat4translate ( Vec: TVec4 ): TMat4;`" description="@abbr`Will generate a translation matrix` of the size depending on the fields of @bold`Vec`.@br If the vector has 3 fields the corresponding matrix will be 3 by 3.@br "/>
+  <procedure name="mat4scale" proctype="function" definition="@code`function mat4scale ( Vec: TVec4 ): TMat4;`" description="@abbr`Will generate a scale matrix` of the size depending on the fields of @bold`Vec`.@br If the vector has 3 fields the corresponding matrix will be 3 by 3.@br "/>
+  <procedure name="mat4rotate" proctype="function" definition="@code`function mat4rotate( Axis: TVec3; Angle: Float ): TMat4;`" description="@abbr`Will generate a 4 by 4 rotation matrix using an axis and an angle`.@br "/>
+  <procedure name="mat4determinant" proctype="function" definition="@code`function mat4determinant( Mat: TMat4 ): Float;`" description="@abbr`Will return the determinant of a 4 by 4 matrix`.@br "/>
+  <procedure name="mat4inverse" proctype="function" definition="@code`function mat4inverse( Mat: TMat4; out MatInv: TMat4 ): Boolean;`" description="@abbr`Will calculate the the inverse of a 4 by 4 matrix` and store the result in @bold`MatInv`.@br If the inverse could be calculated the function will return True.@br "/>
+  <procedure name="mat4transpose" proctype="function" definition="@code`function mat4transpose( Matrix: TMat4 ): TMat4;`" description="@abbr`Will return the the transpose of a 4 by 4 matrix` which means it will swap@br colums and rows.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat4; b: Float ) c: TMat4;`" description="@abbr`Operator for multiplying a matrix with a float`. All values are affected.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat4; b: TMat4 ) c: TMat4;`" description="@abbr`Operator for multiplying two matrices`. If you multiply two transformations, the left value is the transformation applied first.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TVec4; b: TMat4 ) c: TVec4;`" description="@abbr`Operator for transforming a vec using a matrix`. The operation is Pre-Multiply in this order.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TMat4; b: TVec4 ) c: TVec4;`" description="@abbr`Operator for transforming a vec using a matrix`. The operation is Post-Multiply in this order.@br "/>
+  <operator name="=" proctype="operator" definition="@code`operator = ( a: TMat4; b: TMat4 ) c: Boolean;`" description="@abbr`Operator for comparing two matrices`.@br "/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( x : Float ;y: Float ): TVec2;`"/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( xy : Float ): TVec2;`"/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( xy : TVec3 ): TVec2;`"/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( xy : TVec4 ): TVec2;`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( x : Float ;y : Float ;z: Float ): TVec3;`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( xyz : Float ): TVec3;`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( xy : TVec2 ;z: Float ): TVec3;`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( x : Float ;yz : TVec2 ): TVec3;`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( xyz : TVec4 ): TVec3;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;y : Float ;z : Float ;w: Float ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xyzw : Float ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xy : TVec2 ;z : Float ;w: Float ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;yz : TVec2 ;w: Float ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;y : Float ;zw : TVec2 ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xy : TVec2 ;zw : TVec2 ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xyz : TVec3 ;w: Float ): TVec4;`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;yzw : TVec3 ): TVec4;`"/>
+  <procedure name="mat2" proctype="function" definition="@code`function mat2( F: Float ): TMat2;`" description="@abbr`Will create a two by two matrix using one float`. The float is used in a diagonal@br while all other values are 0. So @code`mat2( 1 )` will generate a 2 by 2 identity matrix.@br "/>
+  <procedure name="mat2" proctype="function" definition="@code`function mat2( aa, ba, ab, bb: Float ): TMat2;`" description="@abbr`Will create a two by two matrix using four float`.@br mat2( 1, 0, 0, 1 ) will generate an identity matrix.@br "/>
+  <procedure name="mat2" proctype="function" definition="@code`function mat2( c1, c2: TVec2 ): TMat2;`" description="@abbr`Will create a two by two matrix using two vectors`.@br @code`mat2( vec2( 1, 0 ), vec2( 0, 1 ))` will generate an identity matrix.@br "/>
+  <procedure name="mat2" proctype="function" definition="@code`function mat2( mat: TMat3 ): TMat2;`" description="@abbr`Will create a two by two matrix from a three by three matrix`. The additional row and column are truncated.@br "/>
+  <procedure name="mat2" proctype="function" definition="@code`function mat2( mat: TMat4 ): TMat2;`" description="@abbr`Will create a two by two matrix from a four by four matrix`. The additional rows and columns are truncated.@br "/>
+  <procedure name="mat3" proctype="function" definition="@code`function mat3( F: Float ): TMat3;`" description="@abbr`Will create a three by three matrix using one float`. The float is used in a diagonal@br while all other values are 0. So @code`mat3( 1 )` will generate a 3 by 3 identity matrix.@br "/>
+  <procedure name="mat3" proctype="function" definition="@code`function mat3( aa, ab, ac, ba, bb, bc, ca, cb, cc: Float ): TMat3;`" description="@abbr`Will create a three by three matrix using nine float`.@br @code`mat3( 1, 0, 0, 0, 1, 0, 0, 0, 1 )` will generate an identity matrix.@br "/>
+  <procedure name="mat3" proctype="function" definition="@code`function mat3( mat4: TMat4 ): TMat3;`" description="@abbr`Will create a three by three matrix from a four by four matrix`. The additional row and column are truncated.@br "/>
+  <procedure name="mat3" proctype="function" definition="@code`function mat3( c1, c2, c3: TVec3 ): TMat3;`" description="@abbr`Will create a three by three matrix using three vectors`.@br So code`mat3( vec3( 1, 0, 0 ), vec3( 0, 1, 0 ), vec3( 0, 0, 1 ))` will generate an identity matrix.@br "/>
+  <procedure name="mat3" proctype="function" definition="@code`function mat3( mat: TMat2 ): TMat3;`" description="@abbr`Will create a three by three matrix from a two by two matrix`.@br The additional row and column are set to 0 except for _22 which is set to 1.@br "/>
+  <procedure name="mat4" proctype="function" definition="@code`function mat4( F: Float ): TMat4;`" description="@abbr`Will create a four by four matrix using one float`. The float is used in a diagonal@br while all other values are 0. So mat4( 1 ) will generate a 4 by 4 identity matrix.@br "/>
+  <procedure name="mat4" proctype="function" definition="@code`function mat4( aa, ab, ac, ad, ba, bb, bc, bd, ca, cb, cc, cd, da, db, dc, dd: Float ): TMat4;`" description="@abbr`Will create a four by four matrix using sixteen float`. The letters in the parameters@br stand for the rows and columns. So code`mat4( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 )` will generate an identity matrix.@br "/>
+  <procedure name="mat4" proctype="function" definition="@code`function mat4( c1, c2, c3, c4: TVec4 ): TMat4;`" description="@abbr`Will create a four by four matrix using three vectors`. The vectors are used as rows.@br So code`mat4( vec4( 1, 0, 0, 0 ), vec4( 0, 1, 0, 0 ), vec4( 0, 0, 1, 0 ), vec4( 0, 0, 0, 1 ))` will generate an identity matrix.@br "/>
+  <procedure name="mat4" proctype="function" definition="@code`function mat4( mat: TMat2 ): TMat4;`" description="@abbr`Will create a four by four matrix from a two by two matrix`.@br The additional rows and columns are set to 0 except for _33 which is set to 1.@br "/>
+  <procedure name="mat4" proctype="function" definition="@code`function mat4( mat: TMat3 ): TMat4;`" description="@abbr`Will create a four by four matrix from a three by three matrix`.@br The additional row and column are set to 0 except for _33 which is set to 1.@br "/>
+  <procedure name="mat4perspectiveFOVLH" proctype="function" definition="@code`function mat4perspectiveFOVLH( FOV, Aspect, Near, Far: Float ): TMat4;`" description="@abbr`Returns a left handed perspective 4 by 4 projection matrix`.@br "/>
+  <procedure name="mat4perspectiveFOVRH" proctype="function" definition="@code`function mat4perspectiveFOVRH( FOV, Aspect, Near, Far: Float ): TMat4;`" description="@abbr`Returns a right handed perspective 4 by 4 projection matrix`.@br "/>
+  <procedure name="mat4orthoLH" proctype="function" definition="@code`function mat4orthoLH( w, h: Float ): TMat4;`" description="@abbr`Returns a left handed orthogonal 4 by 4 projection matrix`.@br "/>
+  <procedure name="mat4orthoRH" proctype="function" definition="@code`function mat4orthoRH( left, right, top, bottom: Float ): TMat4;`" description="@abbr`Returns a right handed orthogonal 4 by 4 projection matrix`.@br "/>
+  <procedure name="mat4lookatLH" proctype="function" definition="@code`function mat4lookatLH( EyePt, LookAt, UpDir: TVec3 ): TMat4;`" description="@abbr`Returns a left handed 4 by 4 lookat matrix which can be used for cameras`.@br "/>
+  <procedure name="mat4lookatRH" proctype="function" definition="@code`function mat4lookatRH( EyePt, LookAt, UpDir: TVec3 ): TMat4;`" description="@abbr`Returns a right handed 4 by 4 lookat matrix which can be used for cameras`.@br "/>
+  <procedure name="dot" proctype="function" definition="@code`function dot( x: TVec2; y: TVec2 ): Float;`" description="@abbr`This will return the dot product of two vectors`.@br "/>
+  <procedure name="normalize" proctype="function" definition="@code`function normalize( x: TVec2 ): TVec2;`" description="@abbr`This return a normalized vector leaving the original vector untouched`.@br "/>
+  <procedure name="refract" proctype="function" definition="@code`function refract( i, n: TVec2; r: Float ): TVec2;`" description="@abbr`Computes the direction of a refracted ray` if i specifies the normalized(!)@br direction of the incoming ray and n specifies the normalized(!) normal vector@br of the interface of two optical media (e.g. air and water). The vector n@br should point to the side from where i is coming, i.e. the dot product of n and@br i should be negative. The floating-point number r is the ratio of the@br refractive index of the medium from where the ray comes to the refractive index@br of the medium on the other side of the surface. Thus, if a ray comes from air@br (refractive index about 1.0) and hits the surface of water (refractive index 1.33),@br then the ratio r is 1.0 / 1.33 = 0.75.@br "/>
+  <procedure name="reflect" proctype="function" definition="@code`function reflect( i, n: TVec2 ): TVec2;`" description="@abbr`Will reflect an input vector using a normal vector.` For a given incident vector I and surface normal N reflect returns the reflection direction calculated as I - 2.0 * dot(N, I) * N.@br N should be normalized in order to achieve the desired result.@br "/>
+  <procedure name="max" proctype="function" definition="@code`function max( x: TVec2; y: TVec2 ): TVec2;`" description="@abbr`Will return the bigger components of two vectors`. It works component-wise.@br "/>
+  <procedure name="min" proctype="function" definition="@code`function min( x: TVec2; y: TVec2 ): TVec2;`" description="@abbr`Will return the smaller components of two vectors`. It works component-wise.@br "/>
+  <procedure name="max" proctype="function" definition="@code`function max( x: TVec2; s: Single ): TVec2;`" description="@abbr`Will return the bigger components of one vector and a scalar`. It works component-wise.@br "/>
+  <procedure name="min" proctype="function" definition="@code`function min( x: TVec2; s: Single ): TVec2;`" description="@abbr`Will return the smaller components of one vector and a scalar`. It works component-wise.@br "/>
+  <procedure name="clamp" proctype="function" definition="@code`function clamp( x, minVal, maxVal: TVec2 ): TVec2;`" description="@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).@br "/>
+  <procedure name="abs" proctype="function" definition="@code`function abs( x: TVec2 ): TVec2;`" description="@abbr`Returns x if x &gt;= 0; otherwise, it returns -x`.@br "/>
+  <procedure name="clamp" proctype="function" definition="@code`function clamp( x: TVec2; minVal, maxVal: Float ): TVec2;`" description="@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).@br "/>
+  <procedure name="floor" proctype="function" definition="@code`function floor( x: TVec2 ): TVec2;`" description="@abbr`Returns a value equal to the nearest integer that is less than or equal to x`.@br "/>
+  <procedure name="ceil" proctype="function" definition="@code`function ceil( x: TVec2 ): TVec2;`" description="@abbr`Returns a value equal to the nearest integer that is greater than or equal to x`.@br "/>
+  <procedure name="round" proctype="function" definition="@code`function round( x: TVec2 ): TVec2;`" description="@abbr`Returns a value equal to the nearest integer to x`.@br "/>
+  <procedure name="distance" proctype="function" definition="@code`function distance( p0, p1: TVec2 ): Float;`" description="@abbr`Returns the distance between the two points p0 and p1`.@br "/>
+  <procedure name="len" proctype="function" definition="@code`function len( p: TVec2 ): Float;`" description="@abbr`Returns the length of the vector`. It's not called length because it would@br override the function Length from system, which is invisible then.@br "/>
+  <procedure name="fract" proctype="function" definition="@code`function fract( x: TVec2 ): TVec2;`" description="@abbr`Returns the fractional part of x`.@br "/>
+  <operator name="+" proctype="operator" definition="@code`operator + ( a, b: TVec2 ) c: TVec2;`" description="Operator for adding two vectors.@br "/>
+  <operator name="+" proctype="operator" definition="@code`operator + ( a: TVec2; b: Float ) c: TVec2;`" description="Operator for adding one vector and a float.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a, b: TVec2 ) c: TVec2;`" description="Operator for subtracting two vectors.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TVec2; b: Float ) c: TVec2;`" description="Operator for subtracting one vector and a float.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a, b: TVec2 ) c: TVec2;`" description="Operator for multiplying two vectors component-wise.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a, b: TVec2 ) c: Float;`" description="Operator for calculating a dot product of two vectors.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TVec2; s: Float ) c: TVec2;`" description="Operator for scaling a vector using a scalar (float).@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( s: Float; b: TVec2 ) c: TVec2;`" description="Operator for scaling a vector using a scalar (float).@br "/>
+  <operator name="/" proctype="operator" definition="@code`operator / ( a, b: TVec2 ) c: TVec2;`" description="Operator for dividing two vectors component-wise.@br "/>
+  <operator name="/" proctype="operator" definition="@code`operator / ( a: TVec2; s: Float ) c: TVec2;`" description="Operator for scaling a vector using a scalar (float). This is the same as multiplying by -s@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TVec2 ) c: TVec2;`" description="Operator for negating a vector.@br "/>
+  <operator name="=" proctype="operator" definition="@code`operator = ( a, b: TVec2 ) c: Boolean;`" description="Operator for comparing two vectors.@br "/>
+  <procedure name="cross" proctype="function" definition="@code`function cross( x: TVec3; y: TVec3 ): TVec3;`" description="@abbr`This will return the cross product of two vectors`.@br "/>
+  <procedure name="dot" proctype="function" definition="@code`function dot( x: TVec3; y: TVec3 ): Float;`" description="@abbr`This will return the dot product of two vectors`.@br "/>
+  <procedure name="normalize" proctype="function" definition="@code`function normalize( x: TVec3 ): TVec3;`" description="@abbr`This return a normalized vector leaving the original vector untouched`.@br "/>
+  <procedure name="refract" proctype="function" definition="@code`function refract( i, n: TVec3; r: Float ): TVec3;`" description="@abbr`Computes the direction of a refracted ray` if i specifies the normalized(!)@br direction of the incoming ray and n specifies the normalized(!) normal vector@br of the interface of two optical media (e.g. air and water). The vector n@br should point to the side from where i is coming, i.e. the dot product of n and@br i should be negative. The floating-point number r is the ratio of the@br refractive index of the medium from where the ray comes to the refractive index@br of the medium on the other side of the surface. Thus, if a ray comes from air@br (refractive index about 1.0) and hits the surface of water (refractive index 1.33),@br then the ratio r is 1.0 / 1.33 = 0.75.@br "/>
+  <procedure name="reflect" proctype="function" definition="@code`function reflect( i, n: TVec3 ): TVec3;`" description="@abbr`Will reflect an input vector using a normal vector.` For a given incident vector I and surface normal N reflect returns the reflection direction calculated as I - 2.0 * dot(N, I) * N.@br N should be normalized in order to achieve the desired result.@br "/>
+  <procedure name="max" proctype="function" definition="@code`function max( x: TVec3; y: TVec3 ): TVec3;`" description="@abbr`Will return the bigger components of two vectors`. It works component-wise.@br "/>
+  <procedure name="min" proctype="function" definition="@code`function min( x: TVec3; y: TVec3 ): TVec3;`" description="@abbr`Will return the smaller components of two vectors`. It works component-wise.@br "/>
+  <procedure name="max" proctype="function" definition="@code`function max( x: TVec3; s: Single ): TVec3;`" description="@abbr`Will return the bigger components of one vector and a scalar`. It works component-wise.@br "/>
+  <procedure name="min" proctype="function" definition="@code`function min( x: TVec3; s: Single ): TVec3;`" description="@abbr`Will return the smaller components of one vector and a scalar`. It works component-wise.@br "/>
+  <procedure name="clamp" proctype="function" definition="@code`function clamp( x, minVal, maxVal: TVec3 ): TVec3;`" description="@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).@br "/>
+  <procedure name="abs" proctype="function" definition="@code`function abs( x: TVec3 ): TVec3;`" description="@abbr`Returns x if x &gt;= 0; otherwise, it returns -x`.@br "/>
+  <procedure name="clamp" proctype="function" definition="@code`function clamp( x: TVec3; minVal, maxVal: Float ): TVec3;`" description="@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).@br "/>
+  <procedure name="floor" proctype="function" definition="@code`function floor( x: TVec3 ): TVec3;`" description="@abbr`Returns a value equal to the nearest integer that is less than or equal to x`.@br "/>
+  <procedure name="ceil" proctype="function" definition="@code`function ceil( x: TVec3 ): TVec3;`" description="@abbr`Returns a value equal to the nearest integer that is greater than or equal to x`.@br "/>
+  <procedure name="round" proctype="function" definition="@code`function round( x: TVec3 ): TVec3;`" description="@abbr`Returns a value equal to the nearest integer to x`.@br "/>
+  <procedure name="distance" proctype="function" definition="@code`function distance( p0, p1: TVec3 ): Float;`" description="@abbr`Returns the distance between the two points p0 and p1`.@br "/>
+  <procedure name="len" proctype="function" definition="@code`function len( p: TVec3 ): Float;`" description="@abbr`Returns the length of the vector`. It's not called length because it would@br override the function Length from system, which is invisible then.@br "/>
+  <procedure name="fract" proctype="function" definition="@code`function fract( x: TVec3 ): TVec3;`" description="@abbr`Returns the fractional part of x`.@br "/>
+  <operator name="+" proctype="operator" definition="@code`operator + ( a, b: TVec3 ) c: TVec3;`" description="Operator for adding two vectors.@br "/>
+  <operator name="+" proctype="operator" definition="@code`operator + ( a: TVec3; b: Float ) c: TVec3;`" description="Operator for adding one vector and a float.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a, b: TVec3 ) c: TVec3;`" description="Operator for subtracting two vectors.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TVec3; b: Float ) c: TVec3;`" description="Operator for subtracting one vector and a float.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a, b: TVec3 ) c: TVec3;`" description="Operator for multiplying two vectors component-wise.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a, b: TVec3 ) c: Float;`" description="Operator for calculating a dot product of two vectors.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TVec3; s: Float ) c: TVec3;`" description="Operator for scaling a vector using a scalar (float).@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( s: Float; b: TVec3 ) c: TVec3;`" description="Operator for scaling a vector using a scalar (float).@br "/>
+  <operator name="/" proctype="operator" definition="@code`operator / ( a, b: TVec3 ) c: TVec3;`" description="Operator for dividing two vectors component-wise.@br "/>
+  <operator name="/" proctype="operator" definition="@code`operator / ( a: TVec3; s: Float ) c: TVec3;`" description="Operator for scaling a vector using a scalar (float). This is the same as multiplying by -s@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TVec3 ) c: TVec3;`" description="Operator for negating a vector.@br "/>
+  <operator name="=" proctype="operator" definition="@code`operator = ( a, b: TVec3 ) c: Boolean;`" description="Operator for comparing two vectors.@br "/>
+  <procedure name="cross" proctype="function" definition="@code`function cross( x: TVec4; y: TVec4 ): TVec4;`" description="@abbr`This will return the cross product of two vectors`.@br "/>
+  <procedure name="dot" proctype="function" definition="@code`function dot( x: TVec4; y: TVec4 ): Float;`" description="@abbr`This will return the dot product of two vectors`.@br "/>
+  <procedure name="normalize" proctype="function" definition="@code`function normalize( x: TVec4 ): TVec4;`" description="@abbr`This return a normalized vector leaving the original vector untouched`.@br "/>
+  <procedure name="refract" proctype="function" definition="@code`function refract( i, n: TVec4; r: Float ): TVec4;`" description="@abbr`Computes the direction of a refracted ray` if i specifies the normalized(!)@br direction of the incoming ray and n specifies the normalized(!) normal vector@br of the interface of two optical media (e.g. air and water). The vector n@br should point to the side from where i is coming, i.e. the dot product of n and@br i should be negative. The floating-point number r is the ratio of the@br refractive index of the medium from where the ray comes to the refractive index@br of the medium on the other side of the surface. Thus, if a ray comes from air@br (refractive index about 1.0) and hits the surface of water (refractive index 1.33),@br then the ratio r is 1.0 / 1.33 = 0.75.@br "/>
+  <procedure name="reflect" proctype="function" definition="@code`function reflect( i, n: TVec4 ): TVec4;`" description="@abbr`Will reflect an input vector using a normal vector.` For a given incident vector I and surface normal N reflect returns the reflection direction calculated as I - 2.0 * dot(N, I) * N.@br N should be normalized in order to achieve the desired result.@br "/>
+  <procedure name="unproject" proctype="function" definition="@code`function unproject( x: TVec4; matWorld, matView, matProj: TMat4; Width, Height: Integer; out vDirection: TVec4 ): TVec4;`" description="@abbr`This will unproject a vector using world, view and projection matrix`. It will return the unprojected vector and the direction it is pointing to.@br "/>
+  <procedure name="max" proctype="function" definition="@code`function max( x: TVec4; y: TVec4 ): TVec4;`" description="@abbr`Will return the bigger components of two vectors`. It works component-wise.@br "/>
+  <procedure name="min" proctype="function" definition="@code`function min( x: TVec4; y: TVec4 ): TVec4;`" description="@abbr`Will return the smaller components of two vectors`. It works component-wise.@br "/>
+  <procedure name="max" proctype="function" definition="@code`function max( x: TVec4; s: Single ): TVec4;`" description="@abbr`Will return the bigger components of one vector and a scalar`. It works component-wise.@br "/>
+  <procedure name="min" proctype="function" definition="@code`function min( x: TVec4; s: Single ): TVec4;`" description="@abbr`Will return the smaller components of one vector and a scalar`. It works component-wise.@br "/>
+  <procedure name="clamp" proctype="function" definition="@code`function clamp( x, minVal, maxVal: TVec4 ): TVec4;`" description="@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).@br "/>
+  <procedure name="abs" proctype="function" definition="@code`function abs( x: TVec4 ): TVec4;`" description="@abbr`Returns x if x &gt;= 0; otherwise, it returns -x`.@br "/>
+  <procedure name="clamp" proctype="function" definition="@code`function clamp( x: TVec4; minVal, maxVal: Float ): TVec4;`" description="@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).@br "/>
+  <procedure name="floor" proctype="function" definition="@code`function floor( x: TVec4 ): TVec4;`" description="@abbr`Returns a value equal to the nearest integer that is less than or equal to x`.@br "/>
+  <procedure name="ceil" proctype="function" definition="@code`function ceil( x: TVec4 ): TVec4;`" description="@abbr`Returns a value equal to the nearest integer that is greater than or equal to x`.@br "/>
+  <procedure name="round" proctype="function" definition="@code`function round( x: TVec4 ): TVec4;`" description="@abbr`Returns a value equal to the nearest integer to x`.@br "/>
+  <procedure name="distance" proctype="function" definition="@code`function distance( p0, p1: TVec4 ): Float;`" description="@abbr`Returns the distance between the two points p0 and p1`.@br "/>
+  <procedure name="len" proctype="function" definition="@code`function len( p: TVec4 ): Float;`" description="@abbr`Returns the length of the vector`. It's not called length because it would@br override the function Length from system, which is invisible then.@br "/>
+  <procedure name="fract" proctype="function" definition="@code`function fract( x: TVec4 ): TVec4;`" description="@abbr`Returns the fractional part of x`.@br "/>
+  <operator name="+" proctype="operator" definition="@code`operator + ( a, b: TVec4 ) c: TVec4;`" description="Operator for adding two vectors.@br "/>
+  <operator name="+" proctype="operator" definition="@code`operator + ( a: TVec4; b: Float ) c: TVec4;`" description="Operator for adding one vector and a float.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a, b: TVec4 ) c: TVec4;`" description="Operator for subtracting two vectors.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TVec4; b: Float ) c: TVec4;`" description="Operator for subtracting one vector and a float.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a, b: TVec4 ) c: TVec4;`" description="Operator for multiplying two vectors component-wise.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a, b: TVec4 ) c: Float;`" description="Operator for calculating a dot product of two vectors.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TVec4; s: Float ) c: TVec4;`" description="Operator for scaling a vector using a scalar (float).@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( s: Float; b: TVec4 ) c: TVec4;`" description="Operator for scaling a vector using a scalar (float).@br "/>
+  <operator name="/" proctype="operator" definition="@code`operator / ( a, b: TVec4 ) c: TVec4;`" description="Operator for dividing two vectors component-wise.@br "/>
+  <operator name="/" proctype="operator" definition="@code`operator / ( a: TVec4; s: Float ) c: TVec4;`" description="Operator for scaling a vector using a scalar (float). This is the same as multiplying by -s@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TVec4 ) c: TVec4;`" description="Operator for negating a vector.@br "/>
+  <operator name="=" proctype="operator" definition="@code`operator = ( a, b: TVec4 ) c: Boolean;`" description="Operator for comparing two vectors.@br "/>
+  <class name="TQuaternion" type="Object" parent="TVec4" description="@abbr`Quaternions can be used instead of or together with matrices for transforming the view`.@br ">
+    <section visibility="Public">
+      <property name="a" type="Float" definition="@code`property a:Float`"/>
+      <property name="b" type="Float" definition="@code`property b:Float`"/>
+      <property name="c" type="Float" definition="@code`property c:Float`"/>
+      <property name="d" type="Float" definition="@code`property d:Float`"/>
+      <procedure name="Conj" proctype="function" definition="@code`function Conj: TQuaternion;`"/>
+    </section>
+  </class>
+  <operator name="*" proctype="operator" definition="@code`operator * ( q1, q2: TQuaternion ) q : TQuaternion;`" description="Multiplies two quaternions.@br "/>
+  <operator name="*" proctype="operator" definition="@code`operator * ( a: TQuaternion; b: TVec4 ) c: TVec4;`" description="Transforms a vector using a quaternion.@br "/>
+  <operator name="-" proctype="operator" definition="@code`operator - ( a: TQuaternion ) b: TQuaternion;`" description="Inverts a quaternion.@br "/>
+  <procedure name="quat" proctype="function" definition="@code`function quat( vec: TVec4 ): TQuaternion;`"/>
+  <procedure name="quat" proctype="function" definition="@code`function quat( a, b, c, d: Float ): TQuaternion;`"/>
+  <class name="TIntList" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pIntArray" definition="@code`FItems: pIntArray`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): Integer;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: Integer );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: Integer ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of Integer ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TIntList );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TIntListEnumerator;`"/>
+      <property name="Items" type="Integer" definition="@code`property Items[Index:Integer]:Integer`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TIntListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="Integer" definition="@code`FCurrent: Integer`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TIntList" definition="@code`FItemList: TIntList`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TIntList );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="Integer" definition="@code`property Current:Integer`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TFloatList" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pFloatArray" definition="@code`FItems: pFloatArray`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): Float;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: Float );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: Float ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of Float ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TFloatList );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TFloatListEnumerator;`"/>
+      <property name="Items" type="Float" definition="@code`property Items[Index:Integer]:Float`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TFloatListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="Float" definition="@code`FCurrent: Float`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TFloatList" definition="@code`FItemList: TFloatList`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TFloatList );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="Float" definition="@code`property Current:Float`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TVec2List" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pVec2Array" definition="@code`FItems: pVec2Array`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): TVec2;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: TVec2 );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: TVec2 ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of TVec2 ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TVec2List );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TVec2ListEnumerator;`"/>
+      <property name="Items" type="TVec2" definition="@code`property Items[Index:Integer]:TVec2`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TVec2ListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="TVec2" definition="@code`FCurrent: TVec2`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TVec2List" definition="@code`FItemList: TVec2List`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TVec2List );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="TVec2" definition="@code`property Current:TVec2`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TVec3List" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pVec3Array" definition="@code`FItems: pVec3Array`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): TVec3;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: TVec3 );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: TVec3 ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of TVec3 ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TVec3List );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TVec3ListEnumerator;`"/>
+      <property name="Items" type="TVec3" definition="@code`property Items[Index:Integer]:TVec3`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TVec3ListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="TVec3" definition="@code`FCurrent: TVec3`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TVec3List" definition="@code`FItemList: TVec3List`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TVec3List );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="TVec3" definition="@code`property Current:TVec3`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TVec4List" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pVec4Array" definition="@code`FItems: pVec4Array`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): TVec4;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: TVec4 );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: TVec4 ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of TVec4 ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TVec4List );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TVec4ListEnumerator;`"/>
+      <property name="Items" type="TVec4" definition="@code`property Items[Index:Integer]:TVec4`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TVec4ListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="TVec4" definition="@code`FCurrent: TVec4`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TVec4List" definition="@code`FItemList: TVec4List`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TVec4List );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="TVec4" definition="@code`property Current:TVec4`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TMat2List" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pMat2Array" definition="@code`FItems: pMat2Array`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): TMat2;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: TMat2 );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: TMat2 ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of TMat2 ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TMat2List );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TMat2ListEnumerator;`"/>
+      <property name="Items" type="TMat2" definition="@code`property Items[Index:Integer]:TMat2`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TMat2ListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="TMat2" definition="@code`FCurrent: TMat2`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TMat2List" definition="@code`FItemList: TMat2List`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TMat2List );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="TMat2" definition="@code`property Current:TMat2`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TMat3List" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pMat3Array" definition="@code`FItems: pMat3Array`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): TMat3;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: TMat3 );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: TMat3 ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of TMat3 ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TMat3List );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TMat3ListEnumerator;`"/>
+      <property name="Items" type="TMat3" definition="@code`property Items[Index:Integer]:TMat3`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TMat3ListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="TMat3" definition="@code`FCurrent: TMat3`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TMat3List" definition="@code`FItemList: TMat3List`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TMat3List );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="TMat3" definition="@code`property Current:TMat3`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+  <class name="TMat4List" type="Class" parent="TPersistent">
+    <section visibility="Private">
+      <variable name="FItems" type="pMat4Array" definition="@code`FItems: pMat4Array`"/>
+      <variable name="FCount" type="Integer" definition="@code`FCount: Integer`"/>
+      <variable name="FCapacity" type="Integer" definition="@code`FCapacity: Integer`"/>
+      <variable name="FGrowth" type="Integer" definition="@code`FGrowth: Integer`"/>
+      <variable name="FSizeLimit" type="Integer" definition="@code`FSizeLimit: Integer`"/>
+      <procedure name="GetItem" proctype="function" definition="@code`function GetItem( Index: Integer ): TMat4;`"/>
+      <procedure name="SetCapacity" proctype="procedure" definition="@code`procedure SetCapacity( const Value: Integer );`"/>
+      <procedure name="SetCount" proctype="procedure" definition="@code`procedure SetCount( AValue: Integer );`"/>
+      <procedure name="SetGrowth" proctype="procedure" definition="@code`procedure SetGrowth( const Value: Integer );`"/>
+      <procedure name="SetItem" proctype="procedure" definition="@code`procedure SetItem( Index: Integer; const Value: TMat4 );`"/>
+      <procedure name="Grow" proctype="procedure" definition="@code`procedure Grow;`"/>
+      <procedure name="Shrink" proctype="procedure" definition="@code`procedure Shrink;`"/>
+    </section>
+    <section visibility="Protected">
+      <procedure name="GetItemSize" proctype="function" definition="@code`function GetItemSize: Integer;`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create;`"/>
+      <procedure name="Destroy" proctype="destructor" definition="@code`destructor Destroy;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Item: TMat4 ): Integer;`"/>
+      <procedure name="Add" proctype="function" definition="@code`function Add( Items: array of TMat4 ): Integer;`"/>
+      <procedure name="Delete" proctype="procedure" definition="@code`procedure Delete( Index: Integer );`"/>
+      <procedure name="Clear" proctype="procedure" definition="@code`procedure Clear;`"/>
+      <procedure name="PtrTo" proctype="function" definition="@code`function PtrTo( Index: Integer ): Pointer;`"/>
+      <procedure name="Ptr" proctype="function" definition="@code`function Ptr: Pointer;`"/>
+      <procedure name="AssignTo" proctype="procedure" definition="@code`procedure AssignTo( Dest: TMat4List );`"/>
+      <procedure name="GetEnumerator" proctype="function" definition="@code`function GetEnumerator: TMat4ListEnumerator;`"/>
+      <property name="Items" type="TMat4" definition="@code`property Items[Index:Integer]:TMat4`"/>
+      <property name="Count" type="Integer" definition="@code`property Count:Integer`"/>
+      <property name="Capacity" type="Integer" definition="@code`property Capacity:Integer`"/>
+      <property name="Growth" type="Integer" definition="@code`property Growth:Integer`"/>
+      <property name="SizeLimit" type="Integer" definition="@code`property SizeLimit:Integer`"/>
+    </section>
+  </class>
+  <class name="TMat4ListEnumerator" type="Class">
+    <section visibility="Private">
+      <variable name="FCurrent" type="TMat4" definition="@code`FCurrent: TMat4`"/>
+      <variable name="FCurrentIdx" type="Integer" definition="@code`FCurrentIdx: Integer`"/>
+      <variable name="FItemList" type="TMat4List" definition="@code`FItemList: TMat4List`"/>
+    </section>
+    <section visibility="Public">
+      <procedure name="Create" proctype="constructor" definition="@code`constructor Create( ItemList: TMat4List );`"/>
+      <procedure name="MoveNext" proctype="function" definition="@code`function MoveNext: Boolean;`"/>
+      <property name="Current" type="TMat4" definition="@code`property Current:TMat4`"/>
+      <property name="CurrentIdx" type="Integer" definition="@code`property CurrentIdx:Integer`"/>
+    </section>
+  </class>
+</unit>

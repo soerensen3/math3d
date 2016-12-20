@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unit name="p3dMath" description="
+@section`1,whatisp3dmath,What is P3DMath,
+
+P3DMath is an open source 3D math library for pascal. It is part part of the 3D engine pascal3d (p3d) which is
+currently in development but not yet published. It is planned to be open source as well.@br
+@br
+P3DMath supports vector types, matrices and quaternions (very basic at the moment) so far.
+The syntax is supposed to be as close to @bold`glsl` as possible (Like GLM which is C++ only).
+@br
+Additionally to @bold`glsl` there is support for quaternions.
+@br@br
+In P3DMath, for convenience, vectors and matrices are defined as objects (not classes) so they
+can be used just like normal variables and you don't have to take care of creating or freeing them.
+@br@br
+@bold`Note:` This library has just been published so it might undergo some major changes in the
+future. In this early stage it is probably not suitable for a productive use yet. However I would be
+happy to receive some feedback! Please make use of the bugtracker or send me a message if you have any questions.`
+@section`1,typesdefined,Types defined in p3dmath,
+
+@section`2,vectortypes,Vector Types,
+@unorderedList`
+@item`@link` TVec2 ``
+@item`@link` TVec3 ``
+@item`@link` TVec4 ``
+`
+`
+
+@section`2,matrices,Matrices,
+@unorderedList`
+@item`@link`TMat2``
+@item`@link`TMat3``
+@item`@link`TMat4``
+``
+
+@section`2,quaternions,Quaternions,
+@unorderedList`
+@item`@link` TQuaternion ``
+```
+
+@section`1,differences,Differences to glsl,
+While p3dmath aims to be as close to glsl as possible with it's syntax in some cases this is just not possible because pascal language is just different from glsl.
+
+@section`2,diff_typenames,Type,names,
+In Pascal it is common to use a T as prefix for types. What is mat4 in glsl becomes
+TMat4 in p3dmath. The prefix is not a must but there would be a conflict with the
+constructors for TMat4. In glsl you also use mat4(...) as a constructor. In p3dmath
+the constructors are available as well though technically they are not real constructors
+in a pascal sense (like TMat4.Create(...)).
+`
+@section`2,diff_swizzling,Swizzling,
+See chapter swizzling of @link`TVec2`, @link`TVec3` or @link`TVec4.``
+
+@section`2,diff_matrix_types,Matrix Types,
+While glsl supports a lot of different sized matrices, p3dmath only
+supports square sized matrix types, so there are only three defined.
+In most cases this will be sufficient so this will probably not change in the future.``
+@section`1,matrix_order,Matrix Order,
+There are two different orders when using matrices, one is column-major and one is row-major.
+The order is however only a matter of notation.
+The order for constructors in glsl is column-major. Please note that it only has an influence on the constructors for creating the matrices. This is especially true for the functions that create a specific projection or view matrix.
+For the math it doesn't really matter which order you are using as long as you do it consequently.
+See this if you want to know &lt;a href=&#34;http://fgiesen.wordpress.com/2012/02/12/row-major-vs-column-major-row-vectors-vs-column-vectors/&#34;&gt;more&lt;/a&gt;
+`
+@section`1,p3dmath_license,P3DMath License,
+P3DMath is under MIT-License. Please read the license below, for more information.
+@section`2,mit_license,The MIT License (MIT),
+Copyright (c) 2015 Johannes Rosleff Soerensen@br
+@br
+Permission is hereby granted, free of charge, to any person obtaining a copy@br
+of this software and associated documentation files (the &#34;Software&#34;), to deal@br
+in the Software without restriction, including without limitation the rights@br
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell@br
+copies of the Software, and to permit persons to whom the Software is@br
+furnished to do so, subject to the following conditions:@br
+@br
+The above copyright notice and this permission notice shall be included in all@br
+copies or substantial portions of the Software.@br
+@br
+THE SOFTWARE IS PROVIDED &#34;AS IS&#34;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR@br
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,@br
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE@br
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER@br
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,@br
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE@br
+SOFTWARE.``">
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( x : Float ;y: Float ): TVec2;`" description="@abbr`Constructor for vec2 with two floats`"/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( xy : Float ): TVec2;`" description="@abbr`Constructor for vec2 with one float, which is taken for x and y`"/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( xy : TVec3 ): TVec2;`" description="@abbr`Constructor for vec2 with one vec3, where z is truncated`"/>
+  <procedure name="vec2" proctype="function" definition="@code`function vec2( xy : TVec4 ): TVec2;`" description="@abbr`Constructor for vec2 with one vec3, where z and w is truncated`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( x : Float ;y : Float ;z: Float ): TVec3;`" description="@abbr`Constructor for vec3 with three floats`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( xyz : Float ): TVec3;`" description="@abbr`Constructor for vec3 with one float, which is taken for x, y and z`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( xy : TVec2 ;z: Float ): TVec3;`" description="@abbr`Constructor for vec2 with one vec2 which is taken for x and y and one float, which is taken for z`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( x : Float ;yz : TVec2 ): TVec3;`" description="@abbr`Constructor for vec2 with one float, which is taken for x and one vec2 which is taken for y and z`"/>
+  <procedure name="vec3" proctype="function" definition="@code`function vec3( xyz : TVec4 ): TVec3;`" description="@abbr`Constructor for vec3 with one vec4, where w is truncated`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;y : Float ;z : Float ;w: Float ): TVec4;`" description="@abbr`Constructor for vec4 with four floats`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xyzw : Float ): TVec4;`" description="@abbr`Constructor for vec4 with one float, which is taken for x, y, z and w`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xy : TVec2 ;z : Float ;w: Float ): TVec4;`" description="@abbr`Constructor for vec4 with one vec2 which is taken for x and y and two float, which are taken for z and w`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;yz : TVec2 ;w: Float ): TVec4;`" description="@abbr`Constructor for vec4 with one float, which is taken for x, one vec2, which is taken for y and z and one float, which is taken for w`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;y : Float ;zw : TVec2 ): TVec4;`" description="@abbr`Constructor for vec4 with two float, which are taken for x and y and one vec2 which is taken for z and w`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xy : TVec2 ;zw : TVec2 ): TVec4;`" description="@abbr`Constructor for vec4 with one vec2, which is taken for x and y and one vec2, which is taken for z and w`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( xyz : TVec3 ;w: Float ): TVec4;`" description="@abbr`Constructor for vec4 with one vec3, which is taken for x, y and z one float, which is taken for w`"/>
+  <procedure name="vec4" proctype="function" definition="@code`function vec4( x : Float ;yzw : TVec3 ): TVec4;`" description="@abbr`Constructor for vec4 with one float, which is taken for x and one vec3 which is taken for y, z and w`"/>
+
+  <class name="TIntListEnumerator" type="Class" description="@exclude"/>
+  <class name="TFloatListEnumerator" type="Class" description="@exclude"/>
+  <class name="TVec2ListEnumerator" type="Class" description="@exclude"/>
+  <class name="TVec3ListEnumerator" type="Class" description="@exclude"/>
+  <class name="TVec4ListEnumerator" type="Class" description="@exclude"/>
+  <class name="TMat2ListEnumerator" type="Class" description="@exclude"/>
+  <class name="TMat3ListEnumerator" type="Class" description="@exclude"/>
+  <class name="TMat4ListEnumerator" type="Class" description="@exclude"/>
+  <class name="TVec2" type="Object" description="@abbr`TVec2 is a basic vector object wich can be modified with operators and functions`
+@section`1,introduction,Introduction,
+It also provides some methods itself.
+There are provided different ways to access the fields of the vector.
+@orderedlist`
+@item`Using Coord`
+@item`Using @bold`x,y,z,w r,g,b,a s,t,p,q` properties`
+@item`Using Swizzling`
+``
+@section`1,using_coord,1. Access the fields with the array Coord,
+@link`Coord` is the default property so using @code`v[ 0 ]` is the same as @code`v.Coord[ 0 ]`.`
+@section`1,using_properties,2. Alternatively you can use it's properties...,
+...@code`X, Y, Z, W`. However you can also use the alias @code`R, G, B, A` if you use the vector to store color values.
+For the use as with texture coordinates this is also available @code` S, T, P, Q `.
+So all these code lines are equivalent: @br
+@section`2,listing1,Listing 1,@code`
+v.Coords[ 0 ]:= 0.0;@br
+v[ 0 ]:= 0.0;@br
+v.x:= 0.0;@br
+v.r:= 0.0;@br
+v.s:= 0.0;@br
+``@br@br
+These different type of access are only for convenience but point to one and
+the same field. Except for the Coords array everything works just like in @bold` glsl `.
+@br@br
+Depending on the vectors type some fields may not be availabe.@br
+For @link`TVec2` there is only @bold` X (R, S)` and @bold` Y (G, T)` defined.@br
+For @link`TVec3` there is only @bold` X (R, S)`, @bold` Y (G, T)` and @bold` Z (B, P)` defined.@br
+For @link`TVec4` there is @bold` X (R, S)`, @bold` Y (G, T)`, @bold` Z (B, P)` and @bold` W (A, Q)` defined.`
+@section`1,using_swizzling, 3. Additionally math3d supports swizzling glsl-style.,
+This means you can write:@br
+@section`2,listing2,Listing 2,@code`
+v2:= v1.xxy; // equivalent to vec3( v1.x, v1.x, v1.y )@br
+``
+Unlike @bold` glsl ` this is not yet supported: @br
+@section`2,listing3,Listing 3,@code`
+var@br
+  v1: TVec2;@br
+  v2: TVec3;@br
+begin@br
+  v2:= v1.xxx; //Returns an error because v1 only has two members and cannot return a TVec3@br
+end;@br
+``@br
+This is due to an internal problem of how the math3d unit is written.
+In Pascal you can only forward declare classes and procedures but not objects.
+So it is not possible for TVec2 to return TVec3 because it's still undefined at that stage.
+There is no solution for that for now i fear. @br@br For more information on swizzling see this &lt;a href=&#34;https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Swizzling&#34;&gt;doc&lt;/a&gt;`"/>
+  <class name="TVec3" type="Object" description="@abbr` TVec3 is a basic vector object wich can be modified with operators and functions`
+@section`1,introduction,Introduction,
+It also provides some methods itself.
+There are provided different ways to access the fields of the vector.
+@orderedlist`
+@item`Using Coord`
+@item`Using @bold`x,y,z,w r,g,b,a s,t,p,q` properties`
+@item`Using Swizzling`
+``
+@section`1,using_coord,1. Access the fields with the array Coord,
+@link`Coord` is the default property so using @code`v[ 0 ]` is the same as @code`v.Coord[ 0 ]`.`
+@section`1,using_properties,2. Alternatively you can use it's properties...,
+...@code`X, Y, Z, W`. However you can also use the alias @code`R, G, B, A` if you use the vector to store color values.
+For the use as with texture coordinates this is also available @code` S, T, P, Q `.
+So all these code lines are equivalent: @br
+@section`2,listing1,Listing 1,@code`
+v.Coords[ 0 ]:= 0.0;@br
+v[ 0 ]:= 0.0;@br
+v.x:= 0.0;@br
+v.r:= 0.0;@br
+v.s:= 0.0;@br
+``@br@br
+These different type of access are only for convenience but point to one and
+the same field. Except for the Coords array everything works just like in @bold` glsl `.
+@br@br
+Depending on the vectors type some fields may not be availabe.@br
+For @link`TVec2` there is only @bold` X (R, S)` and @bold` Y (G, T)` defined.@br
+For @link`TVec3` there is only @bold` X (R, S)`, @bold` Y (G, T)` and @bold` Z (B, P)` defined.@br
+For @link`TVec4` there is @bold` X (R, S)`, @bold` Y (G, T)`, @bold` Z (B, P)` and @bold` W (A, Q)` defined.`
+@section`1,using_swizzling,3. Additionally math3d supports swizzling glsl-style.,
+This means you can write:@br
+@section`2,listing2,Listing 2,@code`
+v2:= v1.xxy; // equivalent to vec3( v1.x, v1.x, v1.y )@br
+``
+Unlike @bold` glsl ` this is not yet supported: @br
+@section`2,listing3,Listing 3,@code`
+var@br
+  v1: TVec2;@br
+  v2: TVec3;@br
+begin@br
+  v2:= v1.xxx; //Returns an error because v1 only has two members and cannot return a TVec3@br
+end;@br
+``@br
+This is due to an internal problem of how the math3d unit is written.
+In Pascal you can only forward declare classes and procedures but not objects.
+So it is not possible for TVec2 to return TVec3 because it's still undefined at that stage.
+There is no solution for that for now i fear. @br@br For more information on swizzling see this &lt;a href=&#34;https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Swizzling&#34;&gt;doc&lt;/a&gt;`"/>
+  <class name="TVec4" type="Object" description="@abbr`TVec4 is a basic vector object wich can be modified with operators and functions`
+@section`1,introduction,Introduction,
+It also provides some methods itself.
+There are provided different ways to access the fields of the vector.
+@orderedlist`
+@item`Using Coord`
+@item`Using @bold`x,y,z,w r,g,b,a s,t,p,q` properties`
+@item`Using Swizzling`
+``
+@section`1,using_coord,1. Access the fields with the array Coord,
+@link`Coord` is the default property so using @code`v[ 0 ]` is the same as @code`v.Coord[ 0 ]`.`
+@section`1,using_properties,2. Alternatively you can use it's properties...,
+...@code`X, Y, Z, W`. However you can also use the alias @code`R, G, B, A` if you use the vector to store color values.
+For the use as with texture coordinates this is also available @code` S, T, P, Q `.
+So all these code lines are equivalent: @br
+@section`2,listing1,Listing 1,@code`
+v.Coords[ 0 ]:= 0.0;@br
+v[ 0 ]:= 0.0;@br
+v.x:= 0.0;@br
+v.r:= 0.0;@br
+v.s:= 0.0;@br
+``@br@br
+These different type of access are only for convenience but point to one and
+the same field. Except for the Coords array everything works just like in @bold` glsl `.
+@br@br
+Depending on the vectors type some fields may not be availabe.@br
+For @link`TVec2` there is only @bold` X (R, S)` and @bold` Y (G, T)` defined.@br
+For @link`TVec3` there is only @bold` X (R, S)`, @bold` Y (G, T)` and @bold` Z (B, P)` defined.@br
+For @link`TVec4` there is @bold` X (R, S)`, @bold` Y (G, T)`, @bold` Z (B, P)` and @bold` W (A, Q)` defined.`
+@section`1,using_swizzling,3. Additionally math3d supports swizzling glsl-style.,
+This means you can write:@br
+@section`2,listing2,Listing 2,@code`
+v2:= v1.xxy; // equivalent to vec3( v1.x, v1.x, v1.y )@br
+``
+Unlike @bold` glsl ` this is not yet supported: @br
+@section`2,listing3,Listing 3,@code`
+var@br
+  v1: TVec2;@br
+  v2: TVec3;@br
+begin@br
+  v2:= v1.xxx; //Returns an error because v1 only has two members and cannot return a TVec3@br
+end;@br
+``@br
+This is due to an internal problem of how the math3d unit is written.
+In Pascal you can only forward declare classes and procedures but not objects.
+So it is not possible for TVec2 to return TVec3 because it's still undefined at that stage.
+There is no solution for that for now i fear. @br@br For more information on swizzling see this &lt;a href=&#34;https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Swizzling&#34;&gt;doc&lt;/a&gt;`"/>
+  <class name="TMat2" type="Object" description="@abbr`A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
+transformations`.
+@section`1,introduction,Introduction,The array @link`m` is for directly accessing the fields of the matrix.
+You can also use the properties for accessing columns and rows which consist
+of an &#34;_&#34; and one number for the column and another for the row. So if you
+want to let's say access column 0 and row 3 you use _03.
+The array is stored in column-major order but it only matters if you pass it
+to another API than OpenGL, like Direct 3D. You might need to transpose the matrix then.`"/>
+  <class name="TMat3" type="Object" description="@abbr`A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
+transformations`.
+@section`1,introduction,Introduction,The array @link`m` is for directly accessing the fields of the matrix.
+You can also use the properties for accessing columns and rows which consist
+of an &#34;_&#34; and one number for the column and another for the row. So if you
+want to let's say access column 0 and row 3 you use _03.
+The array is stored in column-major order but it only matters if you pass it
+to another API than OpenGL, like Direct 3D. You might need to transpose the matrix then.`"/>
+  <class name="TMat4" type="Object" description="@abbr`A Matrix which can be either 2 by 2, 3 by 3 or 4 by 4. It can be used for
+transformations`.
+@section`1,introduction,Introduction,The array @link`m` is for directly accessing the fields of the matrix.
+You can also use the properties for accessing columns and rows which consist
+of an &#34;_&#34; and one number for the column and another for the row. So if you
+want to let's say access column 0 and row 3 you use _03.
+The array is stored in column-major order but it only matters if you pass it
+to another API than OpenGL, like Direct 3D. You might need to transpose the matrix then.`"/>
+</unit>
