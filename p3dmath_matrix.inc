@@ -632,7 +632,7 @@ end;
 
 function mat3normalize( M: TMatrix ): TMatrix;
 begin
-  Result:= mat3( M[ 0 ].Normalize, m[ 1 ].Normalize, m[ 2 ].Normalize );
+  Result:= mat3( M[ 0 ].Normalize, M[ 1 ].Normalize, M[ 2 ].Normalize );
 end;
 
 {
@@ -702,6 +702,7 @@ procedure mat3decompose( mat: TMat3; out rot: TMat3; out scale: TVec3 );
 var
   mat_n, mat_sz: TMat3;
 begin
+  (*
   { rotation & scale are linked, we need to create the mat's
    * for these together since they are related. }
 
@@ -721,7 +722,24 @@ begin
   mat3inverse( mat_n, mat_n );
   mat_sz:= mat_n * mat;
 
-  scale:= vec3( mat_sz[ 0 ][ 0 ], mat_sz[ 1 ][ 1 ], mat_sz[ 2 ][ 2 ]);
+  scale:= vec3( mat_sz[ 0 ][ 0 ], mat_sz[ 1 ][ 1 ], mat_sz[ 2 ][ 2 ]);*)
+
+  (*
+  /* keep rot as a 3x3 matrix, the caller can convert into a quat or euler */
+  	size[0] = normalize_v3_v3(rot[0], mat3[0]);
+  	size[1] = normalize_v3_v3(rot[1], mat3[1]);
+  	size[2] = normalize_v3_v3(rot[2], mat3[2]);
+  	if (UNLIKELY(is_negative_m3(rot))) {
+  		negate_m3(rot);
+  		negate_v3(size);
+  }
+  *)
+  scale:= max( vec3( mat.Row[ 0 ].GetDist, mat.Row[ 1 ].GetDist, mat.Row[ 2 ].GetDist ), epsilon );
+  mat_n:= mat3( mat.Row[ 0 ] / scale[ 0 ], mat.Row[ 1 ] / scale[ 1 ], mat.Row[ 2 ] / scale[ 2 ]);
+  if ( mat3_is_negative( mat_n )) then
+    rot:= mat3( -mat_n[ 0 ], -mat_n[ 1 ], -mat_n[ 2 ])
+  else
+    rot:= mat_n;
 end;
 {$ENDIF}
 {$IF NUMFIELD = 4}

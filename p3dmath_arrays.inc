@@ -68,6 +68,10 @@ type
         procedure AssignTo( Dest: TItemList ); reintroduce;
         function GetEnumerator(): TListEnumerator;
         function IndexOf( Item: TItem ): Integer;
+        procedure SaveToStream( AStream: TStream );
+        procedure LoadFromStream( AStream: TStream );
+        procedure LoadFromStream( AStream: TStream; ACount: Integer );
+        procedure AppendFromStream( AStream: TStream );
 
         property Items[ Index: Integer ]: TItem read GetItem write SetItem; default;
         property Count: Integer read FCount write SetCount;
@@ -145,6 +149,37 @@ begin
         Result:= i;
         break;
       end;
+end;
+
+procedure TItemList.SaveToStream( AStream: TStream );
+begin
+  AStream.WriteBuffer( Count, SizeOf( Integer ));
+  AStream.WriteBuffer( FItems^[ 0 ], SizeOf( TItem ) * Count );
+end;
+
+procedure TItemList.LoadFromStream( AStream: TStream );
+var
+  Size: Integer;
+begin
+  AStream.ReadBuffer( Size, SizeOf( Integer ));
+  Count:= Size;
+  AStream.ReadBuffer( FItems^[ 0 ], SizeOf( TItem ) * Count );
+end;
+
+procedure TItemList.LoadFromStream(AStream: TStream; ACount: Integer);
+begin
+  AStream.ReadBuffer( FItems^[ 0 ], SizeOf( TItem ) * ACount );
+end;
+
+procedure TItemList.AppendFromStream( AStream: TStream );
+var
+  OldCount: Integer;
+  NewCount: Cardinal;
+begin
+  OldCount:= Count;
+  NewCount:= AStream.ReadDWord;
+  Count:= OldCount + NewCount;
+  AStream.ReadBuffer( FItems^[ OldCount ], SizeOf( TItem ) * NewCount );
 end;
 
 procedure TItemList.Clear;

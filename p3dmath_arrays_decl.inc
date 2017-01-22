@@ -29,7 +29,12 @@ SOFTWARE.
 
   {$DEFINE TItem:= Byte}
   {$DEFINE TItemArray:= TByteArray}
-  {$DEFINE TItemList:= TByteList}
+  {$DEFINE TItemList:=
+    { TByteList }
+
+    { TByteList }
+
+    TByteList}
   {$DEFINE pItemArray:= pByteArray}
   {$DEFINE TListEnumerator:= TByteListEnumerator}
   {$INCLUDE p3dmath_arrays.inc}
