@@ -386,5 +386,13 @@ begin
 end;
 
 {$ENDIF}
+
+function project( x: TVector; Normal: TVector ): TVector;
+{$IFDEF IMPLEMENTATION}
+begin
+  Result:= dot( x, Normal ) / dot( Normal, Normal ) * Normal;
+end;
+{$ENDIF}
+
 {$ENDIF}
 

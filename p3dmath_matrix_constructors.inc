@@ -160,31 +160,31 @@ var
   qw, qx, qy, qz, qda, qdb, qdc, qaa, qab, qac, qbb, qbc, qcc: Float;
 begin
   qw:= M_SQRT2 * quat.W;
-	qx:= M_SQRT2 * quat.X;
-	qy:= M_SQRT2 * quat.Y;
-	qz:= M_SQRT2 * quat.Z;
+  qx:= M_SQRT2 * quat.X;
+  qy:= M_SQRT2 * quat.Y;
+  qz:= M_SQRT2 * quat.Z;
 
-	qda:= qw * qx;
-	qdb:= qw * qy;
-	qdc:= qw * qz;
-	qaa:= qx * qx;
-	qab:= qx * qy;
-	qac:= qx * qz;
-	qbb:= qy * qy;
-	qbc:= qy * qz;
-	qcc:= qz * qz;
+  qda:= qw * qx;
+  qdb:= qw * qy;
+  qdc:= qw * qz;
+  qaa:= qx * qx;
+  qab:= qx * qy;
+  qac:= qx * qz;
+  qbb:= qy * qy;
+  qbc:= qy * qz;
+  qcc:= qz * qz;
 
-	Result._00:= 1.0 - qbb - qcc;
-	Result._01:= qdc + qab;
-	Result._02:= -qdb + qac;
+  Result._00:= 1.0 - qbb - qcc;
+  Result._01:= qdc + qab;
+  Result._02:= -qdb + qac;
 
-	Result._10:= -qdc + qab;
-	Result._11:= 1.0 - qaa - qcc;
-	Result._12:= qda + qbc;
+  Result._10:= -qdc + qab;
+  Result._11:= 1.0 - qaa - qcc;
+  Result._12:= qda + qbc;
 
-	Result._20:= qdb + qac;
-	Result._21:= -qda + qbc;
-	Result._22:= 1.0 - qaa - qbb;
+  Result._20:= qdb + qac;
+  Result._21:= -qda + qbc;
+  Result._22:= 1.0 - qaa - qbb;
 end;
 {$ENDIF}
 

@@ -89,6 +89,7 @@ type
       {$IFDEF FLOATTYPE}
       {@abbr`Calculate the length of the current vector`.}
       function GetDist: FieldType;
+      function GetDistSqr: FieldType;
       {@abbr`Normalizes the current vector`.
       The vector will be returned in the function's result additionally.
       @br@br
@@ -204,6 +205,20 @@ begin
     Result:= sqrt( sq )
   else
     Result:= 0;
+end;
+
+function TVector.GetDistSqr: FieldType;
+begin
+  Result:= sqr( x )
+       {$IF NUMFIELD>1}
+         + sqr( y )
+       {$ENDIF}
+       {$IF NUMFIELD>2}
+         + sqr( z )
+       {$ENDIF}
+       {$IF NUMFIELD>3}
+         + sqr( w )
+       {$ENDIF};
 end;
 
 function TVector.Normalize: TVector;

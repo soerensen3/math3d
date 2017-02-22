@@ -118,40 +118,40 @@ begin
   j:= R.axis[ 1 ];
   k:= R.axis[ 2 ];
 
-	if ( R.parity ) then
+  if ( R.parity ) then
     begin
-		  ti:= -Euler[ i ];
-		  tj:= -Euler[ j ];
-		  th:= -Euler[ k ];
-	  end
-	else
+      ti:= -Euler[ i ];
+      tj:= -Euler[ j ];
+      th:= -Euler[ k ];
+    end
+  else
     begin
-		  ti:= Euler[ i ];
-		  tj:= Euler[ j ];
-		  th:= Euler[ k ];
-	  end;
+      ti:= Euler[ i ];
+      tj:= Euler[ j ];
+      th:= Euler[ k ];
+    end;
 
-	ci:= cos( ti );
-	cj:= cos( tj );
-	ch:= cos( th );
-	si:= sin( ti );
-	sj:= sin( tj );
-	sh:= sin( th );
+  ci:= cos( ti );
+  cj:= cos( tj );
+  ch:= cos( th );
+  si:= sin( ti );
+  sj:= sin( tj );
+  sh:= sin( th );
 
-	cc:= ci * ch;
-	cs:= ci * sh;
-	sc:= si * ch;
-	ss:= si * sh;
+  cc:= ci * ch;
+  cs:= ci * sh;
+  sc:= si * ch;
+  ss:= si * sh;
 
-	Result.Row[i][i]:= cj * ch;
-	Result.Row[j][i]:= sj * sc - cs;
-	Result.Row[k][i]:= sj * cc + ss;
-	Result.Row[i][j]:= cj * sh;
-	Result.Row[j][j]:= sj * ss + cc;
-	Result.Row[k][j]:= sj * cs - sc;
-	Result.Row[i][k]:= -sj;
-	Result.Row[j][k]:= cj * si;
-	Result.Row[k][k]:= cj * ci;
+  Result.Row[i][i]:= cj * ch;
+  Result.Row[j][i]:= sj * sc - cs;
+  Result.Row[k][i]:= sj * cc + ss;
+  Result.Row[i][j]:= cj * sh;
+  Result.Row[j][j]:= sj * ss + cc;
+  Result.Row[k][j]:= sj * cs - sc;
+  Result.Row[i][k]:= -sj;
+  Result.Row[j][k]:= cj * si;
+  Result.Row[k][k]:= cj * ci;
 end;
 
 (* returns two euler calculation methods, so we can pick the best *)
@@ -162,44 +162,44 @@ var
   cy: Float;
 begin
   R:= RotOrderInfo[ Order ];
-	i:= R.axis[ 0 ];
+  i:= R.axis[ 0 ];
   j:= R.axis[ 1 ];
   k:= R.axis[ 2 ];
 
-	(* process the matrix first *)
-	m:= mat3normalize(m);
+  (* process the matrix first *)
+  m:= mat3normalize(m);
 
-	cy:= sqrt( m.Row[i][i] * m.Row[i][i] + m.Row[i][j] * m.Row[i][j]);
+  cy:= sqrt( m.Row[ i ][ i ] * m.Row[ i ][ i ] + m.Row[ i ][ j ] * m.Row[ i ][ j ]);
 
-	if (cy > 16.0 * epsilon ) then //TODO: MatToEuler2 causes exception on (+-)NAN
+  if (cy > 16.0 * epsilon ) then //TODO: MatToEuler2 causes exception on (+-)NAN
     begin
-		  Euler1[ i ]:= arctan2(m.Row[j][k], m.Row[k][k]);
-		  Euler1[ j ]:= arctan2(-m.Row[i][k], cy);
-		  Euler1[ k ]:= arctan2(m.Row[i][j], m.Row[i][i]);
+      Euler1[ i ]:= arctan2(  m.Row[ j ][ k ],  m.Row[ k ][ k ]);
+      Euler1[ j ]:= arctan2( -m.Row[ i ][ k ],  cy );
+      Euler1[ k ]:= arctan2(  m.Row[ i ][ j ],  m.Row[ i ][ i ]);
 
-		  Euler2[ i ]:= arctan2(-m.Row[j][k], -m.Row[k][k]);
-		  Euler2[ j ]:= arctan2(-m.Row[i][k], -cy);
-		  Euler2[ k ]:= arctan2(-m.Row[i][j], -m.Row[i][i]);
-	  end
-	else
+      Euler2[ i ]:= arctan2( -m.Row[ j ][ k ], -m.Row[ k ][ k ]);
+      Euler2[ j ]:= arctan2( -m.Row[ i ][ k ], -cy );
+      Euler2[ k ]:= arctan2( -m.Row[ i ][ j ], -m.Row[ i ][ i ]);
+    end
+  else
     begin
-		  Euler1[ i ]:= arctan2(-m.Row[k][j], m.Row[j][j]);
-		  Euler1[ j ]:= arctan2(-m.Row[i][k], cy);
-		  Euler1[ k ]:= 0;
+      Euler1[ i ]:= arctan2( -m.Row[ k ][ j ], m.Row[ j ][ j ]);
+      Euler1[ j ]:= arctan2( -m.Row[ i ][ k ], cy );
+      Euler1[ k ]:= 0;
 
-		  Euler2:= Euler1;
-	  end;
+      Euler2:= Euler1;
+    end;
 
-	if (R.parity) then
+  if ( R.parity ) then
     begin
-		  Euler1[0]:= -Euler1[0];
-		  Euler1[1]:= -Euler1[1];
-		  Euler1[2]:= -Euler1[2];
+      Euler1[ 0 ]:= -Euler1[ 0 ];
+      Euler1[ 1 ]:= -Euler1[ 1 ];
+      Euler1[ 2 ]:= -Euler1[ 2 ];
 
-		  Euler2[0]:= -Euler2[0];
-		  Euler2[1]:= -Euler2[1];
-		  Euler2[2]:= -Euler2[2];
-	  end;
+      Euler2[ 0 ]:= -Euler2[ 0 ];
+      Euler2[ 1 ]:= -Euler2[ 1 ];
+      Euler2[ 2 ]:= -Euler2[ 2 ];
+    end;
 end;
 
 (* order independent! *)
@@ -213,38 +213,39 @@ var
   i: Integer;
   deul: TVec3;
 begin
-	(* correct differences of about 360 degrees first *)
-	for i:= 0 to 2 do
+  (* correct differences of about 360 degrees first *)
+  for i:= 0 to 2 do
     begin
-		  deul[i]:= Euler[i] - OldRot[i];
-		  if (deul[i] > pi_thresh) then
+      deul[ i ]:= Euler[ i ] - OldRot[ i ];
+      if ( deul[ i ] > pi_thresh ) then
         begin
-			    Euler[i]:= Euler[i] - floor(( deul[i] / pi_x2) + 0.5) * pi_x2;
-			    deul[i]:= Euler[i] - OldRot[i];
-		    end
-		  else if (deul[i] < -pi_thresh) then
+	  Euler[ i ]:= Euler[ i ] - floor(( deul[ i ] / pi_x2 ) + 0.5 ) * pi_x2;
+	  deul[ i ]:= Euler[ i ] - OldRot[ i ];
+	end
+      else if ( deul[ i ] < -pi_thresh) then
         begin
-			    Euler[i]:= Euler[i] + floor((-deul[i] / pi_x2) + 0.5) * pi_x2;
-			    deul[i]:= Euler[i] - OldRot[i];
-		    end;
+	  Euler[ i ]:= Euler[ i ] + floor(( -deul[ i ] / pi_x2 ) + 0.5 ) * pi_x2;
+	  deul[ i ]:= Euler[ i ] - OldRot[ i ];
 	end;
+    end;
 
-	(* is 1 of the axis rotations larger than 180 degrees and the other small? NO ELSE IF!! *)
-	if (( abs(deul[0]) > 3.2 ) and ( abs(deul[1]) < 1.6 ) and ( abs(deul[2]) < 1.6)) then
-		if (deul[0] > 0.0) then
-      Euler[0]:= Euler[0] - pi_x2
-		else
-      Euler[0]:= Euler[0] + pi_x2;
-	if (( abs(deul[1]) > 3.2 ) and ( abs(deul[2]) < 1.6 ) and ( abs(deul[0]) < 1.6)) then
-		if (deul[1] > 0.0) then
-      Euler[1]:= Euler[1] - pi_x2
-		else
-      Euler[1]:= Euler[1] + pi_x2;
-	if (( abs(deul[2]) > 3.2 ) and ( abs(deul[0]) < 1.6 ) and ( abs(deul[1]) < 1.6)) then
-		if (deul[2] > 0.0) then
-      Euler[2]:= Euler[2] - pi_x2
-		else
-      Euler[2]:= Euler[2] + pi_x2;
+  (* is 1 of the axis rotations larger than 180 degrees and the other small? NO ELSE IF!! *)
+  if (( abs( deul[ 0 ]) > 3.2 ) and ( abs( deul[ 1 ]) < 1.6 ) and ( abs( deul[ 2 ]) < 1.6 )) then
+    if ( deul[ 0 ] > 0.0) then
+      Euler[ 0 ]:= Euler[ 0 ] - pi_x2
+    else
+      Euler[ 0 ]:= Euler[ 0 ] + pi_x2;
+  if (( abs( deul[ 1 ]) > 3.2 ) and ( abs( deul[ 2 ]) < 1.6 ) and ( abs( deul[ 0 ]) < 1.6 )) then
+    if (deul[ 1 ] > 0.0) then
+      Euler[ 1 ]:= Euler[ 1 ] - pi_x2
+    else
+      Euler[ 1 ]:= Euler[ 1 ] + pi_x2;
+
+  if (( abs(deul[ 2 ]) > 3.2 ) and ( abs( deul[ 0 ]) < 1.6 ) and ( abs( deul[ 1 ]) < 1.6 )) then
+    if (deul[ 2 ] > 0.0) then
+      Euler[ 2 ]:= Euler[ 2 ] - pi_x2
+    else
+      Euler[ 2 ]:= Euler[ 2 ] + pi_x2;
 end;
 
 (* uses 2 methods to retrieve eulers, and picks the closest *)
@@ -255,17 +256,17 @@ var
 begin
   MatToEuler2( M, eul1, eul2, Order );
 
-  compatible_eul(eul1, oldrot);
-  compatible_eul(eul2, oldrot);
+  compatible_eul( eul1, oldrot );
+  compatible_eul( eul2, oldrot );
 
-  d1:= abs(eul1[0] - OldRot[0]) + abs(eul1[1] - OldRot[1]) + abs(eul1[2] - OldRot[2]);
-  d2:= abs(eul2[0] - OldRot[0]) + abs(eul2[1] - OldRot[1]) + abs(eul2[2] - OldRot[2]);
+  d1:= abs( eul1[ 0 ] - OldRot[ 0 ]) + abs( eul1[ 1 ] - OldRot[ 1 ]) + abs( eul1[ 2 ] - OldRot[ 2 ]);
+  d2:= abs( eul2[ 0 ] - OldRot[ 0 ]) + abs( eul2[ 1 ] - OldRot[ 1 ]) + abs( eul2[ 2 ] - OldRot[ 2 ]);
 
   (* return best, which is just the one with lowest difference *)
-  if (d1 > d2) then
-	  Result:= eul2
+  if ( d1 > d2 ) then
+    Result:= eul2
   else
-	  Result:= eul1;
+    Result:= eul1;
 end;
 
 //@abbr`Returns the value of x constrained to the range minVal to maxVal`. The returned value is computed as min(max(x, minVal), maxVal).

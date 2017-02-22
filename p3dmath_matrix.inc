@@ -590,9 +590,11 @@ end;
 function mat3rotate(Axis: TVec3; Angle: Float): TMat3;
 var
    cosine, sine, one_minus_cosine : Extended;
+   co, si, ico: Float;
+   nsi: TVec3;
 begin
-   SinCos(Angle, Sine, Cosine);
-   one_minus_cosine:=1 - cosine;
+//   SinCos(Angle, Sine, Cosine);
+//   one_minus_cosine:=1 - cosine;
    Axis.Normalize;
 
    {$IFDEF COLUMN_MAJOR_ORDER}
@@ -608,7 +610,26 @@ begin
    Result._12:= (one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
    Result._22:= (one_minus_cosine * Sqr(Axis.z)) + Cosine;
    {$ELSE}
-   Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
+
+    // now convert this to a 3x3 matrix
+    co:= cos( Angle );
+    si:= sin( Angle );
+
+    ico:= ( 1.0 - co );
+    nsi[ 0 ]:= Axis[ 0 ] * si;
+    nsi[ 1 ]:= Axis[ 1 ] * si;
+    nsi[ 2 ]:= Axis[ 2 ] * si;
+
+    Result._00:= (( Axis[ 0 ] * Axis[ 0 ]) * ico ) + co;
+    Result._01:= (( Axis[ 0 ] * Axis[ 1 ]) * ico ) + nsi[ 2 ];
+    Result._02:= (( Axis[ 0 ] * Axis[ 2 ]) * ico ) - nsi[ 1 ];
+    Result._10:= (( Axis[ 0 ] * Axis[ 1 ]) * ico ) - nsi[ 2 ];
+    Result._11:= (( Axis[ 1 ] * Axis[ 1 ]) * ico ) + co;
+    Result._12:= (( Axis[ 1 ] * Axis[ 2 ]) * ico ) + nsi[ 0 ];
+    Result._20:= (( Axis[ 0 ] * Axis[ 2 ]) * ico ) + nsi[ 1 ];
+    Result._21:= (( Axis[ 1 ] * Axis[ 2 ]) * ico ) - nsi[ 0 ];
+    Result._22:= (( Axis[ 2 ] * Axis[ 2 ]) * ico ) + co;
+{   Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
    Result._01:= (one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
    Result._02:= (one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
 
@@ -618,7 +639,7 @@ begin
 
    Result._20:= (one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
    Result._21:= (one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
-   Result._22:= (one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   Result._22:= (one_minus_cosine * Sqr(Axis.z)) + Cosine;}
    {$ENDIF}
 end;
 
@@ -773,7 +794,7 @@ begin
    Result._23:= 0;
    Result._33:= 1;
    {$ELSE}
-   Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
+   {Result._00:= (one_minus_cosine * Sqr(Axis.x)) + Cosine;
    Result._01:= (one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
    Result._02:= (one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
    Result._03:= 0;
@@ -791,7 +812,8 @@ begin
    Result._30:= 0;
    Result._31:= 0;
    Result._32:= 0;
-   Result._33:= 1;
+   Result._33:= 1;}
+   Result:= mat4( mat3rotate( Axis, Angle ));
    {$ENDIF}
 end;
 {$WARNINGS ON}

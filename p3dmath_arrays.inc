@@ -168,6 +168,7 @@ end;
 
 procedure TItemList.LoadFromStream(AStream: TStream; ACount: Integer);
 begin
+  Count:= ACount;
   AStream.ReadBuffer( FItems^[ 0 ], SizeOf( TItem ) * ACount );
 end;
 

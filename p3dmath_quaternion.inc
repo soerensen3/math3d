@@ -54,7 +54,7 @@ function quatRotation( Axis: TVec3; Alpha: Float ): TQuaternion;
 
 function TQuaternion.Conj: TQuaternion;
 begin
-  Result.w:= w;
+  Result.w:=  w;
   Result.x:= -x;
   Result.y:= -y;
   Result.z:= -z;
@@ -138,7 +138,7 @@ end;
 operator * ( a: TQuaternion; b: TVec3 ) c: TVec3;
 var
   t0, t1, t2: Float;
-begin
+begin{
   t0:= - a.x * b.x - a.y * b.y - a.z * b.z;
   t1:=   a.w * b.x + a.y * b.z - a.z * b.y;
   t2:=   a.w * b.y + a.z * b.x - a.x * b.z;
@@ -151,6 +151,18 @@ begin
   c.z:= t0 * -a.z + c.z * a.w - c.x * a.y + c.y * a.x;
   c.x:= t1;
   c.y:= t2;
+  }
+  //c:= b + 2.0 * cross( cross( b, a.xyz ) + a.w * b, a.xyz );
+  {
+
+  t0:= b.y * a.z - b.z * a.y + a.w * b.x;
+  t1:= b.z * a.x - b.x * a.z + a.w * b.y;
+  t2:= b.x * a.y - b.y * a.x + a.w * b.z;
+
+  c.x:= b.x + 2.0 * ( t1 * a.z - t2 * a.y );
+  c.y:= b.y + 2.0 * ( t2 * a.x - t0 * a.z );
+  c.z:= b.z + 2.0 * ( t0 * a.y - t1 * a.x );}
+  c:= ( a * quat( b.x, b.y, b.z, 0 ) * a.Conj ).xyz;
 end;
 
 {$WARNINGS ON}
@@ -186,11 +198,11 @@ begin
   Result.z:= z;
 end;
 
+//Converted from math_rotation.c from blender
 function quat( mat: TMat3 ): TQuaternion;
 var
   tr, s: Double;
 begin
-  //work on a copy
   mat.Col[ 0 ]:= normalize( mat.Col[ 0 ]);// this is needed AND a 'normalize_qt' in the end
   mat.Col[ 1 ]:= normalize( mat.Col[ 1 ]);
   mat.Col[ 2 ]:= normalize( mat.Col[ 2 ]);
@@ -199,45 +211,45 @@ begin
 
   if (tr > epsilon) then
     begin
-  		s:= sqrt( tr );
-  		Result.w:= s;
-  		s:= 1.0 / (4.0 * s);
-  		Result.x:= ( mat.Col[1][2] - mat.Col[2][1]) * s;
-  		Result.y:= ( mat.Col[2][0] - mat.Col[0][2]) * s;
-  		Result.z:= ( mat.Col[0][1] - mat.Col[1][0]) * s;
+      s:= sqrt( tr );
+      Result.w:= s;
+      s:= 1.0 / (4.0 * s);
+      Result.x:= ( mat.Col[1][2] - mat.Col[2][1]) * s;
+      Result.y:= ( mat.Col[2][0] - mat.Col[0][2]) * s;
+      Result.z:= ( mat.Col[0][1] - mat.Col[1][0]) * s;
     end
   else
     begin
       if (( mat.Col[0][0] > mat.Col[1][1]) AND ( mat.Col[0][0] > mat.Col[2][2])) then
         begin
-  		    s:= 2.0 * sqrt( 1.0 + mat.Col[0][0] - mat.Col[1][1] - mat.Col[2][2]);
-  		    Result.x:= (0.25 * s);
+  	  s:= 2.0 * sqrt( 1.0 + mat.Col[0][0] - mat.Col[1][1] - mat.Col[2][2]);
+  	  Result.x:= (0.25 * s);
 
-  		    s:= 1.0 / s;
-  		    Result.w:= (mat.Col[2][1] - mat.Col[1][2]) * s;
-  		    Result.y:= (mat.Col[1][0] + mat.Col[0][1]) * s;
-  		    Result.z:= (mat.Col[2][0] + mat.Col[0][2]) * s;
-  	    end
+  	  s:= 1.0 / s;
+  	  Result.w:= (mat.Col[2][1] - mat.Col[1][2]) * s;
+  	  Result.y:= (mat.Col[1][0] + mat.Col[0][1]) * s;
+  	  Result.z:= (mat.Col[2][0] + mat.Col[0][2]) * s;
+  	end
       else if (mat.Col[1][1] > mat.Col[2][2]) then
         begin
-  		    s:= 2.0 * sqrt(1.0 + mat.Col[1][1] - mat.Col[0][0] - mat.Col[2][2]);
-  		    Result.y:= (0.25 * s);
+  	  s:= 2.0 * sqrt(1.0 + mat.Col[1][1] - mat.Col[0][0] - mat.Col[2][2]);
+  	  Result.y:= (0.25 * s);
 
-  		    s:= 1.0 / s;
-  		    Result.w:= (mat.Col[2][0] - mat.Col[0][2]) * s;
-  		    Result.x:= (mat.Col[1][0] + mat.Col[0][1]) * s;
-  		    Result.z:= (mat.Col[2][1] + mat.Col[1][2]) * s;
-  	    end
- 	    else
+  	  s:= 1.0 / s;
+  	  Result.w:= (mat.Col[2][0] - mat.Col[0][2]) * s;
+  	  Result.x:= (mat.Col[1][0] + mat.Col[0][1]) * s;
+  	  Result.z:= (mat.Col[2][1] + mat.Col[1][2]) * s;
+      end
+      else
         begin
-  		    s:= 2.0 * sqrt(1.0 + mat.Col[2][2] - mat.Col[0][0] - mat.Col[1][1]);
-  		    Result.z:= (0.25 * s);
+  	  s:= 2.0 * sqrt(1.0 + mat.Col[2][2] - mat.Col[0][0] - mat.Col[1][1]);
+  	  Result.z:= (0.25 * s);
 
-  		    s:= 1.0 / s;
-  		    Result.w:= (mat.Col[1][0] - mat.Col[0][1]) * s;
-  		    Result.x:= (mat.Col[2][0] + mat.Col[0][2]) * s;
-  		    Result.y:= (mat.Col[2][1] + mat.Col[1][2]) * s;
-  	    end;
+  	  s:= 1.0 / s;
+  	  Result.w:= (mat.Col[1][0] - mat.Col[0][1]) * s;
+  	  Result.x:= (mat.Col[2][0] + mat.Col[0][2]) * s;
+  	  Result.y:= (mat.Col[2][1] + mat.Col[1][2]) * s;
+  	end;
     end;
 
   Result.Normalize;
