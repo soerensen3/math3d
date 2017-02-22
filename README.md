@@ -6,7 +6,7 @@ For more information refer to the docs.
 
 ### The MIT License (MIT) ###
 
-Copyright (c) [2015] [Johannes Rosleff Soerensen]
+Copyright (c) [2017] [Johannes Rosleff Soerensen]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
