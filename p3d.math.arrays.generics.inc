@@ -45,7 +45,7 @@ type
     TItemListOnChangeAction = ( actAdd, actDelete, actClear, actAssignBefore, actAssignAfter, actSet );
     TItemListOnChangeEvent = procedure ( Sender: TPersistent; ItemIndex: Integer; Action: TItemListOnChangeAction ) of object;
 
-    generic gItemList < T > = class ( TObject )
+    generic gItemList < T > = class ( TAutoClassMultiContainer )
       type
         TItemList = specialize gItemList < T >;
         TItemListOnChangeEvent = procedure ( Sender: TItemList; ItemIndex: Integer; Action: TItemListOnChangeAction ) of object;
@@ -94,6 +94,7 @@ type
         procedure LoadFromStream( AStream: TStream );
         procedure LoadFromStream( AStream: TStream; ACount: Integer );
         procedure AppendFromStream( AStream: TStream );
+        //function GetAsString( const MaxItems: Integer = 100 ): String;
 
         property Items[ Index: Integer ]: T read GetItem write SetItem; default;
         property Count: Integer read FCount write SetCount;
@@ -141,7 +142,7 @@ begin
     Dest.OnChange( Self, -1, actAssignAfter );
 end;
 
-function gItemList.GetEnumerator: TListEnumerator;
+function gItemList.GetEnumerator(): TListEnumerator;
 begin
   Result:= TListEnumerator.Create( -1, @MoveNext );
 end;
@@ -170,7 +171,6 @@ var
   Size: Integer;
 begin
   AStream.ReadBuffer( Size, SizeOf( Integer ));
-  WriteLn( Size );
   Count:= Size;
   AStream.ReadBuffer( FItems^[ 0 ], SizeOf( T ) * Count );
 end;
@@ -191,6 +191,16 @@ begin
   Count:= OldCount + NewCount;
   AStream.ReadBuffer( FItems^[ OldCount ], SizeOf( T ) * NewCount );
 end;
+
+{function gItemList.GetAsString(const MaxItems: Integer): String;
+var
+  i: Integer;
+begin
+  Result:= '';
+  for i:= 0 to Min( MaxItems, Count ) - 1 do
+    Result+= ', ' + Items[ i ].ToString;
+  Result:= '[' + Copy( Result, 3, Length( Result ) - 2 ) + ']';
+end;}
 
 procedure gItemList.Clear;
 begin

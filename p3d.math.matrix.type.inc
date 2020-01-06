@@ -61,7 +61,11 @@ type
     //The array is stored in column-major order but it only matters if you pass it
     //to another API than OpenGL, like Direct 3D. You might need to transpose the matrix then.
 
+    private type
+      PFieldType = ^FieldType;
+
     private
+      class function GetCount: Integer; static;
       function GetCol( index: Integer ): TVector;
       function GetIndex( index: Integer ): FieldType; inline;
       function GetMField( AIndex: Integer ): FieldType; inline;
@@ -80,10 +84,12 @@ type
       property Row [ index: Integer ] : TVector read GetRow write SetRow;
       property Col [ index: Integer ] : TVector read GetCol write SetCol; default;
 
+      function Ptr: PFieldType;
       procedure Identity;
 
       {$IFDEF FLOATTYPE}
       function ToString( const LineBreaks: Boolean = False; const Digits: Integer = 8 ): String;
+      function FromString( S: String ): TMatrix;
       function Inverted: TMatrix;
       function Inverse: Boolean;
       {$ENDIF}
@@ -116,6 +122,8 @@ type
       //This property is only provided for the use with OnChange events if needed in the future.
 
       property _m[ index: Integer ]: FieldType read GetIndex write SetIndex; //@exclude
+
+      class property Count: Integer read GetCount;
   end;
 {$ENDIF}
 
@@ -124,6 +132,11 @@ type
 {$INCLUDE p3dmath_vector_names.inc}
 
 { TMatrix }
+
+class function TMatrix.GetCount: Integer; static;
+begin
+  Result:= NUMFIELD;
+end;
 
 function TMatrix.GetCol( index: Integer ): TVector;
 begin
@@ -174,6 +187,7 @@ begin
   m[ index + 6 ]:= AValue.Z;
   {$ENDIF}
   {$IF NUMFIELD = 4}
+  m[ index + 0 ]:= AValue.X;
   m[ index + 4 ]:= AValue.Y;
   m[ index + 8 ]:= AValue.Z;
   m[ index + 12 ]:= AValue.W;
@@ -224,17 +238,86 @@ begin
   else
     lb:= '';
     {$IF NUMFIELD = 2}
-  str:= StringReplace( '%.#f,%.#f, %s%.#f,%.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
-  Result:= Format( str, [ _00, _01, lb, _10, _11 ]);
+  str:= StringReplace( '[%.#f,%.#f], %s[%.#f,%.#f]', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ _00, _10, lb, _01, _11 ]);
     {$ENDIF}
     {$IF NUMFIELD = 3}
-  str:= StringReplace( '%.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
-  Result:= Format( str, [ _00, _01, _02, lb, _10, _11, _12, lb, _20, _21, _22 ]);
+  str:= StringReplace( '[%.#f, %.#f, %.#f], %s[%.#f, %.#f, %.#f], %s[%.#f, %.#f, %.#f]', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ _00, _10, _20, lb, _01, _11, _21, lb, _02, _12, _22 ]);
     {$ENDIF}
     {$IF NUMFIELD = 4}
-  str:= StringReplace( '%.#f, %.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %.#f, %s%.#f, %.#f, %.#f, %.#f', '#', IntToStr( Digits ), [ rfReplaceAll ]);
-  Result:= Format( str, [ _00, _01, _02, _03, lb, _10, _11, _12, _13, lb, _20, _21, _22, _23, lb, _30, _31, _32, _33 ]);
+  str:= StringReplace( '[%.#f, %.#f, %.#f, %.#f], %s[%.#f, %.#f, %.#f, %.#f], %s[%.#f, %.#f, %.#f, %.#f], %s[%.#f, %.#f, %.#f, %.#f]', '#', IntToStr( Digits ), [ rfReplaceAll ]);
+  Result:= Format( str, [ _00, _10, _20, _30, lb, _01, _11, _21, _31, lb, _02, _12, _22, _32, lb, _03, _13, _23, _33 ]);
     {$ENDIF}
+end;
+
+function TMatrix.FromString(S: String): TMatrix;
+  function GetWordCount: Integer; inline;
+  var
+    c: Char;
+  begin
+    if ( S = '' ) then
+      Result:= 0
+    else
+      begin
+        Result:= 1;
+        for c in S do
+          if ( c = ',' ) then
+            Inc( Result );
+      end;
+  end;
+
+  function GetWord( n: Integer ): String; inline;
+  var
+    i: Integer;
+    c: Char;
+  begin
+    i:= 1;
+    Result:= '';
+    for c in S do
+      if ( c = ',' ) then
+        begin
+          Inc( i );
+          if ( i > n ) then
+            break;
+        end
+      else if ( i = n ) then
+        Result:= Result + c;
+  end;
+
+const
+  exp_wc =
+    {$IF NUMFIELD = 2}
+       2
+    {$ELSEIF NUMFIELD = 3}
+       3
+    {$ELSEIF NUMFIELD = 4}
+       4
+    {$ENDIF}
+    ;
+var
+  i: Integer;
+  n: Integer;
+  comp: TStringArray;
+  val: TVector;
+  s2: String;
+begin
+  comp:= S.Split([ ',' ], '[', ']' );
+  n:= length( comp );
+
+  if ( n <> exp_wc ) then
+    raise Exception.Create( Format( 'Error while converting string ''%s'' to TMat%d. Wrong number of values given: %d.', [ S, exp_wc, n ]));
+  for i:= 0 to n - 1 do begin
+    s2:= Trim( comp[ i ]);
+    if ( not s2.StartsWith( '[' )) then
+      raise Exception.Create( Format( 'Error while converting string ''%s'' to TMat%d. "[" expected!', [ s, exp_wc ]));
+    if ( not s2.EndsWith( ']' )) then
+      raise Exception.Create( Format( 'Error while converting string ''%s'' to TMat%d. "]" expected!', [ s, exp_wc ]));
+    s2:= Copy( s2, 2, Length( s2 ) - 2 );
+    val.FromString( s2 );
+    Col[ i ]:= val;
+  end;
+  Result:= Self;
 end;
 
 function TMatrix.Inverted: TMatrix;
@@ -263,6 +346,11 @@ begin
     {$ENDIF}
 end;
   {$ENDIF}
+
+function TMatrix.Ptr: PFieldType;
+begin
+  Result:= @m[ 0 ];
+end;
 
 procedure TMatrix.Identity;
 const

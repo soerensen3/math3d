@@ -108,6 +108,13 @@ begin
 end;
        {$ENDIF}
 
+//@abbr`Generate a step function by comparing two values`.
+{function step( edge, x: TVector ): TVector; overload;
+       {$IFDEF IMPLEMENTATION}
+begin
+  Result:= TVector( x < edge );
+end;}
+
 //@abbr`Will make a gradient between two edges`.
 function smoothstep( edge0, edge1, x: TVector ): TVector; overload;
        {$IFDEF IMPLEMENTATION}

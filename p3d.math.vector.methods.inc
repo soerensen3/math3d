@@ -45,31 +45,31 @@
   {$ENDIF}
 
   {$IF NUMFIELD>1}
-    property X: FieldType index 0 read FCoord[ 0 ] write SetCoord;
-    property R: FieldType index 0 read FCoord[ 0 ] write SetCoord;
-    property S: FieldType index 0 read FCoord[ 0 ] write SetCoord;
-    property Y: FieldType index 1 read FCoord[ 1 ] write SetCoord;
-    property G: FieldType index 1 read FCoord[ 1 ] write SetCoord;
-    property T: FieldType index 1 read FCoord[ 1 ] write SetCoord;
+    property X: FieldType index 0 read FCoord[ 0 ] write FCoord[ 0 ];//SetCoord;
+    property R: FieldType index 0 read FCoord[ 0 ] write FCoord[ 0 ];//SetCoord;
+    property S: FieldType index 0 read FCoord[ 0 ] write FCoord[ 0 ];//SetCoord;
+    property Y: FieldType index 1 read FCoord[ 1 ] write FCoord[ 1 ];//SetCoord;
+    property G: FieldType index 1 read FCoord[ 1 ] write FCoord[ 1 ];//SetCoord;
+    property T: FieldType index 1 read FCoord[ 1 ] write FCoord[ 1 ];//SetCoord;
   {$ENDIF}
 
 
   {$IF NUMFIELD>2}
     //This field will only exist from TVec3 on.
-    property Z: FieldType index 2 read FCoord[ 2 ] write SetCoord;
+    property Z: FieldType index 2 read FCoord[ 2 ] write FCoord[ 2 ];//SetCoord;
     //This field will only exist from TVec3 on.
-    property B: FieldType index 2 read FCoord[ 2 ] write SetCoord;
+    property B: FieldType index 2 read FCoord[ 2 ] write FCoord[ 2 ];//SetCoord;
     //This field will only exist from TVec3 on.
-    property P: FieldType index 2 read FCoord[ 2 ] write SetCoord;
+    property P: FieldType index 2 read FCoord[ 2 ] write FCoord[ 2 ];//SetCoord;
   {$ENDIF}
 
   {$IF NUMFIELD>3}
     //This field will only exist from TVec4 on.
-    property W: FieldType index 3 read FCoord[ 3 ] write SetCoord;
+    property W: FieldType index 3 read FCoord[ 3 ] write FCoord[ 3 ];//SetCoord;
     //This field will only exist from TVec4 on.
-    property A: FieldType index 3 read FCoord[ 3 ] write SetCoord;
+    property A: FieldType index 3 read FCoord[ 3 ] write FCoord[ 3 ];//SetCoord;
     //This field will only exist from TVec4 on.
-    property Q: FieldType index 3 read FCoord[ 3 ] write SetCoord;
+    property Q: FieldType index 3 read FCoord[ 3 ] write FCoord[ 3 ];//SetCoord;
   {$ENDIF}
   {$UNDEF ToStrFloat}
 {$ENDIF}

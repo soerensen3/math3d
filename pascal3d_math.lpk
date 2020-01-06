@@ -10,68 +10,102 @@
       </SearchPaths>
     </CompilerOptions>
     <Version Minor="5"/>
-    <Files Count="14">
+    <Files Count="22">
       <Item1>
-        <Filename Value="p3dmath.pas"/>
-        <UnitName Value="p3dMath"/>
+        <HasRegisterProc Value="True"/>
       </Item1>
       <Item2>
-        <Filename Value="p3dmath_arrays.inc"/>
-        <Type Value="Include"/>
+        <Filename Value="p3d.math.pas"/>
+        <UnitName Value="p3d.math"/>
       </Item2>
       <Item3>
-        <Filename Value="p3dmath_arrays_decl.inc"/>
+        <Filename Value="p3d.math.arrays.inc"/>
         <Type Value="Include"/>
       </Item3>
       <Item4>
-        <Filename Value="p3dmath_consts.inc"/>
+        <Filename Value="p3d.math.arrays.generics.inc"/>
         <Type Value="Include"/>
       </Item4>
       <Item5>
-        <Filename Value="p3dmath_conversion.inc"/>
+        <Filename Value="p3d.math.consts.inc"/>
         <Type Value="Include"/>
       </Item5>
       <Item6>
-        <Filename Value="p3dmath_matrix.inc"/>
+        <Filename Value="p3d.math.conversion.inc"/>
         <Type Value="Include"/>
       </Item6>
       <Item7>
-        <Filename Value="p3dmath_matrix_constructors.inc"/>
+        <Filename Value="p3d.math.matrix.inc"/>
         <Type Value="Include"/>
       </Item7>
       <Item8>
-        <Filename Value="p3dmath_quaternion.inc"/>
+        <Filename Value="p3d.math.matrix.constructors.double.inc"/>
         <Type Value="Include"/>
       </Item8>
       <Item9>
-        <Filename Value="p3dmath_vector.inc"/>
+        <Filename Value="p3d.math.matrix.constructors.float.inc"/>
         <Type Value="Include"/>
       </Item9>
       <Item10>
-        <Filename Value="p3dmath_vector_constructor_template.inc"/>
+        <Filename Value="p3d.math.matrix.constructors.int.inc"/>
         <Type Value="Include"/>
       </Item10>
       <Item11>
-        <Filename Value="p3dmath_vector_constructors.inc"/>
+        <Filename Value="p3d.math.matrix.functions.inc"/>
         <Type Value="Include"/>
       </Item11>
       <Item12>
-        <Filename Value="p3dmath_vector_functions.inc"/>
+        <Filename Value="p3d.math.matrix.operators.inc"/>
         <Type Value="Include"/>
       </Item12>
       <Item13>
-        <Filename Value="p3dmath_vector_op.inc"/>
+        <Filename Value="p3d.math.matrix.type.inc"/>
         <Type Value="Include"/>
       </Item13>
       <Item14>
-        <Filename Value="p3dmath_vector_swizzle.inc"/>
+        <Filename Value="p3d.math.vector.inc"/>
         <Type Value="Include"/>
       </Item14>
+      <Item15>
+        <Filename Value="p3d.math.vector.constructors.double.inc"/>
+        <Type Value="Include"/>
+      </Item15>
+      <Item16>
+        <Filename Value="p3d.math.vector.constructors.float.inc"/>
+        <Type Value="Include"/>
+      </Item16>
+      <Item17>
+        <Filename Value="p3d.math.vector.constructors.int.inc"/>
+        <Type Value="Include"/>
+      </Item17>
+      <Item18>
+        <Filename Value="p3d.math.vector.functions.inc"/>
+        <Type Value="Include"/>
+      </Item18>
+      <Item19>
+        <Filename Value="p3d.math.vector.methods.inc"/>
+        <Type Value="Include"/>
+      </Item19>
+      <Item20>
+        <Filename Value="p3d.math.vector.operators.inc"/>
+        <Type Value="Include"/>
+      </Item20>
+      <Item21>
+        <Filename Value="p3d.math.vector.swizzle.inc"/>
+        <Type Value="Include"/>
+      </Item21>
+      <Item22>
+        <Filename Value="p3d.math.vector.type.inc"/>
+        <Type Value="Include"/>
+      </Item22>
     </Files>
-    <RequiredPkgs Count="1">
+    <RequiredPkgs Count="2">
       <Item1>
-        <PackageName Value="FCL"/>
+        <PackageName Value="AutoPtr"/>
       </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

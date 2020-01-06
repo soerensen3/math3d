@@ -30,7 +30,7 @@ unit p3d.math;
 interface
 
 uses
-  Classes, SysUtils, Math;
+  Classes, SysUtils, Math, autoobj;
 
 type
   Int = Integer;
@@ -71,6 +71,3 @@ implementation
 {$UNDEF IMPLEMENTATION}
 
 end.
-
-end.
-

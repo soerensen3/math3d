@@ -13,6 +13,9 @@ class operator * ( a: TMatrix; b: TVector ) c: TVector; //inline; // POST-Multip
 //@abbr`class operator for comparing two matrices`.
 class operator = ( a: TMatrix; b: TMatrix ) c: Boolean; inline;
 
+class operator + ( a: TMatrix; b: TMatrix ) c: TMatrix; inline;
+class operator - ( a: TMatrix; b: TMatrix ) c: TMatrix; inline;
+
 
 {$IFDEF FLOATTYPE}
 //@abbr`Operator for calculating the inverse of a matrix`.
@@ -260,6 +263,22 @@ end;
 class operator TMatrix.=(a: TMatrix; b: TMatrix)c: Boolean;
 begin
   Result:= CompareMem( @a.m, @b.m, SizeOf( a.m ));
+end;
+
+class operator TMatrix.+ ( a: TMatrix; b: TMatrix ) c: TMatrix; inline;
+var
+  i: Integer;
+begin
+  for i:= 0 to Count - 1 do
+    Result[ i ]:= a[ i ] + b[ i ];
+end;
+
+class operator TMatrix.- ( a: TMatrix; b: TMatrix ) c: TMatrix; inline;
+var
+  i: Integer;
+begin
+  for i:= 0 to Count - 1 do
+    Result[ i ]:= a[ i ] - b[ i ];
 end;
 
 

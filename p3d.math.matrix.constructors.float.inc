@@ -348,13 +348,23 @@ end;
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
 }
 //@abbr`Returns a right handed orthogonal 4 by 4 projection matrix`.
-function mat4orthoRH( left, right, top, bottom: Float ): TMat4;
+function mat4orthoRH( left, right, top, bottom, zNear, zFar: Float ): TMat4;
 {$IFDEF IMPLEMENTATION}
 begin
-  Result._00:= 2/( right - left );                  Result._01:= 0;                                   Result._02:= 0;    Result._03:= 0;
-  Result._10:= 0;                                   Result._11:= 2/( top - bottom );                  Result._12:= 0;    Result._13:= 0;
-  Result._20:= 0;                                   Result._21:= 0;                                   Result._22:= -1;   Result._23:= 0;
-  Result._30:= - (right + left) / (right - left);   Result._31:= - (top + bottom) / (top - bottom);   Result._32:= 0;    Result._33:= 1;
+  Result._00:= 2/( right - left );                  Result._01:= 0;                                   Result._02:= 0;                                    Result._03:= 0;
+  Result._10:= 0;                                   Result._11:= 2/( top - bottom );                  Result._12:= 0;                                    Result._13:= 0;
+  Result._20:= 0;                                   Result._21:= 0;                                   Result._22:= -2 / ( zFar - zNear );                Result._23:= 0;
+  Result._30:= - (right + left) / (right - left);   Result._31:= - (top + bottom) / (top - bottom);   Result._32:= -( zFar + zNear ) / ( zFar - zNear ); Result._33:= 1;
+end;
+{$ENDIF}
+
+function mat4orthoLH( left, right, top, bottom, zNear, zFar: Float ): TMat4;
+{$IFDEF IMPLEMENTATION}
+begin
+  Result._00:= 2/( right - left );                  Result._01:= 0;                                   Result._02:= 0;                                    Result._03:= 0;
+  Result._10:= 0;                                   Result._11:= 2/( top - bottom );                  Result._12:= 0;                                    Result._13:= 0;
+  Result._20:= 0;                                   Result._21:= 0;                                   Result._22:= 2 / ( zFar - zNear );                 Result._23:= 0;
+  Result._30:= - (right + left) / (right - left);   Result._31:= - (top + bottom) / (top - bottom);   Result._32:= -( zFar + zNear ) / ( zFar - zNear);  Result._33:= 1;
 end;
 {$ENDIF}
 {>>$WARNINGS OFF} // Omit warnings about the function result variable not being initialized
